@@ -1,6 +1,12 @@
-// Application state management
+/**
+ * Application state management
+ * @file state.js
+ */
 
-// Global state object
+/**
+ * Global state object
+ * @type {Object}
+ */
 const state = {
     currentStep: 'home',
     mobileMenuOpen: false,
@@ -25,40 +31,75 @@ const state = {
     savedCalculations: []
 };
 
-// Navigation functions
+/**
+ * Navigate to a specific step in the application
+ * @param {string} step - Step name to navigate to
+ */
 function goToStep(step) {
     state.currentStep = step;
     render();
     window.scrollTo(0, 0);
 }
 
+/**
+ * Change the application language
+ * @param {string} lang - Language code ('en', 'zh', 'vi')
+ */
 function changeLanguage(lang) {
     state.language = lang;
+    saveToStorage('firb_language', lang);
     render();
 }
 
-// Toggle mobile menu
+/**
+ * Toggle mobile menu open/closed state
+ */
 function toggleMobileMenu() {
     state.mobileMenuOpen = !state.mobileMenuOpen;
     render();
 }
 
-// Update functions for eligibility form
+/**
+ * Update eligibility form field
+ * @param {string} field - Field name to update
+ * @param {string} value - New value
+ */
 function updateEligibility(field, value) {
     state.eligibilityData[field] = value;
 }
 
-// Update functions for calculator form
+/**
+ * Update calculator form field
+ * @param {string} field - Field name to update
+ * @param {string} value - New value
+ */
 function updateForm(field, value) {
     state.formData[field] = value;
 }
 
-// Check eligibility and determine if FIRB is required
+/**
+ * Handle property value input with automatic formatting
+ * @param {HTMLInputElement} input - Input element
+ */
+function handlePropertyValueInput(input) {
+    // Remove all non-digit characters
+    const rawValue = input.value.replace(/[^\d]/g, '');
+
+    // Update state with raw numeric value
+    state.formData.propertyValue = rawValue;
+
+    // Format and display with commas
+    input.value = formatNumberWithCommas(rawValue);
+}
+
+/**
+ * Check eligibility and determine if FIRB is required
+ */
 function checkEligibility() {
-    if (!state.eligibilityData.citizenship || 
-        !state.eligibilityData.residency || 
+    if (!state.eligibilityData.citizenship ||
+        !state.eligibilityData.residency ||
         !state.eligibilityData.purposeOfPurchase) {
-        alert('Please answer all questions');
+        showNotification('Please answer all questions', 'warning');
         return;
     }
 
@@ -92,37 +133,39 @@ function checkEligibility() {
     render();
 }
 
-// Validate and calculate fees
+/**
+ * Validate and calculate fees
+ */
 function handleCalculate() {
+    // Sanitize address input
+    state.formData.address = sanitizeHTML(state.formData.address);
+
     // Validation
-    if (!state.formData.address || 
-        !state.formData.propertyValue || 
-        !state.formData.propertyType || 
-        !state.formData.firstHomeBuyer || 
+    if (!state.formData.address ||
+        !state.formData.propertyValue ||
+        !state.formData.propertyType ||
+        !state.formData.firstHomeBuyer ||
         !state.formData.state) {
-        alert('Please fill all fields');
+        showNotification('Please fill all fields', 'warning');
         return;
     }
 
-    const val = parseFloat(state.formData.propertyValue);
-    if (isNaN(val) || val <= 0) {
-        alert('Please enter a valid property value');
-        return;
-    }
-    if (val < 100000) {
-        alert('Property value seems unusually low. Please verify the amount.');
+    // Validate property value
+    const validation = validatePropertyValue(state.formData.propertyValue);
+    if (!validation.valid) {
+        showNotification(validation.error, 'error');
         return;
     }
 
-    // Show calculating state
+    // Calculate fees immediately (removed artificial delay)
     state.isCalculating = true;
     render();
 
-    // Simulate calculation delay for better UX
-    setTimeout(() => {
+    // Use requestAnimationFrame for smooth UI update
+    requestAnimationFrame(() => {
         state.calculatedFees = calculateAllFees(state.formData);
-        
-        // Save to calculation history
+
+        // Save to calculation history and localStorage
         state.savedCalculations.unshift({
             id: Date.now(),
             timestamp: new Date().toISOString(),
@@ -133,27 +176,38 @@ function handleCalculate() {
         });
         state.savedCalculations = state.savedCalculations.slice(0, 5); // Keep only last 5
 
+        // Save to localStorage
+        saveToStorage('firb_calculations', state.savedCalculations);
+        saveToStorage('firb_formData', state.formData);
+
         state.isCalculating = false;
         state.currentStep = 'results';
         render();
-    }, 1500);
+
+        showNotification('Calculation completed successfully!', 'success', 3000);
+    });
 }
 
-// Handle payment button click
+/**
+ * Handle payment button click
+ */
 function handlePayment() {
     state.isProcessingPayment = true;
     render();
-    
+
+    // Simulate payment processing
     setTimeout(() => {
         // In production, redirect to Stripe: window.open('https://buy.stripe.com/...', '_blank')
-        alert('Payment demo: In production, this would redirect to Stripe.\n\nYour report is ready to download!');
+        showNotification('Payment demo: In production, this would redirect to Stripe. Your report is ready to download!', 'info', 7000);
         state.isProcessingPayment = false;
         render();
     }, 2000);
 }
 
-// Download report as text file
-// UPDATED: Enhanced format with detailed line items from Test Code
+/**
+ * Download report as text file
+ * Enhanced format with detailed line items
+ */
 function downloadReport() {
     const fees = state.calculatedFees;
     const lmiLine = fees.standard.lendersMortgageInsurance > 0 

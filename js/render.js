@@ -1,4 +1,11 @@
-// Main render function - THIS WAS MISSING!
+/**
+ * Render functions for FIRB Calculator UI
+ * @file render.js
+ */
+
+/**
+ * Main render function - orchestrates rendering of the entire application
+ */
 function render() {
     const app = document.getElementById('app');
     if (!app) {
@@ -43,7 +50,10 @@ function render() {
     }
 }
 
-// Header component
+/**
+ * Render header component with navigation
+ * @returns {string} HTML string for header
+ */
 function renderHeader() {
     return `
         <header class="bg-white border-b sticky top-0 z-50 shadow-sm">
@@ -83,6 +93,10 @@ function renderHeader() {
     `;
 }
 
+/**
+ * Render home page with information and CTA
+ * @returns {string} HTML string for home page
+ */
 function renderHome() {
     return `
         <section class="bg-gradient-to-br from-blue-50 to-white py-20">
@@ -107,21 +121,21 @@ function renderHome() {
                         <div class="grid md:grid-cols-3 gap-4 my-6">
                             <div class="bg-white p-4 rounded-lg shadow-sm">
                                 <div class="flex items-center mb-2">
-                                    ${icon('file-text', 'w-5 h-5 text-blue-600 mr-2')}
+                                    ${icons.fileText('w-5 h-5 text-blue-600 mr-2')}
                                     <h3 class="font-bold">FIRB Fee</h3>
                                 </div>
                                 <p class="text-sm text-gray-600">$1,710 to $243,400+ depending on property value</p>
                             </div>
                             <div class="bg-white p-4 rounded-lg shadow-sm">
                                 <div class="flex items-center mb-2">
-                                    ${icon('dollar-sign', 'w-5 h-5 text-blue-600 mr-2')}
+                                    ${icons.dollarSign('w-5 h-5 text-blue-600 mr-2')}
                                     <h3 class="font-bold">Stamp Duty Surcharge</h3>
                                 </div>
                                 <p class="text-sm text-gray-600">Additional 7-8% of property value</p>
                             </div>
                             <div class="bg-white p-4 rounded-lg shadow-sm">
                                 <div class="flex items-center mb-2">
-                                    ${icon('building-2', 'w-5 h-5 text-blue-600 mr-2')}
+                                    ${icons.building('w-5 h-5 text-blue-600 mr-2')}
                                     <h3 class="font-bold">Legal Fees</h3>
                                 </div>
                                 <p class="text-sm text-gray-600">Professional representation fees</p>
@@ -136,21 +150,21 @@ function renderHome() {
                 <div class="grid md:grid-cols-3 gap-8 mb-16">
                     <div class="text-center">
                         <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                            ${icon('calculator', 'w-8 h-8 text-blue-600')}
+                            ${icons.calculator('w-8 h-8 text-blue-600')}
                         </div>
                         <h3 class="text-xl font-semibold mb-2">${t('accurateCalc')}</h3>
                         <p class="text-gray-600">${t('accurateDesc')}</p>
                     </div>
                     <div class="text-center">
                         <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                            ${icon('clock', 'w-8 h-8 text-blue-600')}
+                            ${icons.clock('w-8 h-8 text-blue-600')}
                         </div>
                         <h3 class="text-xl font-semibold mb-2">${t('instantResults')}</h3>
                         <p class="text-gray-600">${t('instantDesc')}</p>
                     </div>
                     <div class="text-center">
                         <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                            ${icon('shield', 'w-8 h-8 text-blue-600')}
+                            ${icons.shield('w-8 h-8 text-blue-600')}
                         </div>
                         <h3 class="text-xl font-semibold mb-2">${t('complianceAssured')}</h3>
                         <p class="text-gray-600">${t('complianceDesc')}</p>
@@ -168,7 +182,7 @@ function renderHome() {
                     <div class="grid md:grid-cols-2 gap-8 mb-12">
                         <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-orange-500">
                             <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center">
-                                ${icon('file-text', 'w-5 h-5 text-orange-500 mr-2')}
+                                ${icons.fileText('w-5 h-5 text-orange-500 mr-2')}
                                 FIRB Fees Required
                             </h3>
                             <ul class="space-y-3">
@@ -193,7 +207,7 @@ function renderHome() {
 
                         <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-green-500">
                             <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center">
-                                ${icon('check-circle', 'w-5 h-5 text-green-500 mr-2')}
+                                ${icons.checkCircle('w-5 h-5 text-green-500 mr-2')}
                                 Fees NOT required if you are:
                             </h3>
                             <ul class="space-y-3">
@@ -217,7 +231,7 @@ function renderHome() {
                         <h3 class="text-2xl font-bold text-gray-900 mb-4">Not sure if you need FIRB approval?</h3>
                         <p class="text-gray-600 mb-6">Find out in less than 2 minutes with our quick eligibility assessment</p>
                         <button onclick="goToStep('eligibility')" class="bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transition inline-flex items-center space-x-2">
-                            ${icon('shield', 'w-5 h-5')}
+                            ${icons.shield('w-5 h-5')}
                             <span>Take Our Free Eligibility Test</span>
                             ${icons.arrowRight()}
                         </button>
@@ -243,19 +257,19 @@ function renderHome() {
                         <h3 class="text-2xl font-bold text-gray-900 mb-6">What's Included:</h3>
                         <ul class="space-y-4">
                             <li class="flex items-start">
-                                ${icon('check-circle', 'w-6 h-6 text-green-500 mr-3 flex-shrink-0')}
+                                ${icons.checkCircle('w-6 h-6 text-green-500 mr-3 flex-shrink-0')}
                                 <span class="text-gray-700">Complete FIRB application fee calculation</span>
                             </li>
                             <li class="flex items-start">
-                                ${icon('check-circle', 'w-6 h-6 text-green-500 mr-3 flex-shrink-0')}
+                                ${icons.checkCircle('w-6 h-6 text-green-500 mr-3 flex-shrink-0')}
                                 <span class="text-gray-700">State-specific stamp duty surcharge analysis</span>
                             </li>
                             <li class="flex items-start">
-                                ${icon('check-circle', 'w-6 h-6 text-green-500 mr-3 flex-shrink-0')}
+                                ${icons.checkCircle('w-6 h-6 text-green-500 mr-3 flex-shrink-0')}
                                 <span class="text-gray-700">Detailed breakdown of all associated costs</span>
                             </li>
                             <li class="flex items-start">
-                                ${icon('check-circle', 'w-6 h-6 text-green-500 mr-3 flex-shrink-0')}
+                                ${icons.checkCircle('w-6 h-6 text-green-500 mr-3 flex-shrink-0')}
                                 <span class="text-gray-700">Payment timeline and methods guidance</span>
                             </li>
                         </ul>
@@ -270,7 +284,7 @@ function renderHome() {
                 <div class="grid md:grid-cols-3 gap-8">
                     <div class="bg-white p-8 rounded-lg shadow-sm">
                         <div class="bg-blue-600 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-                            ${icon('file-text', 'w-6 h-6 text-white')}
+                            ${icons.fileText('w-6 h-6 text-white')}
                         </div>
                         <h3 class="text-xl font-bold text-gray-900 mb-3">FIRB Application Fee</h3>
                         <p class="text-gray-600 mb-4">Paid to the Australian Government (Foreign Investment Review Board) for property purchase approval</p>
@@ -278,7 +292,7 @@ function renderHome() {
                     </div>
                     <div class="bg-white p-8 rounded-lg shadow-sm">
                         <div class="bg-blue-600 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-                            ${icon('dollar-sign', 'w-6 h-6 text-white')}
+                            ${icons.dollarSign('w-6 h-6 text-white')}
                         </div>
                         <h3 class="text-xl font-bold text-gray-900 mb-3">Stamp Duty Surcharge</h3>
                         <p class="text-gray-600 mb-4">Additional state-based tax for foreign buyers (varies by state: 7-8% of property value)</p>
@@ -286,7 +300,7 @@ function renderHome() {
                     </div>
                     <div class="bg-white p-8 rounded-lg shadow-sm">
                         <div class="bg-blue-600 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-                            ${icon('globe', 'w-6 h-6 text-white')}
+                            ${icons.globe('w-6 h-6 text-white')}
                         </div>
                         <h3 class="text-xl font-bold text-gray-900 mb-3">Legal & Conveyancing</h3>
                         <p class="text-gray-600 mb-4">Professional fees for legal representation and property transfer</p>
@@ -309,12 +323,16 @@ function renderHome() {
     `;
 }
 
+/**
+ * Render eligibility questionnaire
+ * @returns {string} HTML string for eligibility form
+ */
 function renderEligibility() {
     return `
         <section class="py-20 bg-gray-50 min-h-screen">
             <div class="max-w-3xl mx-auto px-4">
                 <button onclick="goToStep('home')" class="text-blue-600 mb-8 flex items-center space-x-2">
-                    ${icon('arrow-left', 'w-5 h-5')}
+                    ${icons.arrowLeft('w-5 h-5')}
                     <span>${t('back')}</span>
                 </button>
                 <div class="bg-white p-8 rounded-lg">
@@ -389,7 +407,7 @@ function renderEligibility() {
                         </div>
 
                         <button onclick="checkEligibility()" class="w-full bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-700 flex items-center justify-center space-x-2">
-                            ${icon('shield', 'w-5 h-5')}
+                            ${icons.shield('w-5 h-5')}
                             <span>${t('checkElig')}</span>
                         </button>
                     </div>
@@ -399,6 +417,10 @@ function renderEligibility() {
     `;
 }
 
+/**
+ * Render eligibility result page
+ * @returns {string} HTML string for eligibility result
+ */
 function renderEligibilityResult() {
     const isRequired = state.isEligible && state.isEligible.required;
     
@@ -406,13 +428,13 @@ function renderEligibilityResult() {
         <section class="py-20 bg-gray-50 min-h-screen">
             <div class="max-w-3xl mx-auto px-4">
                 <button onclick="goToStep('eligibility')" class="text-blue-600 mb-8 flex items-center space-x-2">
-                    ${icon('arrow-left', 'w-5 h-5')}
+                    ${icons.arrowLeft('w-5 h-5')}
                     <span>${t('back')}</span>
                 </button>
                 <div class="bg-white p-8 rounded-lg text-center">
                     ${isRequired ? `
                         <div class="bg-orange-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
-                            ${icon('file-text', 'w-10 h-10 text-orange-600')}
+                            ${icons.fileText('w-10 h-10 text-orange-600')}
                         </div>
                         <h2 class="text-3xl font-bold mb-4">${t('firbReq')}</h2>
                         <p class="text-lg text-gray-600 mb-4">${t('firbReqMsg')}</p>
@@ -423,7 +445,7 @@ function renderEligibilityResult() {
                         </button>
                     ` : `
                         <div class="bg-green-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
-                            ${icon('check-circle', 'w-10 h-10 text-green-600')}
+                            ${icons.checkCircle('w-10 h-10 text-green-600')}
                         </div>
                         <h2 class="text-3xl font-bold mb-4">${t('noFirb')}</h2>
                         <p class="text-lg text-gray-600 mb-4">${t('noFirbMsg')}</p>
@@ -436,40 +458,54 @@ function renderEligibilityResult() {
     `;
 }
 
+/**
+ * Render calculator form for property details
+ * @returns {string} HTML string for calculator form
+ */
 function renderCalculator() {
     return `
         <section class="py-20 bg-gray-50 min-h-screen">
             <div class="max-w-3xl mx-auto px-4">
                 <button onclick="goToStep('eligibilityResult')" class="text-blue-600 mb-8 flex items-center space-x-2">
-                    ${icon('arrow-left', 'w-5 h-5')}
+                    ${icons.arrowLeft('w-5 h-5')}
                     <span>${t('back')}</span>
                 </button>
                 <div class="bg-white p-8 rounded-lg">
                     <h2 class="text-3xl font-bold mb-8">${t('propCalc')}</h2>
                     <div class="space-y-6">
                         <div>
-                            <label class="block font-semibold mb-2">${t('propAddress')}</label>
-                            <input type="text" 
-                                value="${state.formData.address}" 
-                                oninput="updateForm('address', this.value)" 
-                                placeholder="${t('enterAddress')}" 
-                                class="w-full px-4 py-3 border rounded-lg" />
+                            <label class="block font-semibold mb-2" for="property-address">${t('propAddress')}</label>
+                            <input type="text"
+                                id="property-address"
+                                value="${escapeHTML(state.formData.address)}"
+                                oninput="updateForm('address', this.value)"
+                                placeholder="${t('enterAddress')}"
+                                aria-label="${t('propAddress')}"
+                                aria-required="true"
+                                class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
                         </div>
 
                         <div>
-                            <label class="block font-semibold mb-2">${t('purchasePrice')}</label>
-                            <input type="number" 
-                                value="${state.formData.propertyValue}" 
-                                oninput="updateForm('propertyValue', this.value)" 
-                                placeholder="850000" 
-                                class="w-full px-4 py-3 border rounded-lg" />
+                            <label class="block font-semibold mb-2" for="property-value">${t('purchasePrice')}</label>
+                            <input type="text"
+                                id="property-value"
+                                value="${formatNumberWithCommas(state.formData.propertyValue)}"
+                                oninput="handlePropertyValueInput(this)"
+                                placeholder="850,000"
+                                aria-label="${t('purchasePrice')}"
+                                aria-required="true"
+                                class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+                            <p class="text-xs text-gray-500 mt-1">Enter amount in AUD</p>
                         </div>
 
                         <div>
-                            <label class="block font-semibold mb-2">${t('propType')}</label>
-                            <select value="${state.formData.propertyType}" 
-                                onchange="updateForm('propertyType', this.value)" 
-                                class="w-full px-4 py-3 border rounded-lg">
+                            <label class="block font-semibold mb-2" for="property-type">${t('propType')}</label>
+                            <select id="property-type"
+                                value="${state.formData.propertyType}"
+                                onchange="updateForm('propertyType', this.value)"
+                                aria-label="${t('propType')}"
+                                aria-required="true"
+                                class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                                 <option value="">${t('selectType')}</option>
                                 <option value="established">${t('established')}</option>
                                 <option value="newDwelling">${t('newDwelling')}</option>
@@ -478,10 +514,13 @@ function renderCalculator() {
                         </div>
 
                         <div>
-                            <label class="block font-semibold mb-2">${t('state')}</label>
-                            <select value="${state.formData.state}" 
-                                onchange="updateForm('state', this.value)" 
-                                class="w-full px-4 py-3 border rounded-lg">
+                            <label class="block font-semibold mb-2" for="property-state">${t('state')}</label>
+                            <select id="property-state"
+                                value="${state.formData.state}"
+                                onchange="updateForm('state', this.value)"
+                                aria-label="${t('state')}"
+                                aria-required="true"
+                                class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                                 <option value="">${t('selectState')}</option>
                                 <option value="NSW">NSW</option>
                                 <option value="VIC">VIC</option>
@@ -496,26 +535,28 @@ function renderCalculator() {
 
                         <div>
                             <label class="block font-semibold mb-2">${t('firstHome')}</label>
-                            <div class="flex space-x-4">
-                                <label>
-                                    <input type="radio" name="firstHome" value="yes" 
-                                        ${state.formData.firstHomeBuyer === 'yes' ? 'checked' : ''} 
-                                        onchange="updateForm('firstHomeBuyer', 'yes'); render();" 
+                            <div class="flex space-x-4" role="radiogroup" aria-label="${t('firstHome')}">
+                                <label class="flex items-center">
+                                    <input type="radio" name="firstHome" value="yes"
+                                        ${state.formData.firstHomeBuyer === 'yes' ? 'checked' : ''}
+                                        onchange="updateForm('firstHomeBuyer', 'yes'); render();"
+                                        aria-label="Yes, first home buyer"
                                         class="mr-2" />Yes
                                 </label>
-                                <label>
-                                    <input type="radio" name="firstHome" value="no" 
-                                        ${state.formData.firstHomeBuyer === 'no' ? 'checked' : ''} 
-                                        onchange="updateForm('firstHomeBuyer', 'no'); render();" 
+                                <label class="flex items-center">
+                                    <input type="radio" name="firstHome" value="no"
+                                        ${state.formData.firstHomeBuyer === 'no' ? 'checked' : ''}
+                                        onchange="updateForm('firstHomeBuyer', 'no'); render();"
+                                        aria-label="No, not first home buyer"
                                         class="mr-2" />No
                                 </label>
                             </div>
                         </div>
 
-                        <button onclick="handleCalculate()" 
-                            ${state.isCalculating ? 'disabled' : ''} 
+                        <button onclick="handleCalculate()"
+                            ${state.isCalculating ? 'disabled' : ''}
                             class="w-full bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-700 flex items-center justify-center space-x-2 ${state.isCalculating ? 'opacity-50 cursor-not-allowed' : ''}">
-                            ${icon('calculator', 'w-5 h-5')}
+                            ${icons.calculator('w-5 h-5')}
                             <span>${state.isCalculating ? t('calculating') : t('calcFees')}</span>
                         </button>
                     </div>
@@ -525,6 +566,10 @@ function renderCalculator() {
     `;
 }
 
+/**
+ * Render results page with fee breakdown
+ * @returns {string} HTML string for results page
+ */
 function renderResults() {
     if (!state.calculatedFees) return '';
     
@@ -534,7 +579,7 @@ function renderResults() {
         <section class="py-20 bg-gray-50 min-h-screen">
             <div class="max-w-4xl mx-auto px-4">
                 <button onclick="goToStep('calculator')" class="text-blue-600 mb-8 flex items-center space-x-2">
-                    ${icon('arrow-left', 'w-5 h-5')}
+                    ${icons.arrowLeft('w-5 h-5')}
                     <span>${t('back')}</span>
                 </button>
                 <div class="bg-white p-8 rounded-lg">
@@ -542,7 +587,7 @@ function renderResults() {
                     
                     <div class="mb-12">
                         <h3 class="text-2xl font-bold mb-6 flex items-center">
-                            ${icon('globe', 'w-6 h-6 text-orange-600 mr-2')}
+                            ${icons.globe('w-6 h-6 text-orange-600 mr-2')}
                             ${t('foreignInvestmentFees')}
                         </h3>
                         <div class="space-y-4 mb-6">
@@ -662,14 +707,14 @@ function renderResults() {
                     </div>
 
                     <div class="grid md:grid-cols-2 gap-4 mb-6">
-                        <button onclick="handlePayment()" 
+                        <button onclick="handlePayment()"
                             ${state.isProcessingPayment ? 'disabled' : ''}
                             class="bg-blue-600 text-white px-6 py-4 rounded-lg font-semibold hover:bg-blue-700 flex items-center justify-center space-x-2 ${state.isProcessingPayment ? 'opacity-50 cursor-not-allowed' : ''}">
-                            ${icon('dollar-sign', 'w-5 h-5')}
+                            ${icons.dollarSign('w-5 h-5')}
                             <span>${state.isProcessingPayment ? t('processing') : t('proceedPayment')}</span>
                         </button>
                         <button onclick="downloadReport()" class="bg-gray-100 text-gray-900 px-6 py-4 rounded-lg font-semibold hover:bg-gray-200 flex items-center justify-center space-x-2">
-                            ${icon('download', 'w-5 h-5')}
+                            ${icons.download('w-5 h-5')}
                             <span>${t('downloadReport')}</span>
                         </button>
                     </div>
@@ -681,6 +726,10 @@ function renderResults() {
     `;
 }
 
+/**
+ * Render footer component
+ * @returns {string} HTML string for footer
+ */
 function renderFooter() {
     return `
         <footer class="bg-gray-900 text-white py-12">

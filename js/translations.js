@@ -1,4 +1,12 @@
-// Language translations for the FIRB Calculator
+/**
+ * Language translations for the FIRB Calculator
+ * @file translations.js
+ */
+
+/**
+ * Translation strings for supported languages
+ * @type {Object}
+ */
 const translations = {
     en: {
         hero: 'Foreign Investment Property Fee Calculator',
@@ -84,8 +92,14 @@ const translations = {
         cta: '计算您的费用',
         navHome: '主页',
         navCalculator: '计算器',
-        navResources: '资源', // ADDED
+        navResources: '资源',
         back: '返回',
+        accurateCalc: '精确计算',
+        accurateDesc: '基于当前FIRB法规和州要求',
+        instantResults: '即时结果',
+        instantDesc: '几秒钟内获得费用明细',
+        complianceAssured: '合规保证',
+        complianceDesc: '遵守澳大利亚投资法律',
         checkEligibility: '检查您的资格',
         citizenshipQ: '公民身份？',
         ausC: '澳大利亚公民',
@@ -119,7 +133,23 @@ const translations = {
         calcFees: '计算费用',
         calculating: '计算中...',
         feeBreakdown: '费用明细',
+        foreignInvestmentFees: '外国投资费用',
+        firbAppFee: 'FIRB申请费',
+        paidToGov: '支付给澳大利亚政府',
+        stampSurcharge: '印花税附加费',
+        addStateTax: '额外州税（7-8%）',
+        legalFeesCard: '法律费用',
+        profFees: '专业费用',
         foreignTotal: '外国投资总额',
+        standardPropertyFees: '标准房产购买费用',
+        allBuyersPay: '所有买家支付这些费用',
+        standardStampDuty: '标准印花税',
+        transferFee: '过户费',
+        mortgageReg: '抵押登记',
+        legalConveyancing: '法律和产权转让费用',
+        buildingPest: '建筑和虫害检查',
+        loanApp: '贷款申请费',
+        councilWater: '市政和水费',
         standardTotal: '标准费用总额',
         totalCosts: '预计总费用',
         allFees: '所有外国投资费用+标准房产费用',
@@ -129,7 +159,9 @@ const translations = {
         processing: '处理中...',
         downloadReport: '下载报告',
         estimates: '基于当前法规的估算',
-        allBuyersPay: '所有买家支付这些费用',
+        quickLinks: '快速链接',
+        contact: '联系方式',
+        allRights: '版权所有',
     },
     vi: {
         hero: 'Máy Tính Phí Đầu Tư BĐS Nước Ngoài',
@@ -137,8 +169,14 @@ const translations = {
         cta: 'Tính Phí',
         navHome: 'Trang chủ',
         navCalculator: 'Máy tính',
-        navResources: 'Tài nguyên', // ADDED
+        navResources: 'Tài nguyên',
         back: 'Quay lại',
+        accurateCalc: 'Tính Toán Chính Xác',
+        accurateDesc: 'Dựa trên quy định FIRB và yêu cầu tiểu bang hiện hành',
+        instantResults: 'Kết Quả Tức Thì',
+        instantDesc: 'Nhận phân tích phí trong vài giây',
+        complianceAssured: 'Đảm Bảo Tuân Thủ',
+        complianceDesc: 'Tuân thủ luật đầu tư của Úc',
         checkEligibility: 'Kiểm Tra Đủ Điều Kiện',
         citizenshipQ: 'Tình trạng công dân?',
         ausC: 'Công dân Úc',
@@ -172,7 +210,23 @@ const translations = {
         calcFees: 'Tính Phí',
         calculating: 'Đang tính...',
         feeBreakdown: 'Phân Tích Phí',
+        foreignInvestmentFees: 'Phí Đầu Tư Nước Ngoài',
+        firbAppFee: 'Phí Đơn FIRB',
+        paidToGov: 'Trả cho Chính phủ Úc',
+        stampSurcharge: 'Phụ Phí Thuế',
+        addStateTax: 'Thuế tiểu bang bổ sung (7-8%)',
+        legalFeesCard: 'Phí Pháp Lý',
+        profFees: 'Phí chuyên nghiệp',
         foreignTotal: 'Tổng Đầu Tư Nước Ngoài',
+        standardPropertyFees: 'Phí Mua BĐS Tiêu Chuẩn',
+        allBuyersPay: 'Tất cả người mua trả phí này',
+        standardStampDuty: 'Thuế Tiêu Chuẩn',
+        transferFee: 'Phí Chuyển Nhượng',
+        mortgageReg: 'Đăng Ký Thế Chấp',
+        legalConveyancing: 'Phí Pháp Lý & Chuyển Nhượng',
+        buildingPest: 'Kiểm Tra Nhà & Côn Trùng',
+        loanApp: 'Phí Đơn Vay',
+        councilWater: 'Phí Hội Đồng & Nước',
         standardTotal: 'Tổng Phí Tiêu Chuẩn',
         totalCosts: 'Tổng Chi Phí Ước Tính',
         allFees: 'Tất cả phí đầu tư nước ngoài + phí BĐS tiêu chuẩn',
@@ -182,11 +236,17 @@ const translations = {
         processing: 'Đang xử lý...',
         downloadReport: 'Tải Báo Cáo',
         estimates: 'Ước tính dựa trên quy định hiện tại',
-        allBuyersPay: 'Tất cả người mua trả phí này',
+        quickLinks: 'Liên Kết Nhanh',
+        contact: 'Liên Hệ',
+        allRights: 'Bảo lưu mọi quyền',
     }
 };
 
-// Translation helper function
+/**
+ * Translation helper function
+ * @param {string} key - Translation key
+ * @returns {string} Translated string in current language
+ */
 function t(key) {
     return translations[state.language][key] || key;
 }

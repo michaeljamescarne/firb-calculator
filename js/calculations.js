@@ -1,6 +1,13 @@
-// All calculation functions for FIRB fees and property costs
+/**
+ * All calculation functions for FIRB fees and property costs
+ * @file calculations.js
+ */
 
-// Format currency in Australian dollars
+/**
+ * Format currency in Australian dollars
+ * @param {number} amount - The amount to format
+ * @returns {string} Formatted currency string
+ */
 function formatCurrency(amount) {
     return new Intl.NumberFormat('en-AU', {
         style: 'currency',
@@ -10,8 +17,13 @@ function formatCurrency(amount) {
     }).format(amount);
 }
 
-// Calculate FIRB application fee based on property value, type, and first home buyer status
-// UPDATED: Added higher brackets for expensive properties ($3M-$4M+)
+/**
+ * Calculate FIRB application fee based on property value, type, and first home buyer status
+ * @param {string|number} value - Property value
+ * @param {string} type - Property type ('vacant', 'newDwelling', 'established')
+ * @param {string} firstHome - First home buyer status ('yes' or 'no')
+ * @returns {number} FIRB application fee
+ */
 function calculateFIRBFee(value, type, firstHome) {
     const val = parseFloat(value);
     
@@ -40,7 +52,12 @@ function calculateFIRBFee(value, type, firstHome) {
     return 243400; // UPDATED: Added $4M+ bracket
 }
 
-// Calculate stamp duty surcharge for foreign investors by state
+/**
+ * Calculate stamp duty surcharge for foreign investors by state
+ * @param {string|number} value - Property value
+ * @param {string} stateCode - Australian state code (NSW, VIC, QLD, SA, WA, TAS, ACT, NT)
+ * @returns {number} Stamp duty surcharge amount
+ */
 function calculateStampDutySurcharge(value, stateCode) {
     const val = parseFloat(value);
     const rates = {
@@ -56,8 +73,12 @@ function calculateStampDutySurcharge(value, stateCode) {
     return val * (rates[stateCode] || 0.08);
 }
 
-// Calculate standard stamp duty by state (paid by all buyers)
-// UPDATED: Added calculations for all states/territories
+/**
+ * Calculate standard stamp duty by state (paid by all buyers)
+ * @param {string|number} value - Property value
+ * @param {string} stateCode - Australian state code
+ * @returns {number} Standard stamp duty amount
+ */
 function calculateStandardStampDuty(value, stateCode) {
     const val = parseFloat(value);
     
@@ -129,17 +150,56 @@ const stateMortgageFees = {
     NT: 146
 };
 
-// Calculate all fees and return complete breakdown
-// UPDATED: Now uses state-specific transfer and mortgage fees
+/**
+ * Calculate Lenders Mortgage Insurance (LMI)
+ * LMI is required when LVR (Loan to Value Ratio) exceeds 80%
+ * @param {string|number} propertyValue - Property value
+ * @param {number} depositPercent - Deposit percentage (default 20%)
+ * @returns {number} LMI amount
+ */
+function calculateLMI(propertyValue, depositPercent = 20) {
+    const val = parseFloat(propertyValue);
+    const loanAmount = val * ((100 - depositPercent) / 100);
+    const lvr = (loanAmount / val) * 100;
+
+    // LMI only applies if LVR > 80%
+    if (lvr <= 80) return 0;
+
+    // LMI calculation based on loan amount and LVR
+    // These are approximate rates - actual LMI varies by lender
+    let lmiRate = 0;
+
+    if (lvr > 80 && lvr <= 85) {
+        lmiRate = 0.017; // ~1.7%
+    } else if (lvr > 85 && lvr <= 90) {
+        lmiRate = 0.024; // ~2.4%
+    } else if (lvr > 90 && lvr <= 95) {
+        lmiRate = 0.031; // ~3.1%
+    } else {
+        lmiRate = 0.04; // ~4% for >95%
+    }
+
+    return loanAmount * lmiRate;
+}
+
+/**
+ * Calculate all fees and return complete breakdown
+ * @param {Object} formData - Form data containing property details
+ * @param {string} formData.propertyValue - Property value
+ * @param {string} formData.propertyType - Property type
+ * @param {string} formData.firstHomeBuyer - First home buyer status
+ * @param {string} formData.state - Australian state code
+ * @returns {Object} Complete fee breakdown including foreign and standard fees
+ */
 function calculateAllFees(formData) {
     const val = parseFloat(formData.propertyValue);
-    
+
     // Foreign investment fees
     const firbFee = calculateFIRBFee(formData.propertyValue, formData.propertyType, formData.firstHomeBuyer);
     const stampDutySurcharge = calculateStampDutySurcharge(formData.propertyValue, formData.state);
     const legalFees = 2500;
-    
-    // Standard property purchase fees (UPDATED with state-specific fees)
+
+    // Standard property purchase fees (UPDATED with state-specific fees and improved LMI)
     const standardFees = {
         stampDuty: calculateStandardStampDuty(formData.propertyValue, formData.state),
         transferFee: stateTransferFees[formData.state] || 150,
@@ -149,7 +209,7 @@ function calculateAllFees(formData) {
         pestInspection: 350,
         conveyancingLegal: 1500,
         loanApplicationFee: 600,
-        lendersMortgageInsurance: val > 800000 && val * 0.8 > 640000 ? val * 0.02 : 0,
+        lendersMortgageInsurance: calculateLMI(val),
         councilRates: 400,
         waterRates: 300
     };

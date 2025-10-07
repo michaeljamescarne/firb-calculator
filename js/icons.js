@@ -1,11 +1,22 @@
-// Icon helper functions for Lucide icons
-// Returns HTML string for any Lucide icon
+/**
+ * Icon helper functions for Lucide icons
+ * @file icons.js
+ */
 
+/**
+ * Generate HTML string for any Lucide icon
+ * @param {string} name - Lucide icon name
+ * @param {string} classes - CSS classes for the icon
+ * @returns {string} HTML string for icon
+ */
 function icon(name, classes = 'w-5 h-5') {
     return `<i data-lucide="${name}" class="${classes}"></i>`;
 }
 
-// Common icon shortcuts
+/**
+ * Common icon shortcuts for frequently used icons
+ * @type {Object}
+ */
 const icons = {
     home: (classes) => icon('home', classes || 'w-8 h-8'),
     calculator: (classes) => icon('calculator', classes || 'w-5 h-5'),
