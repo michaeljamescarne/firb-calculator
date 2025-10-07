@@ -1,3 +1,88 @@
+// Main render function - THIS WAS MISSING!
+function render() {
+    const app = document.getElementById('app');
+    if (!app) {
+        console.error('App element not found!');
+        return;
+    }
+
+    let content = '';
+
+    // Header (always shown)
+    content += renderHeader();
+
+    // Render current step
+    switch(state.currentStep) {
+        case 'home':
+            content += renderHome();
+            break;
+        case 'eligibility':
+            content += renderEligibility();
+            break;
+        case 'eligibilityResult':
+            content += renderEligibilityResult();
+            break;
+        case 'calculator':
+            content += renderCalculator();
+            break;
+        case 'results':
+            content += renderResults();
+            break;
+        default:
+            content += renderHome();
+    }
+
+    // Footer (always shown)
+    content += renderFooter();
+
+    app.innerHTML = content;
+    
+    // Re-initialize Lucide icons after rendering
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+    }
+}
+
+// Header component
+function renderHeader() {
+    return `
+        <header class="bg-white border-b sticky top-0 z-50 shadow-sm">
+            <div class="max-w-7xl mx-auto px-4 py-4">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center space-x-2 cursor-pointer" onclick="goToStep('home')">
+                        ${icons.home('w-8 h-8 text-blue-600')}
+                        <span class="text-xl font-semibold">FIRB Calculator</span>
+                    </div>
+
+                    <div class="flex items-center space-x-4">
+                        <nav class="hidden md:flex space-x-6">
+                            <button onclick="goToStep('home')" class="text-gray-700 hover:text-blue-600">${t('navHome')}</button>
+                            <button onclick="goToStep('eligibility')" class="text-gray-700 hover:text-blue-600">${t('navCalculator')}</button>
+                        </nav>
+
+                        <div class="flex space-x-2">
+                            <button onclick="changeLanguage('en')" class="px-3 py-1 rounded text-sm ${state.language === 'en' ? 'bg-blue-600 text-white' : 'text-gray-600'}">EN</button>
+                            <button onclick="changeLanguage('zh')" class="px-3 py-1 rounded text-sm ${state.language === 'zh' ? 'bg-blue-600 text-white' : 'text-gray-600'}">中文</button>
+                            <button onclick="changeLanguage('vi')" class="px-3 py-1 rounded text-sm ${state.language === 'vi' ? 'bg-blue-600 text-white' : 'text-gray-600'}">VI</button>
+                        </div>
+
+                        <button onclick="toggleMobileMenu()" class="md:hidden">
+                            ${state.mobileMenuOpen ? icons.x() : icons.menu()}
+                        </button>
+                    </div>
+                </div>
+
+                ${state.mobileMenuOpen ? `
+                    <div class="py-4 border-t mt-4 md:hidden">
+                        <button onclick="goToStep('home'); toggleMobileMenu();" class="block w-full text-left py-2">${t('navHome')}</button>
+                        <button onclick="goToStep('eligibility'); toggleMobileMenu();" class="block w-full text-left py-2">${t('navCalculator')}</button>
+                    </div>
+                ` : ''}
+            </div>
+        </header>
+    `;
+}
+
 function renderHome() {
     return `
         <section class="bg-gradient-to-br from-blue-50 to-white py-20">
@@ -221,5 +306,404 @@ function renderHome() {
                 </button>
             </div>
         </section>
+    `;
+}
+
+function renderEligibility() {
+    return `
+        <section class="py-20 bg-gray-50 min-h-screen">
+            <div class="max-w-3xl mx-auto px-4">
+                <button onclick="goToStep('home')" class="text-blue-600 mb-8 flex items-center space-x-2">
+                    ${icon('arrow-left', 'w-5 h-5')}
+                    <span>${t('back')}</span>
+                </button>
+                <div class="bg-white p-8 rounded-lg">
+                    <h2 class="text-3xl font-bold mb-6">${t('checkEligibility')}</h2>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block font-semibold mb-3">${t('citizenshipQ')}</label>
+                            <div class="space-y-2">
+                                <label class="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50">
+                                    <input type="radio" name="citizenship" value="australian" 
+                                        ${state.eligibilityData.citizenship === 'australian' ? 'checked' : ''} 
+                                        onchange="updateEligibility('citizenship', 'australian'); render();" 
+                                        class="mr-3" />
+                                    <span>${t('ausC')}</span>
+                                </label>
+                                <label class="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50">
+                                    <input type="radio" name="citizenship" value="foreign" 
+                                        ${state.eligibilityData.citizenship === 'foreign' ? 'checked' : ''} 
+                                        onchange="updateEligibility('citizenship', 'foreign'); render();" 
+                                        class="mr-3" />
+                                    <span>${t('foreignC')}</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block font-semibold mb-3">${t('residencyQ')}</label>
+                            <div class="space-y-2">
+                                <label class="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50">
+                                    <input type="radio" name="residency" value="permanent" 
+                                        ${state.eligibilityData.residency === 'permanent' ? 'checked' : ''} 
+                                        onchange="updateEligibility('residency', 'permanent'); render();" 
+                                        class="mr-3" />
+                                    <span>${t('permRes')}</span>
+                                </label>
+                                <label class="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50">
+                                    <input type="radio" name="residency" value="temporary" 
+                                        ${state.eligibilityData.residency === 'temporary' ? 'checked' : ''} 
+                                        onchange="updateEligibility('residency', 'temporary'); render();" 
+                                        class="mr-3" />
+                                    <span>${t('tempRes')}</span>
+                                </label>
+                                <label class="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50">
+                                    <input type="radio" name="residency" value="notResident" 
+                                        ${state.eligibilityData.residency === 'notResident' ? 'checked' : ''} 
+                                        onchange="updateEligibility('residency', 'notResident'); render();" 
+                                        class="mr-3" />
+                                    <span>${t('notRes')}</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block font-semibold mb-3">${t('purposeQ')}</label>
+                            <div class="space-y-2">
+                                <label class="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50">
+                                    <input type="radio" name="purpose" value="primary" 
+                                        ${state.eligibilityData.purposeOfPurchase === 'primary' ? 'checked' : ''} 
+                                        onchange="updateEligibility('purposeOfPurchase', 'primary'); render();" 
+                                        class="mr-3" />
+                                    <span>${t('primary')}</span>
+                                </label>
+                                <label class="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50">
+                                    <input type="radio" name="purpose" value="investment" 
+                                        ${state.eligibilityData.purposeOfPurchase === 'investment' ? 'checked' : ''} 
+                                        onchange="updateEligibility('purposeOfPurchase', 'investment'); render();" 
+                                        class="mr-3" />
+                                    <span>${t('invest')}</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <button onclick="checkEligibility()" class="w-full bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-700 flex items-center justify-center space-x-2">
+                            ${icon('shield', 'w-5 h-5')}
+                            <span>${t('checkElig')}</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    `;
+}
+
+function renderEligibilityResult() {
+    const isRequired = state.isEligible && state.isEligible.required;
+    
+    return `
+        <section class="py-20 bg-gray-50 min-h-screen">
+            <div class="max-w-3xl mx-auto px-4">
+                <button onclick="goToStep('eligibility')" class="text-blue-600 mb-8 flex items-center space-x-2">
+                    ${icon('arrow-left', 'w-5 h-5')}
+                    <span>${t('back')}</span>
+                </button>
+                <div class="bg-white p-8 rounded-lg text-center">
+                    ${isRequired ? `
+                        <div class="bg-orange-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                            ${icon('file-text', 'w-10 h-10 text-orange-600')}
+                        </div>
+                        <h2 class="text-3xl font-bold mb-4">${t('firbReq')}</h2>
+                        <p class="text-lg text-gray-600 mb-4">${t('firbReqMsg')}</p>
+                        ${state.isEligible.note ? `<p class="text-sm text-gray-500 mb-8 bg-gray-50 p-4 rounded">${state.isEligible.note}</p>` : ''}
+                        <button onclick="goToStep('calculator')" class="bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-700 inline-flex items-center space-x-2">
+                            <span>${t('proceedCalc')}</span>
+                            ${icons.arrowRight()}
+                        </button>
+                    ` : `
+                        <div class="bg-green-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                            ${icon('check-circle', 'w-10 h-10 text-green-600')}
+                        </div>
+                        <h2 class="text-3xl font-bold mb-4">${t('noFirb')}</h2>
+                        <p class="text-lg text-gray-600 mb-4">${t('noFirbMsg')}</p>
+                        ${state.isEligible.note ? `<p class="text-sm text-gray-500 mb-8 bg-gray-50 p-4 rounded">${state.isEligible.note}</p>` : ''}
+                        <button onclick="goToStep('home')" class="bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-700">${t('returnHome')}</button>
+                    `}
+                </div>
+            </div>
+        </section>
+    `;
+}
+
+function renderCalculator() {
+    return `
+        <section class="py-20 bg-gray-50 min-h-screen">
+            <div class="max-w-3xl mx-auto px-4">
+                <button onclick="goToStep('eligibilityResult')" class="text-blue-600 mb-8 flex items-center space-x-2">
+                    ${icon('arrow-left', 'w-5 h-5')}
+                    <span>${t('back')}</span>
+                </button>
+                <div class="bg-white p-8 rounded-lg">
+                    <h2 class="text-3xl font-bold mb-8">${t('propCalc')}</h2>
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block font-semibold mb-2">${t('propAddress')}</label>
+                            <input type="text" 
+                                value="${state.formData.address}" 
+                                oninput="updateForm('address', this.value)" 
+                                placeholder="${t('enterAddress')}" 
+                                class="w-full px-4 py-3 border rounded-lg" />
+                        </div>
+
+                        <div>
+                            <label class="block font-semibold mb-2">${t('purchasePrice')}</label>
+                            <input type="number" 
+                                value="${state.formData.propertyValue}" 
+                                oninput="updateForm('propertyValue', this.value)" 
+                                placeholder="850000" 
+                                class="w-full px-4 py-3 border rounded-lg" />
+                        </div>
+
+                        <div>
+                            <label class="block font-semibold mb-2">${t('propType')}</label>
+                            <select value="${state.formData.propertyType}" 
+                                onchange="updateForm('propertyType', this.value)" 
+                                class="w-full px-4 py-3 border rounded-lg">
+                                <option value="">${t('selectType')}</option>
+                                <option value="established">${t('established')}</option>
+                                <option value="newDwelling">${t('newDwelling')}</option>
+                                <option value="vacant">${t('vacant')}</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block font-semibold mb-2">${t('state')}</label>
+                            <select value="${state.formData.state}" 
+                                onchange="updateForm('state', this.value)" 
+                                class="w-full px-4 py-3 border rounded-lg">
+                                <option value="">${t('selectState')}</option>
+                                <option value="NSW">NSW</option>
+                                <option value="VIC">VIC</option>
+                                <option value="QLD">QLD</option>
+                                <option value="SA">SA</option>
+                                <option value="WA">WA</option>
+                                <option value="TAS">TAS</option>
+                                <option value="ACT">ACT</option>
+                                <option value="NT">NT</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block font-semibold mb-2">${t('firstHome')}</label>
+                            <div class="flex space-x-4">
+                                <label>
+                                    <input type="radio" name="firstHome" value="yes" 
+                                        ${state.formData.firstHomeBuyer === 'yes' ? 'checked' : ''} 
+                                        onchange="updateForm('firstHomeBuyer', 'yes'); render();" 
+                                        class="mr-2" />Yes
+                                </label>
+                                <label>
+                                    <input type="radio" name="firstHome" value="no" 
+                                        ${state.formData.firstHomeBuyer === 'no' ? 'checked' : ''} 
+                                        onchange="updateForm('firstHomeBuyer', 'no'); render();" 
+                                        class="mr-2" />No
+                                </label>
+                            </div>
+                        </div>
+
+                        <button onclick="handleCalculate()" 
+                            ${state.isCalculating ? 'disabled' : ''} 
+                            class="w-full bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-700 flex items-center justify-center space-x-2 ${state.isCalculating ? 'opacity-50 cursor-not-allowed' : ''}">
+                            ${icon('calculator', 'w-5 h-5')}
+                            <span>${state.isCalculating ? t('calculating') : t('calcFees')}</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    `;
+}
+
+function renderResults() {
+    if (!state.calculatedFees) return '';
+    
+    const fees = state.calculatedFees;
+    
+    return `
+        <section class="py-20 bg-gray-50 min-h-screen">
+            <div class="max-w-4xl mx-auto px-4">
+                <button onclick="goToStep('calculator')" class="text-blue-600 mb-8 flex items-center space-x-2">
+                    ${icon('arrow-left', 'w-5 h-5')}
+                    <span>${t('back')}</span>
+                </button>
+                <div class="bg-white p-8 rounded-lg">
+                    <h2 class="text-3xl font-bold mb-8">${t('feeBreakdown')}</h2>
+                    
+                    <div class="mb-12">
+                        <h3 class="text-2xl font-bold mb-6 flex items-center">
+                            ${icon('globe', 'w-6 h-6 text-orange-600 mr-2')}
+                            ${t('foreignInvestmentFees')}
+                        </h3>
+                        <div class="space-y-4 mb-6">
+                            <div class="p-6 bg-orange-50 rounded-lg border border-orange-200">
+                                <div class="flex justify-between">
+                                    <div>
+                                        <h4 class="font-semibold text-lg">${t('firbAppFee')}</h4>
+                                        <p class="text-sm text-gray-600">${t('paidToGov')}</p>
+                                    </div>
+                                    <span class="text-2xl font-bold">${formatCurrency(fees.firb)}</span>
+                                </div>
+                            </div>
+                            
+                            <div class="p-6 bg-orange-50 rounded-lg border border-orange-200">
+                                <div class="flex justify-between">
+                                    <div>
+                                        <h4 class="font-semibold text-lg">${t('stampSurcharge')}</h4>
+                                        <p class="text-sm text-gray-600">${t('addStateTax')}</p>
+                                    </div>
+                                    <span class="text-2xl font-bold">${formatCurrency(fees.stampDuty)}</span>
+                                </div>
+                            </div>
+                            
+                            <div class="p-6 bg-orange-50 rounded-lg border border-orange-200">
+                                <div class="flex justify-between">
+                                    <div>
+                                        <h4 class="font-semibold text-lg">${t('legalFeesCard')}</h4>
+                                        <p class="text-sm text-gray-600">${t('profFees')}</p>
+                                    </div>
+                                    <span class="text-2xl font-bold">${formatCurrency(fees.legal)}</span>
+                                </div>
+                            </div>
+
+                            <div class="bg-orange-100 p-4 rounded-lg">
+                                <div class="flex justify-between items-center">
+                                    <h4 class="text-xl font-bold">${t('foreignTotal')}</h4>
+                                    <span class="text-2xl font-bold text-orange-600">${formatCurrency(fees.foreignTotal)}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-12">
+                        <h3 class="text-2xl font-bold mb-6 flex items-center">
+                            ${icons.home('w-6 h-6 text-blue-600 mr-2')}
+                            ${t('standardPropertyFees')}
+                        </h3>
+                        <p class="text-sm text-gray-600 mb-6">${t('allBuyersPay')}</p>
+                        
+                        <div class="space-y-3 mb-6">
+                            <div class="p-4 bg-blue-50 rounded-lg flex justify-between">
+                                <span class="font-semibold">${t('standardStampDuty')}</span>
+                                <span class="font-bold">${formatCurrency(fees.standard.stampDuty)}</span>
+                            </div>
+                            <div class="p-4 bg-gray-50 rounded-lg flex justify-between">
+                                <span class="font-semibold">${t('transferFee')}</span>
+                                <span class="font-bold">${formatCurrency(fees.standard.transferFee)}</span>
+                            </div>
+                            <div class="p-4 bg-gray-50 rounded-lg flex justify-between">
+                                <span class="font-semibold">${t('mortgageReg')}</span>
+                                <span class="font-bold">${formatCurrency(fees.standard.mortgageRegistration)}</span>
+                            </div>
+                            <div class="p-4 bg-gray-50 rounded-lg flex justify-between">
+                                <span class="font-semibold">${t('legalConveyancing')}</span>
+                                <span class="font-bold">${formatCurrency(fees.standard.conveyancingLegal)}</span>
+                            </div>
+                            <div class="p-4 bg-gray-50 rounded-lg flex justify-between">
+                                <span class="font-semibold">${t('buildingPest')}</span>
+                                <span class="font-bold">${formatCurrency(fees.standard.buildingInspection + fees.standard.pestInspection)}</span>
+                            </div>
+                            <div class="p-4 bg-gray-50 rounded-lg flex justify-between">
+                                <span class="font-semibold">${t('loanApp')}</span>
+                                <span class="font-bold">${formatCurrency(fees.standard.loanApplicationFee)}</span>
+                            </div>
+                            ${fees.standard.lendersMortgageInsurance > 0 ? `
+                                <div class="p-4 bg-gray-50 rounded-lg flex justify-between">
+                                    <span class="font-semibold">Lenders Mortgage Insurance</span>
+                                    <span class="font-bold">${formatCurrency(fees.standard.lendersMortgageInsurance)}</span>
+                                </div>
+                            ` : ''}
+                            <div class="p-4 bg-gray-50 rounded-lg flex justify-between">
+                                <span class="font-semibold">Title Search</span>
+                                <span class="font-bold">${formatCurrency(fees.standard.titleSearch)}</span>
+                            </div>
+                            <div class="p-4 bg-gray-50 rounded-lg flex justify-between">
+                                <span class="font-semibold">${t('councilWater')}</span>
+                                <span class="font-bold">${formatCurrency(fees.standard.councilRates + fees.standard.waterRates)}</span>
+                            </div>
+
+                            <div class="bg-blue-100 p-4 rounded-lg">
+                                <div class="flex justify-between items-center">
+                                    <h4 class="text-xl font-bold">${t('standardTotal')}</h4>
+                                    <span class="text-2xl font-bold text-blue-600">${formatCurrency(fees.standardTotal)}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border-t-2 pt-6 mb-8">
+                        <div class="bg-gradient-to-r from-blue-600 to-indigo-600 p-6 rounded-lg text-white">
+                            <div class="flex justify-between items-center">
+                                <h3 class="text-2xl font-bold">${t('totalCosts')}</h3>
+                                <span class="text-4xl font-bold">${formatCurrency(fees.grandTotal)}</span>
+                            </div>
+                            <p class="text-sm text-blue-100 mt-2">${t('allFees')}</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-blue-50 p-6 rounded-lg mb-8">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <h3 class="text-xl font-bold mb-1">${t('ourServiceFee')}</h3>
+                                <p class="text-sm text-gray-600">${t('detailedReport')}</p>
+                            </div>
+                            <span class="text-2xl font-bold text-blue-600">$50</span>
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-4 mb-6">
+                        <button onclick="handlePayment()" 
+                            ${state.isProcessingPayment ? 'disabled' : ''}
+                            class="bg-blue-600 text-white px-6 py-4 rounded-lg font-semibold hover:bg-blue-700 flex items-center justify-center space-x-2 ${state.isProcessingPayment ? 'opacity-50 cursor-not-allowed' : ''}">
+                            ${icon('dollar-sign', 'w-5 h-5')}
+                            <span>${state.isProcessingPayment ? t('processing') : t('proceedPayment')}</span>
+                        </button>
+                        <button onclick="downloadReport()" class="bg-gray-100 text-gray-900 px-6 py-4 rounded-lg font-semibold hover:bg-gray-200 flex items-center justify-center space-x-2">
+                            ${icon('download', 'w-5 h-5')}
+                            <span>${t('downloadReport')}</span>
+                        </button>
+                    </div>
+
+                    <p class="text-sm text-gray-500 text-center">${t('estimates')}</p>
+                </div>
+            </div>
+        </section>
+    `;
+}
+
+function renderFooter() {
+    return `
+        <footer class="bg-gray-900 text-white py-12">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div>
+                        <h3 class="text-lg font-bold mb-4">FIRB Calculator</h3>
+                        <p class="text-gray-400">Professional fee calculations</p>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold mb-4">${t('quickLinks')}</h3>
+                        <button onclick="goToStep('home')" class="block text-gray-400 hover:text-white mb-2">${t('navHome')}</button>
+                        <button onclick="goToStep('eligibility')" class="block text-gray-400 hover:text-white">${t('navCalculator')}</button>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold mb-4">${t('contact')}</h3>
+                        <p class="text-gray-400">support@firbcalculator.com.au</p>
+                    </div>
+                </div>
+                <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                    <p>&copy; 2025 FIRB Calculator. ${t('allRights')}</p>
+                </div>
+            </div>
+        </footer>
     `;
 }
