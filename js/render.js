@@ -1,6 +1,7 @@
 // All render functions for each page/section
 
 // Render home page
+// UPDATED: Added comprehensive educational sections from Test Code
 function renderHome() {
     return `
         <section class="bg-gradient-to-br from-blue-50 to-white py-20">
@@ -14,9 +15,45 @@ function renderHome() {
             </div>
         </section>
 
+        <!-- ADDED: What Are Foreign Investment Property Fees? Section -->
         <section class="py-20 bg-white">
             <div class="max-w-7xl mx-auto px-4">
-                <div class="grid md:grid-cols-3 gap-8">
+                <div class="max-w-4xl mx-auto mb-16">
+                    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-8 rounded-lg border border-blue-100">
+                        <h2 class="text-3xl font-bold mb-6 text-center">What Are Foreign Investment Property Fees?</h2>
+                        <p class="mb-4 text-gray-700">
+                            Foreign Investment Property Fees are mandatory charges that foreign investors must pay when purchasing residential real estate in Australia.
+                        </p>
+                        <div class="grid md:grid-cols-3 gap-4 my-6">
+                            <div class="bg-white p-4 rounded-lg shadow-sm">
+                                <div class="flex items-center mb-2">
+                                    <span class="text-2xl mr-2">📋</span>
+                                    <h3 class="font-bold">FIRB Fee</h3>
+                                </div>
+                                <p class="text-sm text-gray-600">$1,710 to $243,400+ depending on property value</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-sm">
+                                <div class="flex items-center mb-2">
+                                    <span class="text-2xl mr-2">💰</span>
+                                    <h3 class="font-bold">Stamp Duty Surcharge</h3>
+                                </div>
+                                <p class="text-sm text-gray-600">Additional 7-8% of property value</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-sm">
+                                <div class="flex items-center mb-2">
+                                    <span class="text-2xl mr-2">🏢</span>
+                                    <h3 class="font-bold">Legal Fees</h3>
+                                </div>
+                                <p class="text-sm text-gray-600">Professional representation fees</p>
+                            </div>
+                        </div>
+                        <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                            <p class="text-sm text-blue-800"><strong>Important:</strong> FIRB approval must be obtained BEFORE purchasing property.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-8 mb-16">
                     <div class="text-center">
                         <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                             <span class="text-3xl">📊</span>
@@ -41,10 +78,163 @@ function renderHome() {
                 </div>
             </div>
         </section>
+
+        <!-- ADDED: When Are These Fees Required? Section -->
+        <section class="py-20 bg-gray-50">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="max-w-4xl mx-auto">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-6 text-center">When Are These Fees Required?</h2>
+                    <p class="text-lg text-gray-600 mb-8 text-center">Foreign investment fees are required in specific circumstances when purchasing Australian residential property:</p>
+                    
+                    <div class="grid md:grid-cols-2 gap-8 mb-12">
+                        <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-orange-500">
+                            <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                                <span class="text-2xl mr-2">📋</span>
+                                FIRB Fees Required
+                            </h3>
+                            <ul class="space-y-3">
+                                <li class="flex items-start text-gray-700">
+                                    <span class="text-orange-500 mr-2">•</span>
+                                    <span>Foreign citizens purchasing any Australian residential property</span>
+                                </li>
+                                <li class="flex items-start text-gray-700">
+                                    <span class="text-orange-500 mr-2">•</span>
+                                    <span>Temporary residents buying established dwellings or vacant land</span>
+                                </li>
+                                <li class="flex items-start text-gray-700">
+                                    <span class="text-orange-500 mr-2">•</span>
+                                    <span>Non-residents making any residential property investment</span>
+                                </li>
+                                <li class="flex items-start text-gray-700">
+                                    <span class="text-orange-500 mr-2">•</span>
+                                    <span>Companies/trusts with foreign ownership purchasing residential property</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-green-500">
+                            <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                                <span class="text-2xl mr-2">✅</span>
+                                Fees NOT required if you are:
+                            </h3>
+                            <ul class="space-y-3">
+                                <li class="flex items-start text-gray-700">
+                                    <span class="text-green-500 mr-2">✓</span>
+                                    <span>An Australian citizen or permanent resident</span>
+                                </li>
+                                <li class="flex items-start text-gray-700">
+                                    <span class="text-green-500 mr-2">✓</span>
+                                    <span>A New Zealand citizen with Special Category Visa (subclass 444)</span>
+                                </li>
+                                <li class="flex items-start text-gray-700">
+                                    <span class="text-green-500 mr-2">✓</span>
+                                    <span>A temporary resident buying a new dwelling to live in</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="bg-blue-50 p-8 rounded-lg text-center border border-blue-200">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-4">Not sure if you need FIRB approval?</h3>
+                        <p class="text-gray-600 mb-6">Find out in less than 2 minutes with our quick eligibility assessment</p>
+                        <button onclick="goToStep('eligibility')" class="bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transition inline-flex items-center space-x-2">
+                            <span>🛡️</span>
+                            <span>Take Our Free Eligibility Test</span>
+                            <span>→</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ADDED: Our Service Section -->
+        <section class="py-20 bg-white">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="grid md:grid-cols-2 gap-12">
+                    <div>
+                        <h2 class="text-3xl font-bold text-gray-900 mb-6">Our Service</h2>
+                        <p class="text-lg text-gray-600 mb-8">
+                            We provide comprehensive fee calculations for foreign investors purchasing Australian residential property, ensuring you understand all costs upfront.
+                        </p>
+                        <div class="bg-blue-600 text-white p-6 rounded-lg">
+                            <h3 class="text-2xl font-bold mb-2">Service Fee: $50</h3>
+                            <p class="text-blue-100">One-time fee per property application covering detailed fee breakdown and compliance guidance</p>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 p-8 rounded-lg shadow-sm">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-6">What's Included:</h3>
+                        <ul class="space-y-4">
+                            <li class="flex items-start">
+                                <span class="text-2xl mr-3">✅</span>
+                                <span class="text-gray-700">Complete FIRB application fee calculation</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-2xl mr-3">✅</span>
+                                <span class="text-gray-700">State-specific stamp duty surcharge analysis</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-2xl mr-3">✅</span>
+                                <span class="text-gray-700">Detailed breakdown of all associated costs</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-2xl mr-3">✅</span>
+                                <span class="text-gray-700">Payment timeline and methods guidance</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ADDED: Understanding the Fees Section -->
+        <section class="py-20 bg-gray-50">
+            <div class="max-w-7xl mx-auto px-4">
+                <h2 class="text-3xl font-bold text-gray-900 mb-12 text-center">Understanding the Fees</h2>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="bg-white p-8 rounded-lg shadow-sm">
+                        <div class="bg-blue-600 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
+                            <span class="text-2xl">📋</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-3">FIRB Application Fee</h3>
+                        <p class="text-gray-600 mb-4">Paid to the Australian Government (Foreign Investment Review Board) for property purchase approval</p>
+                        <p class="text-sm text-gray-500">Payment: Direct to Australian Treasury</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-lg shadow-sm">
+                        <div class="bg-blue-600 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
+                            <span class="text-2xl">💰</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-3">Stamp Duty Surcharge</h3>
+                        <p class="text-gray-600 mb-4">Additional state-based tax for foreign buyers (varies by state: 7-8% of property value)</p>
+                        <p class="text-sm text-gray-500">Payment: State Revenue Office at settlement</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-lg shadow-sm">
+                        <div class="bg-blue-600 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
+                            <span class="text-2xl">🌏</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-3">Legal & Conveyancing</h3>
+                        <p class="text-gray-600 mb-4">Professional fees for legal representation and property transfer</p>
+                        <p class="text-sm text-gray-500">Payment: Direct to your legal representative</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ADDED: Final CTA Section -->
+        <section class="py-20 bg-blue-600">
+            <div class="max-w-4xl mx-auto text-center px-4">
+                <h2 class="text-3xl font-bold text-white mb-6">Ready to calculate your fees?</h2>
+                <p class="text-xl text-blue-100 mb-8">Get your comprehensive fee breakdown in minutes</p>
+                <button onclick="goToStep('eligibility')" class="bg-white text-blue-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-50 transition inline-flex items-center space-x-2">
+                    <span>Start Your Calculation</span>
+                    <span>→</span>
+                </button>
+            </div>
+        </section>
     `;
 }
 
 // Render eligibility checker page
+// UPDATED: Added "vacation" option from Test Code
 function renderEligibility() {
     return `
         <section class="py-20 bg-gray-50 min-h-screen">
@@ -96,6 +286,10 @@ function renderEligibility() {
                                 <label class="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50">
                                     <input type="radio" name="purpose" value="investment" onchange="updateEligibility('purposeOfPurchase', 'investment')" class="mr-3">
                                     <span>${t('invest')}</span>
+                                </label>
+                                <label class="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50">
+                                    <input type="radio" name="purpose" value="vacation" onchange="updateEligibility('purposeOfPurchase', 'vacation')" class="mr-3">
+                                    <span>Vacation</span>
                                 </label>
                             </div>
                         </div>
@@ -240,7 +434,8 @@ function renderCalculator() {
                                 <div class="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                                 <span>${t('calculating')}</span>
                             ` : `
-                                <span>📊 ${t('calcFees')}</span>
+                                <span>📊</span>
+                                <span>${t('calcFees')}</span>
                             `}
                         </button>
                     </div>
@@ -314,8 +509,12 @@ function renderResults() {
                                 <span class="font-bold">${formatCurrency(fees.standard.stampDuty)}</span>
                             </div>
                             <div class="p-4 bg-gray-50 rounded-lg flex justify-between">
-                                <span class="font-semibold">${t('transferFee')} & ${t('mortgageReg')}</span>
-                                <span class="font-bold">${formatCurrency(fees.standard.transferFee + fees.standard.mortgageRegistration)}</span>
+                                <span class="font-semibold">${t('transferFee')}</span>
+                                <span class="font-bold">${formatCurrency(fees.standard.transferFee)}</span>
+                            </div>
+                            <div class="p-4 bg-gray-50 rounded-lg flex justify-between">
+                                <span class="font-semibold">${t('mortgageReg')}</span>
+                                <span class="font-bold">${formatCurrency(fees.standard.mortgageRegistration)}</span>
                             </div>
                             <div class="p-4 bg-gray-50 rounded-lg flex justify-between">
                                 <span class="font-semibold">${t('legalConveyancing')}</span>
@@ -323,7 +522,7 @@ function renderResults() {
                             </div>
                             <div class="p-4 bg-gray-50 rounded-lg flex justify-between">
                                 <span class="font-semibold">${t('buildingPest')}</span>
-                                <span class="font-bold">${formatCurrency(fees.standard.buildingInspection + fees.standard.pestInspection + fees.standard.titleSearch)}</span>
+                                <span class="font-bold">${formatCurrency(fees.standard.buildingInspection + fees.standard.pestInspection)}</span>
                             </div>
                             <div class="p-4 bg-gray-50 rounded-lg flex justify-between">
                                 <span class="font-semibold">${t('loanApp')}</span>
@@ -335,6 +534,10 @@ function renderResults() {
                                     <span class="font-bold">${formatCurrency(fees.standard.lendersMortgageInsurance)}</span>
                                 </div>
                             ` : ''}
+                            <div class="p-4 bg-gray-50 rounded-lg flex justify-between">
+                                <span class="font-semibold">Title Search</span>
+                                <span class="font-bold">${formatCurrency(fees.standard.titleSearch)}</span>
+                            </div>
                             <div class="p-4 bg-gray-50 rounded-lg flex justify-between">
                                 <span class="font-semibold">${t('councilWater')}</span>
                                 <span class="font-bold">${formatCurrency(fees.standard.councilRates + fees.standard.waterRates)}</span>
@@ -370,11 +573,18 @@ function renderResults() {
                     </div>
 
                     <div class="grid md:grid-cols-2 gap-4 mb-6">
-                        <button onclick="handlePayment()" ${state.isProcessingPayment ? 'disabled' : ''} class="bg-blue-600 text-white px-6 py-4 rounded-lg font-semibold hover:bg-blue-700 disabled:bg-gray-400">
-                            ${state.isProcessingPayment ? `⏳ ${t('processing')}` : `💳 ${t('proceedPayment')}`}
+                        <button onclick="handlePayment()" ${state.isProcessingPayment ? 'disabled' : ''} class="bg-blue-600 text-white px-6 py-4 rounded-lg font-semibold hover:bg-blue-700 disabled:bg-gray-400 flex items-center justify-center space-x-2">
+                            ${state.isProcessingPayment ? `
+                                <div class="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                <span>${t('processing')}</span>
+                            ` : `
+                                <span>💳</span>
+                                <span>${t('proceedPayment')}</span>
+                            `}
                         </button>
-                        <button onclick="downloadReport()" class="bg-gray-100 text-gray-900 px-6 py-4 rounded-lg font-semibold hover:bg-gray-200">
-                            📥 ${t('downloadReport')}
+                        <button onclick="downloadReport()" class="bg-gray-100 text-gray-900 px-6 py-4 rounded-lg font-semibold hover:bg-gray-200 flex items-center justify-center space-x-2">
+                            <span>📥</span>
+                            <span>${t('downloadReport')}</span>
                         </button>
                     </div>
 
@@ -386,6 +596,7 @@ function renderResults() {
 }
 
 // Render header
+// UPDATED: Added mobile menu toggle and Resources nav
 function renderHeader() {
     return `
         <header class="bg-white border-b sticky top-0 z-50 shadow-sm">
@@ -395,12 +606,31 @@ function renderHeader() {
                         <span class="text-3xl">🏠</span>
                         <span class="text-xl font-semibold">FIRB Calculator</span>
                     </div>
-                    <div class="flex items-center space-x-2">
-                        <button onclick="changeLanguage('en')" class="px-3 py-1 rounded text-sm ${state.language === 'en' ? 'bg-blue-600 text-white' : 'text-gray-600'}">EN</button>
-                        <button onclick="changeLanguage('zh')" class="px-3 py-1 rounded text-sm ${state.language === 'zh' ? 'bg-blue-600 text-white' : 'text-gray-600'}">中文</button>
-                        <button onclick="changeLanguage('vi')" class="px-3 py-1 rounded text-sm ${state.language === 'vi' ? 'bg-blue-600 text-white' : 'text-gray-600'}">VI</button>
+
+                    <div class="flex items-center space-x-4">
+                        <nav class="hidden md:flex space-x-6">
+                            <button onclick="goToStep('home')" class="text-gray-700 hover:text-blue-600">${t('navHome')}</button>
+                            <button onclick="goToStep('eligibility')" class="text-gray-700 hover:text-blue-600">${t('navCalculator')}</button>
+                        </nav>
+
+                        <div class="flex space-x-2">
+                            <button onclick="changeLanguage('en')" class="px-3 py-1 rounded text-sm ${state.language === 'en' ? 'bg-blue-600 text-white' : 'text-gray-600'}">EN</button>
+                            <button onclick="changeLanguage('zh')" class="px-3 py-1 rounded text-sm ${state.language === 'zh' ? 'bg-blue-600 text-white' : 'text-gray-600'}">中文</button>
+                            <button onclick="changeLanguage('vi')" class="px-3 py-1 rounded text-sm ${state.language === 'vi' ? 'bg-blue-600 text-white' : 'text-gray-600'}">VI</button>
+                        </div>
+
+                        <button onclick="toggleMobileMenu()" class="md:hidden">
+                            ${state.mobileMenuOpen ? '<span class="text-2xl">✕</span>' : '<span class="text-2xl">☰</span>'}
+                        </button>
                     </div>
                 </div>
+
+                ${state.mobileMenuOpen ? `
+                    <div class="py-4 border-t mt-4 md:hidden">
+                        <button onclick="goToStep('home'); toggleMobileMenu();" class="block w-full text-left py-2">${t('navHome')}</button>
+                        <button onclick="goToStep('eligibility'); toggleMobileMenu();" class="block w-full text-left py-2">${t('navCalculator')}</button>
+                    </div>
+                ` : ''}
             </div>
         </header>
     `;
