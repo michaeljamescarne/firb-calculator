@@ -49,6 +49,11 @@ function render() {
         lucide.createIcons();
     }
 
+    // Add alert styles (needed for all pages with alerts)
+    if (typeof addAlertStyles === 'function') {
+        addAlertStyles();
+    }
+
     // Initialize dashboard charts if on results page
     if (state.currentStep === 'results' && state.calculatedFees) {
         // Add collapsible styles
@@ -467,6 +472,9 @@ function renderEligibilityResult() {
                         <button onclick="goToStep('home')" class="bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-700">${t('returnHome')}</button>
                     `}
                 </div>
+
+                <!-- Contextual Alerts -->
+                ${typeof getEligibilityAlertsHTML === 'function' ? getEligibilityAlertsHTML() : ''}
             </div>
         </section>
     `;
@@ -606,6 +614,9 @@ function renderCalculator() {
                             <span>${state.isCalculating ? t('calculating') : t('calcFees')}</span>
                         </button>
                     </div>
+
+                    <!-- Contextual Alerts -->
+                    ${typeof getCalculatorAlertsHTML === 'function' ? getCalculatorAlertsHTML() : ''}
                 </div>
             </div>
         </section>

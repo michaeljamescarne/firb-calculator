@@ -24,6 +24,9 @@ function renderResultsDashboard() {
                 <!-- Summary Cards -->
                 ${renderSummaryCards(fees)}
 
+                <!-- Critical Alerts -->
+                ${typeof getResultsAlertsHTML === 'function' ? getResultsAlertsHTML(fees) : ''}
+
                 <!-- Visualization Section -->
                 ${renderVisualizationSection(fees)}
 
