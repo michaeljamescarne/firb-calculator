@@ -6,6 +6,7 @@ const translations = {
         cta: 'Calculate Your Fees',
         navHome: 'Home',
         navCalculator: 'Calculator',
+        navResources: 'Resources', // ADDED
         back: 'Back',
         accurateCalc: 'Accurate Calculations',
         accurateDesc: 'Based on current FIRB regulations and state requirements',
@@ -83,6 +84,7 @@ const translations = {
         cta: '计算您的费用',
         navHome: '主页',
         navCalculator: '计算器',
+        navResources: '资源', // ADDED
         back: '返回',
         checkEligibility: '检查您的资格',
         citizenshipQ: '公民身份？',
@@ -135,6 +137,7 @@ const translations = {
         cta: 'Tính Phí',
         navHome: 'Trang chủ',
         navCalculator: 'Máy tính',
+        navResources: 'Tài nguyên', // ADDED
         back: 'Quay lại',
         checkEligibility: 'Kiểm Tra Đủ Điều Kiện',
         citizenshipQ: 'Tình trạng công dân?',
