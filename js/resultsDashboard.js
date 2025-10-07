@@ -21,23 +21,36 @@ function renderResultsDashboard() {
                     <span>${t('back')}</span>
                 </button>
 
-                <!-- Summary Cards -->
-                ${renderSummaryCards(fees)}
+                <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+                    <!-- Main Content -->
+                    <div class="lg:col-span-3">
+                        <!-- Summary Cards -->
+                        ${renderSummaryCards(fees)}
 
-                <!-- Critical Alerts -->
-                ${typeof getResultsAlertsHTML === 'function' ? getResultsAlertsHTML(fees) : ''}
+                        <!-- Critical Alerts -->
+                        ${typeof getResultsAlertsHTML === 'function' ? getResultsAlertsHTML(fees) : ''}
 
-                <!-- Visualization Section -->
-                ${renderVisualizationSection(fees)}
+                        <!-- Visualization Section -->
+                        ${renderVisualizationSection(fees)}
 
-                <!-- Comparison Metrics -->
-                ${renderComparisonMetrics(fees, propertyValue)}
+                        <!-- Comparison Metrics -->
+                        ${renderComparisonMetrics(fees, propertyValue)}
 
-                <!-- Detailed Breakdown with Collapsible Sections -->
-                ${renderDetailedBreakdown(fees)}
+                        <!-- Detailed Breakdown with Collapsible Sections -->
+                        ${renderDetailedBreakdown(fees)}
 
-                <!-- Action Buttons -->
-                ${renderActionButtons()}
+                        <!-- Action Buttons -->
+                        ${renderActionButtons()}
+                    </div>
+
+                    <!-- Scenarios Sidebar -->
+                    <div class="lg:col-span-1">
+                        ${renderScenariosSidebarPanel()}
+                    </div>
+                </div>
+
+                <!-- Save Scenario Modal -->
+                ${typeof renderSaveScenarioModal === 'function' ? renderSaveScenarioModal() : ''}
             </div>
         </section>
     `;
@@ -392,7 +405,12 @@ function renderActionButtons() {
                 </div>
             </div>
 
-            <div class="grid md:grid-cols-2 gap-4 mb-6">
+            <div class="grid md:grid-cols-3 gap-4 mb-6">
+                <button onclick="showSaveScenarioModal()"
+                    class="bg-green-600 text-white px-6 py-4 rounded-lg font-semibold hover:bg-green-700 transform hover:scale-105 transition-all flex items-center justify-center space-x-2">
+                    ${icons.fileText('w-5 h-5')}
+                    <span>Save Scenario</span>
+                </button>
                 <button onclick="handlePayment()"
                     ${state.isProcessingPayment ? 'disabled' : ''}
                     class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-4 rounded-lg font-semibold hover:from-blue-700 hover:to-indigo-700 transform hover:scale-105 transition-all flex items-center justify-center space-x-2 ${state.isProcessingPayment ? 'opacity-50 cursor-not-allowed' : ''}">
@@ -406,6 +424,43 @@ function renderActionButtons() {
             </div>
 
             <p class="text-sm text-gray-500 text-center">${t('estimates')}</p>
+        </div>
+    `;
+}
+
+/**
+ * Render scenarios sidebar panel
+ * @returns {string} HTML for scenarios sidebar
+ */
+function renderScenariosSidebarPanel() {
+    return `
+        <div class="bg-white p-6 rounded-xl shadow-md sticky top-24">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-bold">Saved Scenarios</h3>
+                <div class="flex space-x-2">
+                    <button onclick="exportScenariosJSON()" title="Export" class="text-gray-600 hover:text-blue-600">
+                        ${icons.download('w-4 h-4')}
+                    </button>
+                    <button onclick="importScenariosJSON()" title="Import" class="text-gray-600 hover:text-blue-600">
+                        ${icons.fileText('w-4 h-4')}
+                    </button>
+                </div>
+            </div>
+
+            ${typeof renderScenariosSidebar === 'function' ? renderScenariosSidebar() : '<p class="text-sm text-gray-500">Loading...</p>'}
+
+            <button id="compare-scenarios-btn"
+                onclick="showScenarioComparison()"
+                disabled
+                class="w-full mt-6 bg-blue-600 text-white px-4 py-3 rounded-lg font-semibold hover:bg-blue-700 transition opacity-50 cursor-not-allowed">
+                Select 2-3 to Compare
+            </button>
+
+            ${typeof getLastSavedIndicatorHTML === 'function' ? `
+                <div class="mt-4 pt-4 border-t border-gray-200">
+                    ${getLastSavedIndicatorHTML()}
+                </div>
+            ` : ''}
         </div>
     `;
 }

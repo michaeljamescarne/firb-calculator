@@ -35,6 +35,9 @@ function render() {
         case 'results':
             content += renderResultsDashboard();
             break;
+        case 'compare':
+            content += typeof renderScenarioComparison === 'function' ? renderScenarioComparison() : '';
+            break;
         default:
             content += renderHome();
     }

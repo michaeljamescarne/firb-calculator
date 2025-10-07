@@ -29,6 +29,11 @@ document.addEventListener('DOMContentLoaded', function() {
         state.language = savedLanguage;
     }
 
+    // Initialize scenarios system (auto-save, etc.)
+    if (typeof initScenariosSystem === 'function') {
+        initScenariosSystem();
+    }
+
     // Render the initial page
     render();
 
