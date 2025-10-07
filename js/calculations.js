@@ -74,4 +74,97 @@ function calculateStandardStampDuty(value, stateCode) {
             return 44370 + (val - 960000) * 0.06;
             
         case 'QLD':
-            // Progressive
+            // Progressive calculation (more accurate)
+            if (val <= 540000) return val * 0.035;
+            return 17325 + (val - 540000) * 0.045;
+        
+        // ADDED: Calculations for remaining states
+        case 'SA':
+            if (val <= 500000) return val * 0.035;
+            if (val <= 1200000) return 17500 + (val - 500000) * 0.045;
+            return 49000 + (val - 1200000) * 0.055;
+            
+        case 'WA':
+            if (val <= 500000) return val * 0.04;
+            if (val <= 725000) return 20000 + (val - 500000) * 0.045;
+            return 30125 + (val - 725000) * 0.05;
+            
+        case 'TAS':
+            if (val <= 350000) return val * 0.035;
+            if (val <= 725000) return 12250 + (val - 350000) * 0.04;
+            return 27250 + (val - 725000) * 0.045;
+            
+        case 'ACT':
+            return val * 0.044;
+            
+        case 'NT':
+            if (val <= 525000) return val * 0.0365;
+            return 19162.50 + (val - 525000) * 0.0495;
+            
+        default:
+            return val * 0.04;
+    }
+}
+
+// ADDED: State-specific government fees
+const stateTransferFees = {
+    NSW: 138,
+    VIC: 122,
+    QLD: 196,
+    SA: 164,
+    WA: 195,
+    TAS: 125,
+    ACT: 447,
+    NT: 146
+};
+
+const stateMortgageFees = {
+    NSW: 148,
+    VIC: 122,
+    QLD: 196,
+    SA: 164,
+    WA: 195,
+    TAS: 125,
+    ACT: 338,
+    NT: 146
+};
+
+// Calculate all fees and return complete breakdown
+// UPDATED: Now uses state-specific transfer and mortgage fees
+function calculateAllFees(formData) {
+    const val = parseFloat(formData.propertyValue);
+    
+    // Foreign investment fees
+    const firbFee = calculateFIRBFee(formData.propertyValue, formData.propertyType, formData.firstHomeBuyer);
+    const stampDutySurcharge = calculateStampDutySurcharge(formData.propertyValue, formData.state);
+    const legalFees = 2500;
+    
+    // Standard property purchase fees (UPDATED with state-specific fees)
+    const standardFees = {
+        stampDuty: calculateStandardStampDuty(formData.propertyValue, formData.state),
+        transferFee: stateTransferFees[formData.state] || 150,
+        mortgageRegistration: stateMortgageFees[formData.state] || 150,
+        titleSearch: 35,
+        buildingInspection: 450,
+        pestInspection: 350,
+        conveyancingLegal: 1500,
+        loanApplicationFee: 600,
+        lendersMortgageInsurance: val > 800000 && val * 0.8 > 640000 ? val * 0.02 : 0,
+        councilRates: 400,
+        waterRates: 300
+    };
+    
+    const standardTotal = Object.values(standardFees).reduce((sum, fee) => sum + fee, 0);
+    const foreignTotal = firbFee + stampDutySurcharge + legalFees;
+    const grandTotal = foreignTotal + standardTotal;
+    
+    return {
+        firb: firbFee,
+        stampDuty: stampDutySurcharge,
+        legal: legalFees,
+        standard: standardFees,
+        foreignTotal: foreignTotal,
+        standardTotal: standardTotal,
+        grandTotal: grandTotal
+    };
+}
