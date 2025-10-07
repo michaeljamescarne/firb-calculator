@@ -6,6 +6,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Render the initial page
     render();
     
+    // ADDED: Initialize Lucide icons
+    lucide.createIcons();
+    
     console.log('FIRB Calculator initialized successfully');
     console.log('Current step:', state.currentStep);
 });
