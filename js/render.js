@@ -33,7 +33,7 @@ function render() {
             content += renderCalculator();
             break;
         case 'results':
-            content += renderResults();
+            content += renderResultsDashboard();
             break;
         default:
             content += renderHome();
@@ -43,10 +43,24 @@ function render() {
     content += renderFooter();
 
     app.innerHTML = content;
-    
+
     // Re-initialize Lucide icons after rendering
     if (typeof lucide !== 'undefined') {
         lucide.createIcons();
+    }
+
+    // Initialize dashboard charts if on results page
+    if (state.currentStep === 'results' && state.calculatedFees) {
+        // Add collapsible styles
+        if (typeof addCollapsibleStyles === 'function') {
+            addCollapsibleStyles();
+        }
+        // Initialize charts after DOM is ready
+        setTimeout(() => {
+            if (typeof initializeDashboardCharts === 'function') {
+                initializeDashboardCharts();
+            }
+        }, 100);
     }
 }
 

@@ -107,6 +107,9 @@ const translations = {
         upfrontCostsDesc: 'One-time fees paid at purchase',
         firstYearTotal: 'First Year Total Cost',
         firstYearTotalDesc: 'Upfront costs + first year annual fees',
+        // Dashboard-specific translations
+        titleSearch: 'Title Search',
+        lmi: 'Lenders Mortgage Insurance',
     },
     zh: {
         hero: '外国投资房产费用计算器',
@@ -206,6 +209,9 @@ const translations = {
         upfrontCostsDesc: '购买时支付的一次性费用',
         firstYearTotal: '第一年总费用',
         firstYearTotalDesc: '前期费用 + 第一年年度费用',
+        // Dashboard-specific translations
+        titleSearch: '产权查询',
+        lmi: '贷款抵押保险',
     },
     vi: {
         hero: 'Máy Tính Phí Đầu Tư BĐS Nước Ngoài',
@@ -305,6 +311,9 @@ const translations = {
         upfrontCostsDesc: 'Phí một lần trả khi mua',
         firstYearTotal: 'Tổng Chi Phí Năm Đầu',
         firstYearTotalDesc: 'Chi phí trả trước + phí năm đầu tiên',
+        // Dashboard-specific translations
+        titleSearch: 'Tìm Kiếm Tiêu Đề',
+        lmi: 'Bảo Hiểm Thế Chấp Người Cho Vay',
     }
 };
 
