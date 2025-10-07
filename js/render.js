@@ -534,6 +534,38 @@ function renderCalculator() {
                         </div>
 
                         <div>
+                            <label class="block font-semibold mb-2" for="entity-type">${t('entityType')}</label>
+                            <select id="entity-type"
+                                value="${state.formData.entityType}"
+                                onchange="updateForm('entityType', this.value); render();"
+                                aria-label="${t('entityType')}"
+                                aria-required="true"
+                                class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                <option value="individual">${t('individual')}</option>
+                                <option value="company">${t('company')}</option>
+                                <option value="trust">${t('trust')}</option>
+                            </select>
+                            <p class="text-xs text-gray-500 mt-1">${t('entityTypeHelp')}</p>
+                        </div>
+
+                        <div>
+                            <label class="block font-semibold mb-2" for="deposit-percent">${t('depositPercent')}</label>
+                            <div class="flex items-center space-x-4">
+                                <input type="range"
+                                    id="deposit-percent"
+                                    min="10"
+                                    max="100"
+                                    step="5"
+                                    value="${state.formData.depositPercent}"
+                                    oninput="updateForm('depositPercent', this.value); document.getElementById('deposit-value').textContent = this.value + '%';"
+                                    aria-label="${t('depositPercent')}"
+                                    class="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" />
+                                <span id="deposit-value" class="text-lg font-bold text-blue-600 w-16 text-right">${state.formData.depositPercent}%</span>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-1">${t('depositPercentHelp')}</p>
+                        </div>
+
+                        <div>
                             <label class="block font-semibold mb-2">${t('firstHome')}</label>
                             <div class="flex space-x-4" role="radiogroup" aria-label="${t('firstHome')}">
                                 <label class="flex items-center">
@@ -686,13 +718,66 @@ function renderResults() {
                         </div>
                     </div>
 
+                    <div class="mb-12">
+                        <h3 class="text-2xl font-bold mb-6 flex items-center">
+                            ${icons.calendar('w-6 h-6 text-green-600 mr-2')}
+                            ${t('annualFees')}
+                        </h3>
+                        <p class="text-sm text-gray-600 mb-6">${t('annualFeesDesc')}</p>
+
+                        <div class="space-y-3 mb-6">
+                            ${fees.annual.vacancyFee > 0 ? `
+                                <div class="p-4 bg-green-50 rounded-lg flex justify-between">
+                                    <div>
+                                        <span class="font-semibold">${t('vacancyFee')}</span>
+                                        <p class="text-xs text-gray-600">${t('vacancyFeeDesc')}</p>
+                                    </div>
+                                    <span class="font-bold">${formatCurrency(fees.annual.vacancyFee)}</span>
+                                </div>
+                            ` : ''}
+                            <div class="p-4 bg-green-50 rounded-lg flex justify-between">
+                                <div>
+                                    <span class="font-semibold">${t('landTaxSurcharge')}</span>
+                                    <p class="text-xs text-gray-600">${t('landTaxSurchargeDesc')}</p>
+                                </div>
+                                <span class="font-bold">${formatCurrency(fees.annual.landTaxSurcharge)}</span>
+                            </div>
+                            <div class="p-4 bg-gray-50 rounded-lg flex justify-between">
+                                <span class="font-semibold">${t('annualCouncilRates')}</span>
+                                <span class="font-bold">${formatCurrency(fees.annual.councilRates)}</span>
+                            </div>
+                            <div class="p-4 bg-gray-50 rounded-lg flex justify-between">
+                                <span class="font-semibold">${t('annualWaterRates')}</span>
+                                <span class="font-bold">${formatCurrency(fees.annual.waterRates)}</span>
+                            </div>
+                            <div class="p-4 bg-gray-50 rounded-lg flex justify-between">
+                                <span class="font-semibold">${t('annualInsurance')}</span>
+                                <span class="font-bold">${formatCurrency(fees.annual.insurance)}</span>
+                            </div>
+
+                            <div class="bg-green-100 p-4 rounded-lg">
+                                <div class="flex justify-between items-center">
+                                    <h4 class="text-xl font-bold">${t('annualTotal')}</h4>
+                                    <span class="text-2xl font-bold text-green-600">${formatCurrency(fees.annualTotal)}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="border-t-2 pt-6 mb-8">
-                        <div class="bg-gradient-to-r from-blue-600 to-indigo-600 p-6 rounded-lg text-white">
+                        <div class="bg-gradient-to-r from-blue-600 to-indigo-600 p-6 rounded-lg text-white mb-4">
                             <div class="flex justify-between items-center">
-                                <h3 class="text-2xl font-bold">${t('totalCosts')}</h3>
+                                <h3 class="text-2xl font-bold">${t('upfrontCosts')}</h3>
                                 <span class="text-4xl font-bold">${formatCurrency(fees.grandTotal)}</span>
                             </div>
-                            <p class="text-sm text-blue-100 mt-2">${t('allFees')}</p>
+                            <p class="text-sm text-blue-100 mt-2">${t('upfrontCostsDesc')}</p>
+                        </div>
+                        <div class="bg-gradient-to-r from-green-600 to-emerald-600 p-6 rounded-lg text-white">
+                            <div class="flex justify-between items-center">
+                                <h3 class="text-2xl font-bold">${t('firstYearTotal')}</h3>
+                                <span class="text-4xl font-bold">${formatCurrency(fees.firstYearTotal)}</span>
+                            </div>
+                            <p class="text-sm text-green-100 mt-2">${t('firstYearTotalDesc')}</p>
                         </div>
                     </div>
 

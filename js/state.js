@@ -23,7 +23,9 @@ const state = {
         propertyValue: '',
         propertyType: '',
         firstHomeBuyer: '',
-        state: ''
+        state: '',
+        entityType: 'individual',  // individual, company, trust
+        depositPercent: '30'       // Default 30% for foreign buyers
     },
     calculatedFees: null,
     isCalculating: false,

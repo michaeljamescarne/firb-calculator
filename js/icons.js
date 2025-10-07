@@ -31,6 +31,7 @@ const icons = {
     clock: (classes) => icon('clock', classes || 'w-8 h-8'),
     download: (classes) => icon('download', classes || 'w-5 h-5'),
     creditCard: (classes) => icon('credit-card', classes || 'w-5 h-5'),
+    calendar: (classes) => icon('calendar', classes || 'w-6 h-6'),
     menu: (classes) => icon('menu', classes || 'w-6 h-6'),
     x: (classes) => icon('x', classes || 'w-6 h-6'),
 };

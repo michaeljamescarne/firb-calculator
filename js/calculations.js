@@ -18,38 +18,53 @@ function formatCurrency(amount) {
 }
 
 /**
- * Calculate FIRB application fee based on property value, type, and first home buyer status
+ * Calculate FIRB application fee based on property value, type, first home buyer status, and entity type
  * @param {string|number} value - Property value
  * @param {string} type - Property type ('vacant', 'newDwelling', 'established')
  * @param {string} firstHome - First home buyer status ('yes' or 'no')
+ * @param {string} entityType - Entity type ('individual', 'company', 'trust') - defaults to 'individual'
  * @returns {number} FIRB application fee
  */
-function calculateFIRBFee(value, type, firstHome) {
+function calculateFIRBFee(value, type, firstHome, entityType = 'individual') {
     const val = parseFloat(value);
-    
+    let baseFee = 0;
+
     // Vacant land has different fee structure
     if (type === 'vacant') {
-        if (val < 1000000) return 7600;
-        if (val < 2000000) return 15200;
-        if (val < 3000000) return 30400;
-        return 60900; // UPDATED: Added higher bracket
+        if (val < 1000000) baseFee = 7600;
+        else if (val < 2000000) baseFee = 15200;
+        else if (val < 3000000) baseFee = 30400;
+        else baseFee = 60900;
     }
-    
     // New dwelling or first home buyer gets reduced rates
-    if (type === 'newDwelling' || firstHome === 'yes') {
-        if (val < 1000000) return 1710;
-        if (val < 2000000) return 3420;
-        if (val < 3000000) return 6840;
-        if (val < 4000000) return 13680;
-        return 27360; // UPDATED: Added $4M+ bracket
+    else if (type === 'newDwelling' || firstHome === 'yes') {
+        if (val < 1000000) baseFee = 1710;
+        else if (val < 2000000) baseFee = 3420;
+        else if (val < 3000000) baseFee = 6840;
+        else if (val < 4000000) baseFee = 13680;
+        else baseFee = 27360;
     }
-    
     // Established dwelling (standard rates)
-    if (val < 1000000) return 15200;
-    if (val < 2000000) return 30400;
-    if (val < 3000000) return 60900;
-    if (val < 4000000) return 121700;
-    return 243400; // UPDATED: Added $4M+ bracket
+    else {
+        if (val < 1000000) baseFee = 15200;
+        else if (val < 2000000) baseFee = 30400;
+        else if (val < 3000000) baseFee = 60900;
+        else if (val < 4000000) baseFee = 121700;
+        else baseFee = 243400;
+    }
+
+    // Companies and trusts pay significantly higher fees (approximately 10x)
+    // Based on total value of Australian assets, not just this property
+    // Simplified calculation: multiply individual rate
+    if (entityType === 'company' || entityType === 'trust') {
+        // For companies/trusts, fees are much higher and tiered differently
+        if (val < 1000000) return baseFee * 10;
+        if (val < 2000000) return baseFee * 8;
+        if (val < 5000000) return baseFee * 6;
+        return baseFee * 5; // Still substantial even at high values
+    }
+
+    return baseFee;
 }
 
 /**
@@ -151,13 +166,64 @@ const stateMortgageFees = {
 };
 
 /**
+ * Calculate Annual Vacancy Fee for foreign owners
+ * Charged annually if property is vacant for more than 6 months in a year
+ * @param {string|number} propertyValue - Property value
+ * @param {string} propertyType - Property type
+ * @returns {number} Annual vacancy fee
+ */
+function calculateAnnualVacancyFee(propertyValue, propertyType) {
+    const val = parseFloat(propertyValue);
+
+    // Vacancy fee doesn't apply to vacant land
+    if (propertyType === 'vacant') return 0;
+
+    // Tiered vacancy fee structure (similar to FIRB fees)
+    if (val < 1000000) return 11490;
+    if (val < 1500000) return 22980;
+    if (val < 2000000) return 34470;
+    if (val < 3000000) return 57450;
+    if (val < 4000000) return 68940;
+    if (val < 5000000) return 103410;
+    return 137880; // $5M+
+}
+
+/**
+ * Calculate Foreign Owner Land Tax Surcharge (annual)
+ * Additional land tax charged to foreign owners on top of standard land tax
+ * @param {string|number} propertyValue - Property value
+ * @param {string} stateCode - Australian state code
+ * @returns {number} Annual land tax surcharge amount
+ */
+function calculateLandTaxSurcharge(propertyValue, stateCode) {
+    const val = parseFloat(propertyValue);
+
+    // Land tax surcharge rates by state (annual)
+    const surchargeRates = {
+        NSW: 0.02,    // 2% (on top of standard land tax)
+        VIC: 0.015,   // 1.5%
+        QLD: 0.02,    // 2%
+        SA: 0.005,    // 0.5%
+        WA: 0.04,     // 4%
+        TAS: 0.015,   // 1.5%
+        ACT: 0.0075,  // 0.75%
+        NT: 0         // No land tax surcharge in NT
+    };
+
+    // Most states have a tax-free threshold, but surcharge still applies
+    // Simplified calculation: surcharge on full property value
+    // Note: Actual calculation more complex with thresholds and progressive rates
+    return val * (surchargeRates[stateCode] || 0.02);
+}
+
+/**
  * Calculate Lenders Mortgage Insurance (LMI)
  * LMI is required when LVR (Loan to Value Ratio) exceeds 80%
  * @param {string|number} propertyValue - Property value
- * @param {number} depositPercent - Deposit percentage (default 20%)
+ * @param {number} depositPercent - Deposit percentage (default 30% for foreign buyers)
  * @returns {number} LMI amount
  */
-function calculateLMI(propertyValue, depositPercent = 20) {
+function calculateLMI(propertyValue, depositPercent = 30) {
     const val = parseFloat(propertyValue);
     const loanAmount = val * ((100 - depositPercent) / 100);
     const lvr = (loanAmount / val) * 100;
@@ -189,17 +255,26 @@ function calculateLMI(propertyValue, depositPercent = 20) {
  * @param {string} formData.propertyType - Property type
  * @param {string} formData.firstHomeBuyer - First home buyer status
  * @param {string} formData.state - Australian state code
- * @returns {Object} Complete fee breakdown including foreign and standard fees
+ * @param {string} formData.entityType - Entity type (individual, company, trust)
+ * @param {number} formData.depositPercent - Deposit percentage
+ * @returns {Object} Complete fee breakdown including foreign, standard, and annual fees
  */
 function calculateAllFees(formData) {
     const val = parseFloat(formData.propertyValue);
+    const entityType = formData.entityType || 'individual';
+    const depositPercent = parseFloat(formData.depositPercent) || 30;
 
-    // Foreign investment fees
-    const firbFee = calculateFIRBFee(formData.propertyValue, formData.propertyType, formData.firstHomeBuyer);
+    // Foreign investment fees (one-time)
+    const firbFee = calculateFIRBFee(
+        formData.propertyValue,
+        formData.propertyType,
+        formData.firstHomeBuyer,
+        entityType
+    );
     const stampDutySurcharge = calculateStampDutySurcharge(formData.propertyValue, formData.state);
     const legalFees = 2500;
 
-    // Standard property purchase fees (UPDATED with state-specific fees and improved LMI)
+    // Standard property purchase fees (one-time)
     const standardFees = {
         stampDuty: calculateStandardStampDuty(formData.propertyValue, formData.state),
         transferFee: stateTransferFees[formData.state] || 150,
@@ -209,22 +284,46 @@ function calculateAllFees(formData) {
         pestInspection: 350,
         conveyancingLegal: 1500,
         loanApplicationFee: 600,
-        lendersMortgageInsurance: calculateLMI(val),
+        lendersMortgageInsurance: calculateLMI(val, depositPercent),
         councilRates: 400,
         waterRates: 300
     };
-    
+
+    // Annual fees for foreign owners
+    const annualFees = {
+        vacancyFee: calculateAnnualVacancyFee(formData.propertyValue, formData.propertyType),
+        landTaxSurcharge: calculateLandTaxSurcharge(formData.propertyValue, formData.state),
+        councilRates: 2400,  // Annual estimate
+        waterRates: 1200,    // Annual estimate
+        insurance: Math.max(800, val * 0.003) // Rough estimate: 0.3% of property value, min $800
+    };
+
     const standardTotal = Object.values(standardFees).reduce((sum, fee) => sum + fee, 0);
     const foreignTotal = firbFee + stampDutySurcharge + legalFees;
+    const annualTotal = Object.values(annualFees).reduce((sum, fee) => sum + fee, 0);
     const grandTotal = foreignTotal + standardTotal;
-    
+
     return {
+        // One-time foreign investment fees
         firb: firbFee,
         stampDuty: stampDutySurcharge,
         legal: legalFees,
-        standard: standardFees,
         foreignTotal: foreignTotal,
+
+        // One-time standard fees
+        standard: standardFees,
         standardTotal: standardTotal,
-        grandTotal: grandTotal
+
+        // Annual ongoing fees
+        annual: annualFees,
+        annualTotal: annualTotal,
+
+        // Totals
+        grandTotal: grandTotal,
+        firstYearTotal: grandTotal + annualTotal,
+
+        // Metadata
+        depositPercent: depositPercent,
+        entityType: entityType
     };
 }
