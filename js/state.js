@@ -8,6 +8,7 @@ const state = {
     eligibilityData: {
         citizenship: '',
         residency: '',
+        visaType: '', // ADDED: For future use (optional field)
         purposeOfPurchase: ''
     },
     isEligible: null,
@@ -33,6 +34,12 @@ function goToStep(step) {
 
 function changeLanguage(lang) {
     state.language = lang;
+    render();
+}
+
+// Toggle mobile menu
+function toggleMobileMenu() {
+    state.mobileMenuOpen = !state.mobileMenuOpen;
     render();
 }
 
@@ -138,6 +145,7 @@ function handlePayment() {
     render();
     
     setTimeout(() => {
+        // In production, redirect to Stripe: window.open('https://buy.stripe.com/...', '_blank')
         alert('Payment demo: In production, this would redirect to Stripe.\n\nYour report is ready to download!');
         state.isProcessingPayment = false;
         render();
@@ -145,27 +153,55 @@ function handlePayment() {
 }
 
 // Download report as text file
+// UPDATED: Enhanced format with detailed line items from Test Code
 function downloadReport() {
+    const fees = state.calculatedFees;
+    const lmiLine = fees.standard.lendersMortgageInsurance > 0 
+        ? `Lenders Mortgage Insurance: ${formatCurrency(fees.standard.lendersMortgageInsurance)}\n`
+        : '';
+    
     const content = `FIRB FEE CALCULATOR REPORT
 Generated: ${new Date().toLocaleDateString('en-AU')}
 
-PROPERTY: ${state.formData.address}
-PRICE: ${formatCurrency(parseFloat(state.formData.propertyValue))}
+PROPERTY DETAILS
+Address: ${state.formData.address}
+Purchase Price: ${formatCurrency(parseFloat(state.formData.propertyValue))}
+Property Type: ${state.formData.propertyType}
+State: ${state.formData.state}
 
+========================================
 FOREIGN INVESTMENT FEES
-FIRB Fee: ${formatCurrency(state.calculatedFees.firb)}
-Stamp Duty Surcharge: ${formatCurrency(state.calculatedFees.stampDuty)}
-Legal Fees: ${formatCurrency(state.calculatedFees.legal)}
-TOTAL: ${formatCurrency(state.calculatedFees.foreignTotal)}
+========================================
+FIRB Application Fee: ${formatCurrency(fees.firb)}
+Stamp Duty Surcharge: ${formatCurrency(fees.stampDuty)}
+Legal Fees: ${formatCurrency(fees.legal)}
 
-STANDARD FEES
-Stamp Duty: ${formatCurrency(state.calculatedFees.standard.stampDuty)}
-Other Fees: ${formatCurrency(state.calculatedFees.standardTotal - state.calculatedFees.standard.stampDuty)}
-TOTAL: ${formatCurrency(state.calculatedFees.standardTotal)}
+Foreign Investment Total: ${formatCurrency(fees.foreignTotal)}
 
-GRAND TOTAL: ${formatCurrency(state.calculatedFees.grandTotal)}
+========================================
+STANDARD PROPERTY PURCHASE FEES
+========================================
+Standard Stamp Duty: ${formatCurrency(fees.standard.stampDuty)}
+Transfer Fee: ${formatCurrency(fees.standard.transferFee)}
+Mortgage Registration: ${formatCurrency(fees.standard.mortgageRegistration)}
+Conveyancing & Legal: ${formatCurrency(fees.standard.conveyancingLegal)}
+Building Inspection: ${formatCurrency(fees.standard.buildingInspection)}
+Pest Inspection: ${formatCurrency(fees.standard.pestInspection)}
+Loan Application: ${formatCurrency(fees.standard.loanApplicationFee)}
+${lmiLine}Title Search: ${formatCurrency(fees.standard.titleSearch)}
+Council Rates: ${formatCurrency(fees.standard.councilRates)}
+Water Rates: ${formatCurrency(fees.standard.waterRates)}
 
-IMPORTANT: FIRB approval required before purchase.`;
+Standard Fees Total: ${formatCurrency(fees.standardTotal)}
+
+========================================
+TOTAL ESTIMATED COSTS: ${formatCurrency(fees.grandTotal)}
+========================================
+
+IMPORTANT: FIRB approval must be obtained BEFORE purchasing property.
+
+This is an estimate based on current regulations. Actual fees may vary.
+For official advice, consult with a qualified property lawyer or FIRB specialist.`;
 
     const blob = new Blob([content], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
