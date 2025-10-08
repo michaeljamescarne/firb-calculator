@@ -416,12 +416,19 @@ function renderActionButtons() {
                 </div>
             </div>
 
-            <div class="grid md:grid-cols-3 gap-4 mb-4">
+            <div class="grid md:grid-cols-2 gap-4 mb-4">
                 <button onclick="showSaveScenarioModal()"
                     class="bg-green-600 text-white px-6 py-4 rounded-lg font-semibold hover:bg-green-700 transform hover:scale-105 transition-all flex items-center justify-center space-x-2">
                     ${icons.fileText('w-5 h-5')}
                     <span>Save Scenario</span>
                 </button>
+                <button onclick="typeof generateProfessionalPDF === 'function' && generateProfessionalPDF()"
+                    class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-4 rounded-lg font-semibold hover:from-purple-700 hover:to-pink-700 transform hover:scale-105 transition-all flex items-center justify-center space-x-2">
+                    ${icons.download('w-5 h-5')}
+                    <span>PDF Report</span>
+                </button>
+            </div>
+            <div class="grid md:grid-cols-2 gap-4 mb-4">
                 <button onclick="typeof showEmailResultsModal === 'function' && showEmailResultsModal()"
                     class="bg-gradient-to-r from-orange-500 to-red-500 text-white px-6 py-4 rounded-lg font-semibold hover:from-orange-600 hover:to-red-600 transform hover:scale-105 transition-all flex items-center justify-center space-x-2">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -429,10 +436,12 @@ function renderActionButtons() {
                     </svg>
                     <span>Email Results</span>
                 </button>
-                <button onclick="typeof generateProfessionalPDF === 'function' && generateProfessionalPDF()"
-                    class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-4 rounded-lg font-semibold hover:from-purple-700 hover:to-pink-700 transform hover:scale-105 transition-all flex items-center justify-center space-x-2">
-                    ${icons.download('w-5 h-5')}
-                    <span>PDF Report</span>
+                <button onclick="typeof showChecklistModal === 'function' && showChecklistModal()"
+                    class="bg-gradient-to-r from-teal-500 to-cyan-500 text-white px-6 py-4 rounded-lg font-semibold hover:from-teal-600 hover:to-cyan-600 transform hover:scale-105 transition-all flex items-center justify-center space-x-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+                    </svg>
+                    <span>Document Checklist</span>
                 </button>
             </div>
             <div class="grid md:grid-cols-2 gap-4 mb-6">
