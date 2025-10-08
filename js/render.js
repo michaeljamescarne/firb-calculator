@@ -23,11 +23,14 @@ function render() {
         case 'home':
             content += renderHome();
             break;
+        case 'eligibilityWizard':
+            content += typeof renderEligibilityWizard === 'function' ? renderEligibilityWizard() : renderHome();
+            break;
         case 'eligibility':
             content += renderEligibility();
             break;
         case 'eligibilityResult':
-            content += renderEligibilityResult();
+            content += typeof renderEligibilityResult === 'function' ? renderEligibilityResult() : renderHome();
             break;
         case 'calculator':
             content += renderCalculator();
@@ -146,7 +149,7 @@ function renderHome() {
             <div class="max-w-7xl mx-auto px-4 text-center">
                 <h1 class="text-5xl font-bold mb-6">${t('hero')}</h1>
                 <p class="text-xl text-gray-600 mb-8">${t('subtitle')}</p>
-                <button onclick="goToStep('eligibility')" class="bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-700 inline-flex items-center space-x-2">
+                <button onclick="startEligibilityWizard()" class="bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-700 inline-flex items-center space-x-2">
                     <span>${t('cta')}</span>
                     ${icons.arrowRight()}
                 </button>
@@ -273,7 +276,7 @@ function renderHome() {
                     <div class="bg-blue-50 p-8 rounded-lg text-center border border-blue-200">
                         <h3 class="text-2xl font-bold text-gray-900 mb-4">Not sure if you need FIRB approval?</h3>
                         <p class="text-gray-600 mb-6">Find out in less than 2 minutes with our quick eligibility assessment</p>
-                        <button onclick="goToStep('eligibility')" class="bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transition inline-flex items-center space-x-2">
+                        <button onclick="startEligibilityWizard()" class="bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transition inline-flex items-center space-x-2">
                             ${icons.shield('w-5 h-5')}
                             <span>Take Our Free Eligibility Test</span>
                             ${icons.arrowRight()}
@@ -369,7 +372,7 @@ function renderHome() {
             <div class="max-w-4xl mx-auto text-center px-4">
                 <h2 class="text-3xl font-bold text-white mb-6">Ready to calculate your fees?</h2>
                 <p class="text-xl text-blue-100 mb-8">Get your comprehensive fee breakdown in minutes</p>
-                <button onclick="goToStep('eligibility')" class="bg-white text-blue-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-50 transition inline-flex items-center space-x-2">
+                <button onclick="startEligibilityWizard()" class="bg-white text-blue-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-50 transition inline-flex items-center space-x-2">
                     <span>Start Your Calculation</span>
                     ${icons.arrowRight()}
                 </button>
