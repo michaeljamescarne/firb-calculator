@@ -39,6 +39,11 @@ document.addEventListener('DOMContentLoaded', function() {
         initFAQSystem();
     }
 
+    // Initialize Timeline system
+    if (typeof initTimelineSystem === 'function') {
+        initTimelineSystem();
+    }
+
     // Render the initial page
     render();
 
