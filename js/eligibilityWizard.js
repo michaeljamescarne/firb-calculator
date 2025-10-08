@@ -25,8 +25,55 @@ const wizardState = {
 
 /**
  * Visa types and their eligibility
+ * COMMENTED OUT - Now using centralized constants from src/constants/firbConstants.js
  */
-const VISA_TYPES = {
+// const VISA_TYPES = {
+//     'student': {
+//         label: 'Student Visa (subclass 500)',
+//         canBuyEstablished: true,
+//         canBuyNew: true,
+//         canBuyVacant: true,
+//         condition: 'Must be your principal place of residence'
+//     },
+//     'skilled': {
+//         label: 'Skilled Work Visa (subclass 482, 485, 186, 189)',
+//         canBuyEstablished: true,
+//         canBuyNew: true,
+//         canBuyVacant: true,
+//         condition: 'Must be your principal place of residence'
+//     },
+//     'partner': {
+//         label: 'Partner Visa (subclass 309, 820)',
+//         canBuyEstablished: true,
+//         canBuyNew: true,
+//         canBuyVacant: true,
+//         condition: 'Must be your principal place of residence'
+//     },
+//     'bridging': {
+//         label: 'Bridging Visa',
+//         canBuyEstablished: false,
+//         canBuyNew: true,
+//         canBuyVacant: false,
+//         condition: 'Only new dwellings allowed'
+//     },
+//     'visitor': {
+//         label: 'Visitor/Tourist Visa',
+//         canBuyEstablished: false,
+//         canBuyNew: true,
+//         canBuyVacant: false,
+//         condition: 'Only new dwellings allowed'
+//     },
+//     'other': {
+//         label: 'Other Temporary Visa',
+//         canBuyEstablished: true,
+//         canBuyNew: true,
+//         canBuyVacant: true,
+//         condition: 'Check specific visa conditions'
+//     }
+// };
+
+// Import from centralized constants (use detailed version for wizard)
+const VISA_TYPES = window.FIRBConstants?.VISA_TYPES_DETAILED || {
     'student': {
         label: 'Student Visa (subclass 500)',
         canBuyEstablished: true,

@@ -22,14 +22,25 @@ const CITIZENSHIP_STATUS = {
 
 /**
  * Visa type constants
+ * COMMENTED OUT - Now using centralized constants from src/constants/firbConstants.js
  */
-const VISA_TYPES = {
-    STUDENT: 'student',           // Subclass 500
-    SKILLED: 'skilled',           // Subclass 482, 485, 189, 190
-    PARTNER: 'partner',           // Subclass 309, 820
-    BRIDGING: 'bridging',         // Bridging visas
-    VISITOR: 'visitor',           // Tourist visas
-    OTHER_TEMPORARY: 'other'      // Other temporary visas
+// const VISA_TYPES = {
+//     STUDENT: 'student',           // Subclass 500
+//     SKILLED: 'skilled',           // Subclass 482, 485, 189, 190
+//     PARTNER: 'partner',           // Subclass 309, 820
+//     BRIDGING: 'bridging',         // Bridging visas
+//     VISITOR: 'visitor',           // Tourist visas
+//     OTHER_TEMPORARY: 'other'      // Other temporary visas
+// };
+
+// Import from centralized constants
+const VISA_TYPES = window.FIRBConstants?.VISA_TYPES || {
+    STUDENT: 'student',
+    SKILLED: 'skilled',
+    PARTNER: 'partner',
+    BRIDGING: 'bridging',
+    VISITOR: 'visitor',
+    OTHER_TEMPORARY: 'other'
 };
 
 /**
