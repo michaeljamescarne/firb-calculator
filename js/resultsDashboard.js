@@ -46,6 +46,10 @@ function renderResultsDashboard() {
                                 : ''}
                         </div>
 
+                        <!-- Cost Optimization Tool -->
+                        <div id="optimizer-container" class="mt-8">
+                        </div>
+
                         <!-- Action Buttons -->
                         ${renderActionButtons()}
                     </div>

@@ -73,6 +73,10 @@ function render() {
         if (typeof initInvestmentTool === 'function') {
             initInvestmentTool(state.calculatedFees);
         }
+        // Initialize cost optimizer
+        if (typeof initCostOptimizer === 'function') {
+            initCostOptimizer(state.calculatedFees);
+        }
         // Initialize charts after DOM is ready
         setTimeout(() => {
             if (typeof initializeDashboardCharts === 'function') {
