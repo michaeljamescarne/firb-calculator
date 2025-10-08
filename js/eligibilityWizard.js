@@ -944,7 +944,7 @@ function getAlternativeProperties(citizenshipStatus, visaType) {
  * Proceed to full calculator with wizard data
  */
 function proceedToFullCalculator() {
-    const { purchasePrice, state: stateCode, propertyType } = wizardState.answers;
+    const { purchasePrice, state: stateCode, propertyType, citizenshipStatus, visaType } = wizardState.answers;
 
     // Pre-populate calculator with wizard data
     state.propertyValue = parseFloat(purchasePrice);
@@ -959,6 +959,27 @@ function proceedToFullCalculator() {
         'commercial': 'commercial'
     };
     state.propertyType = propertyTypeMap[propertyType] || 'newDwelling';
+
+    // Transfer citizenship context to main state
+    if (citizenshipStatus) {
+        state.citizenshipStatus = citizenshipStatus;
+
+        // Also store in formData for calculations and document checklist
+        if (!state.formData) {
+            state.formData = {};
+        }
+        state.formData.citizenshipStatus = citizenshipStatus;
+    }
+
+    // Transfer visa type if applicable
+    if (visaType) {
+        state.visaType = visaType;
+
+        if (!state.formData) {
+            state.formData = {};
+        }
+        state.formData.visaType = visaType;
+    }
 
     // Go to calculator
     goToStep('calculator');

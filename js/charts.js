@@ -6,17 +6,75 @@
 const { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } = window.Recharts || {};
 
 /**
+ * CSS-based fallback chart when Recharts is unavailable
+ * @param {Array} data - Chart data with name, value, and color
+ * @param {string} title - Chart title
+ */
+function renderCSSBarChartFallback(data, title = 'Cost Breakdown') {
+    const total = data.reduce((sum, item) => sum + item.value, 0);
+
+    return `
+        <div class="fallback-chart bg-white p-6 rounded-lg">
+            <p class="text-sm text-gray-600 mb-4">
+                <i data-lucide="info" class="w-4 h-4 inline mr-1"></i>
+                Chart visualization unavailable. Here's your ${title.toLowerCase()}:
+            </p>
+            ${data.map(item => `
+                <div class="mb-4">
+                    <div class="flex justify-between items-center text-sm mb-2">
+                        <span class="font-medium text-gray-700">${item.name}</span>
+                        <span class="font-bold text-gray-900">${formatCurrency(item.value)}</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
+                        <div class="h-4 rounded-full flex items-center justify-end pr-2 text-xs text-white font-bold transition-all duration-500"
+                            style="width: ${(item.value / total * 100).toFixed(1)}%; background: ${item.color}">
+                            ${(item.value / total * 100) >= 10 ? (item.value / total * 100).toFixed(0) + '%' : ''}
+                        </div>
+                    </div>
+                </div>
+            `).join('')}
+            <div class="mt-4 pt-4 border-t border-gray-200">
+                <div class="flex justify-between items-center font-bold text-lg">
+                    <span>Total</span>
+                    <span class="text-blue-600">${formatCurrency(total)}</span>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+/**
  * Render animated pie chart showing cost distribution
  * @param {Object} fees - Calculated fees object
  */
 function renderPieChart(fees) {
-    if (!window.Recharts || !window.React || !window.ReactDOM) {
-        console.error('Recharts, React, or ReactDOM not loaded');
-        return;
-    }
-
     const container = document.getElementById('pie-chart-container');
     if (!container) return;
+
+    // Check if Recharts is available
+    if (!window.Recharts || !window.React || !window.ReactDOM) {
+        console.warn('Recharts, React, or ReactDOM not loaded - using CSS fallback');
+
+        // Prepare data for fallback chart
+        const data = [
+            { name: 'FIRB Fee', value: fees.firb, color: '#f97316' },
+            { name: 'Stamp Duty (Foreign)', value: fees.stampDuty, color: '#dc2626' },
+            { name: 'Stamp Duty (Standard)', value: fees.standard.stampDuty, color: '#3b82f6' },
+            { name: 'Legal & Conveyancing', value: fees.legal + fees.standard.conveyancingLegal, color: '#8b5cf6' },
+            { name: 'Inspections & Searches', value: fees.standard.buildingInspection + fees.standard.pestInspection + fees.standard.titleSearch, color: '#06b6d4' },
+            { name: 'Loan Fees', value: fees.standard.loanApplicationFee + fees.standard.lendersMortgageInsurance, color: '#10b981' },
+            { name: 'Other Fees', value: fees.standard.transferFee + fees.standard.mortgageRegistration + fees.standard.councilRates + fees.standard.waterRates, color: '#6b7280' }
+        ].filter(item => item.value > 0);
+
+        // Render CSS fallback
+        container.innerHTML = renderCSSBarChartFallback(data, 'Cost Breakdown');
+
+        // Initialize Lucide icons
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+        return;
+    }
 
     // Prepare data for pie chart
     const data = [
@@ -94,13 +152,31 @@ function renderPieChart(fees) {
  * @param {Object} fees - Calculated fees object
  */
 function renderDonutChart(fees) {
-    if (!window.Recharts || !window.React || !window.ReactDOM) {
-        console.error('Recharts, React, or ReactDOM not loaded');
-        return;
-    }
-
     const container = document.getElementById('donut-chart-container');
     if (!container) return;
+
+    // Check if Recharts is available
+    if (!window.Recharts || !window.React || !window.ReactDOM) {
+        console.warn('Recharts, React, or ReactDOM not loaded - using CSS fallback');
+
+        // Prepare data for fallback chart
+        const data = [
+            { name: 'Vacancy Fee', value: fees.annual.vacancyFee, color: '#f59e0b' },
+            { name: 'Land Tax Surcharge', value: fees.annual.landTaxSurcharge, color: '#ef4444' },
+            { name: 'Council Rates', value: fees.annual.councilRates, color: '#3b82f6' },
+            { name: 'Water Rates', value: fees.annual.waterRates, color: '#06b6d4' },
+            { name: 'Insurance', value: fees.annual.insurance, color: '#10b981' }
+        ].filter(item => item.value > 0);
+
+        // Render CSS fallback
+        container.innerHTML = renderCSSBarChartFallback(data, 'Annual Costs');
+
+        // Initialize Lucide icons
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+        return;
+    }
 
     // Prepare data for donut chart
     const data = [
@@ -162,13 +238,33 @@ function renderDonutChart(fees) {
  * @param {Array} stateCosts - Array of state cost objects
  */
 function renderBarChart(stateCosts) {
-    if (!window.Recharts || !window.React || !window.ReactDOM) {
-        console.error('Recharts, React, or ReactDOM not loaded');
-        return;
-    }
-
     const container = document.getElementById('bar-chart-container');
     if (!container) return;
+
+    // Check if Recharts is available
+    if (!window.Recharts || !window.React || !window.ReactDOM) {
+        console.warn('Recharts, React, or ReactDOM not loaded - using CSS fallback');
+
+        // Sort by total cost
+        const sortedData = [...stateCosts].sort((a, b) => a.total - b.total);
+        const currentState = state.formData?.state || '';
+
+        // Prepare data for fallback chart
+        const data = sortedData.map(item => ({
+            name: item.state + (item.state === currentState ? ' (Your Selection)' : ''),
+            value: item.total,
+            color: item.state === currentState ? '#3b82f6' : '#94a3b8'
+        }));
+
+        // Render CSS fallback
+        container.innerHTML = renderCSSBarChartFallback(data, 'State Comparison');
+
+        // Initialize Lucide icons
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+        return;
+    }
 
     // Sort by total cost
     const sortedData = [...stateCosts].sort((a, b) => a.total - b.total);

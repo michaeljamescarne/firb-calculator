@@ -114,8 +114,46 @@ const ErrorTracking = {
 
 /**
  * Global error handler
+ * Only catches truly unexpected, unhandled errors
  */
 window.addEventListener('error', (event) => {
+    // Ignore errors already handled by components
+    if (event.error && event.error.handled) {
+        return;
+    }
+
+    // Ignore specific non-critical errors
+    const errorMessage = event.error?.message || event.message || '';
+
+    // Recharts/React rendering issues (non-blocking)
+    if (errorMessage.includes('Recharts') ||
+        errorMessage.includes('React') ||
+        errorMessage.includes('ReactDOM')) {
+        console.warn('Chart rendering issue (non-critical):', errorMessage);
+        return;
+    }
+
+    // localStorage quota warnings (handled separately)
+    if (errorMessage.includes('localStorage') ||
+        errorMessage.includes('QuotaExceededError')) {
+        console.warn('Storage issue (handled separately):', errorMessage);
+        return;
+    }
+
+    // Network errors (handled by retry logic)
+    if (errorMessage.includes('Failed to fetch') ||
+        errorMessage.includes('NetworkError')) {
+        console.warn('Network issue (handled separately):', errorMessage);
+        return;
+    }
+
+    // Validation errors (component-level handling)
+    if (errorMessage.includes('validation') ||
+        errorMessage.includes('invalid input')) {
+        console.warn('Validation issue (handled by form):', errorMessage);
+        return;
+    }
+
     handleGlobalError(event.error, {
         message: event.message,
         filename: event.filename,
@@ -128,6 +166,11 @@ window.addEventListener('error', (event) => {
  * Unhandled promise rejection handler
  */
 window.addEventListener('unhandledrejection', (event) => {
+    // Ignore handled rejections
+    if (event.reason && event.reason.handled) {
+        return;
+    }
+
     handleGlobalError(event.reason, {
         type: 'unhandled_promise_rejection',
         promise: event.promise
@@ -136,6 +179,7 @@ window.addEventListener('unhandledrejection', (event) => {
 
 /**
  * Handle global errors
+ * Only called for truly unexpected errors after filtering
  */
 function handleGlobalError(error, context = {}) {
     console.error('Global error:', error, context);
@@ -146,10 +190,21 @@ function handleGlobalError(error, context = {}) {
         type: ErrorTypes.FATAL
     });
 
+    // Provide specific error message when possible
+    const errorMessage = error?.message
+        ? `An error occurred: ${error.message}`
+        : 'An unexpected error occurred. Please refresh and try again.';
+
+    // Only show modal in production (not localhost)
+    if (window.location.hostname === 'localhost') {
+        console.error('ERROR MODAL SUPPRESSED (localhost):', errorMessage);
+        return;
+    }
+
     // Show user-friendly error
     showErrorModal(
         'Unexpected Error',
-        'An unexpected error occurred. The page will reload to recover.',
+        errorMessage,
         {
             severity: ErrorSeverity.CRITICAL,
             showReload: true
