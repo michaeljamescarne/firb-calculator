@@ -155,10 +155,18 @@ function renderHome() {
             <div class="max-w-7xl mx-auto px-4 text-center">
                 <h1 class="text-5xl font-bold mb-6">${t('hero')}</h1>
                 <p class="text-xl text-gray-600 mb-8">${t('subtitle')}</p>
-                <button onclick="startEligibilityWizard()" class="bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-700 inline-flex items-center space-x-2">
-                    <span>${t('cta')}</span>
-                    ${icons.arrowRight()}
-                </button>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                    <button onclick="startEligibilityWizard()" class="bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-700 inline-flex items-center space-x-2">
+                        <span>${t('cta')}</span>
+                        ${icons.arrowRight()}
+                    </button>
+                    <button onclick="runFIRBEligibilityTests()" class="bg-green-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-green-700 inline-flex items-center space-x-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <span>Run Eligibility Tests</span>
+                    </button>
+                </div>
             </div>
         </section>
 

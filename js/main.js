@@ -53,3 +53,106 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('FIRB Calculator initialized successfully');
     console.log('Current step:', state.currentStep);
 });
+
+/**
+ * Run FIRB Eligibility Tests
+ * This function runs the comprehensive test suite and displays results
+ */
+function runFIRBEligibilityTests() {
+    console.log('\n\n========================================');
+    console.log('🧪 RUNNING FIRB ELIGIBILITY TESTS');
+    console.log('========================================\n');
+
+    try {
+        // Check if the module is loaded
+        if (typeof window.FIRBEligibility === 'undefined') {
+            console.error('❌ ERROR: FIRB Eligibility module not loaded!');
+            console.error('Make sure src/utils/firbEligibility.js is included in index.html');
+            showToast('FIRB Eligibility module not loaded', 'error');
+            return;
+        }
+
+        const { runEligibilityTests } = window.FIRBEligibility;
+
+        if (typeof runEligibilityTests !== 'function') {
+            console.error('❌ ERROR: runEligibilityTests function not found!');
+            showToast('Test function not found', 'error');
+            return;
+        }
+
+        // Run the tests
+        console.log('Starting test execution...\n');
+        const startTime = performance.now();
+
+        const results = runEligibilityTests();
+
+        const endTime = performance.now();
+        const duration = (endTime - startTime).toFixed(2);
+
+        // Display summary
+        console.log('\n========================================');
+        console.log('📊 TEST RESULTS SUMMARY');
+        console.log('========================================');
+        console.log(`Total Tests: ${results.totalTests}`);
+        console.log(`✅ Passed: ${results.passed}`);
+        console.log(`❌ Failed: ${results.failed}`);
+        console.log(`📈 Pass Rate: ${results.passRate}%`);
+        console.log(`⏱️  Duration: ${duration}ms`);
+        console.log('========================================\n');
+
+        // Display detailed results
+        console.log('📋 DETAILED TEST RESULTS:');
+        console.log('----------------------------------------');
+        results.results.forEach((result, index) => {
+            const icon = result.passed ? '✅' : '❌';
+            const status = result.passed ? 'PASS' : 'FAIL';
+            console.log(`${icon} Test ${index + 1}: ${result.test} - ${status}`);
+
+            if (!result.passed && result.error) {
+                console.log(`   Error: ${result.error}`);
+            } else if (!result.passed) {
+                console.log(`   Expected:`, result.expected);
+                console.log(`   Got:`, result.actual);
+            }
+        });
+        console.log('----------------------------------------\n');
+
+        // Show toast notification
+        if (results.failed === 0) {
+            showToast(`All ${results.totalTests} tests passed! 🎉`, 'success', 7000);
+            console.log('🎉 ALL TESTS PASSED! 🎉\n');
+        } else {
+            showToast(`${results.failed} test(s) failed. Check console for details.`, 'error', 7000);
+            console.log(`⚠️  ${results.failed} test(s) failed. Review output above.\n`);
+        }
+
+        // Display some example results
+        console.log('📝 EXAMPLE TEST RESULTS:');
+        console.log('----------------------------------------');
+
+        // Show first 3 successful tests
+        const successfulTests = results.results.filter(r => r.passed).slice(0, 3);
+        successfulTests.forEach(result => {
+            if (result.fullResult) {
+                console.log(`\n✅ ${result.test}`);
+                console.log('   Input:', {
+                    citizenship: result.fullResult.citizenshipStatus,
+                    visa: result.fullResult.visaType,
+                    property: result.fullResult.propertyType
+                });
+                console.log('   Result:', result.fullResult.result);
+                console.log('   FIRB Required:', result.fullResult.firbRequired);
+                console.log('   Reason:', result.fullResult.reason);
+            }
+        });
+        console.log('----------------------------------------\n');
+
+        console.log('✨ Test execution complete. Check output above for details.\n');
+        console.log('========================================\n\n');
+
+    } catch (error) {
+        console.error('\n❌ ERROR RUNNING TESTS:', error);
+        console.error('Stack:', error.stack);
+        showToast('Error running tests: ' + error.message, 'error');
+    }
+}
