@@ -502,7 +502,7 @@ function renderEligibilityResult() {
                         </div>
                         <h2 class="text-3xl font-bold mb-4">${t('firbReq')}</h2>
                         <p class="text-lg text-gray-600 mb-4">${t('firbReqMsg')}</p>
-                        ${state.isEligible.note ? `<p class="text-sm text-gray-500 mb-8 bg-gray-50 p-4 rounded">${state.isEligible.note}</p>` : ''}
+                        ${state.isEligible?.note ? `<p class="text-sm text-gray-500 mb-8 bg-gray-50 p-4 rounded">${state.isEligible.note}</p>` : ''}
                         <button onclick="goToStep('calculator')" class="bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-700 inline-flex items-center space-x-2">
                             <span>${t('proceedCalc')}</span>
                             ${icons.arrowRight()}
@@ -513,7 +513,7 @@ function renderEligibilityResult() {
                         </div>
                         <h2 class="text-3xl font-bold mb-4">${t('noFirb')}</h2>
                         <p class="text-lg text-gray-600 mb-4">${t('noFirbMsg')}</p>
-                        ${state.isEligible.note ? `<p class="text-sm text-gray-500 mb-8 bg-gray-50 p-4 rounded">${state.isEligible.note}</p>` : ''}
+                        ${state.isEligible?.note ? `<p class="text-sm text-gray-500 mb-8 bg-gray-50 p-4 rounded">${state.isEligible.note}</p>` : ''}
                         <button onclick="goToStep('home')" class="bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-700">${t('returnHome')}</button>
                     `}
                 </div>

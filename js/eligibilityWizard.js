@@ -362,15 +362,15 @@ function renderStep3_PurchasePrice() {
             </div>
             <p class="text-sm text-gray-500 mt-2">Average property price in Sydney: ~$1,200,000</p>
 
-            ${wizardState.answers.purchasePrice ? `
-                <div class="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+            <div class="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200 firb-fee-estimate">
+                ${wizardState.answers.purchasePrice ? `
                     <div class="flex justify-between items-center">
                         <span class="font-semibold">Estimated FIRB Fee:</span>
                         <span class="text-xl font-bold text-blue-600">${formatCurrency(estimateFIRBFee())}</span>
                     </div>
                     <p class="text-xs text-gray-600 mt-2">Based on individual applicant. Company fees are higher.</p>
-                </div>
-            ` : ''}
+                ` : ''}
+            </div>
 
             <button onclick="nextWizardStep()"
                 ${!wizardState.answers.purchasePrice ? 'disabled' : ''}
@@ -461,10 +461,19 @@ function handleCitizenshipChange(value) {
         return;
     }
 
-    // For temporary/foreign, continue wizard
-    if (value === 'temporary' || value === 'foreign') {
-        // Re-render to show visa selection if temporary
+    // For temporary residents, show visa selection
+    if (value === 'temporary') {
+        // Re-render to show visa selection
+        console.log('[WIZARD] Temporary resident selected - showing visa selection');
         render();
+        return;
+    }
+
+    // For foreign nationals, proceed to next step
+    if (value === 'foreign') {
+        console.log('[WIZARD] Foreign national selected - proceeding to next step');
+        nextWizardStep();
+        return;
     }
 }
 
@@ -484,12 +493,48 @@ function handleWizardPriceInput(input) {
     const rawValue = input.value.replace(/[^\d]/g, '');
     wizardState.answers.purchasePrice = rawValue;
 
+    console.log('[WIZARD] Price input changed:', rawValue);
+
+    // Don't call render() - just update the input value directly
+    // This prevents re-rendering which would reset cursor position
     if (rawValue) {
         input.value = formatNumberWithCommas(rawValue);
     } else {
         input.value = '';
     }
-    render();
+
+    // Update the FIRB fee display without full re-render
+    updateFIRBFeeDisplay();
+}
+
+function updateFIRBFeeDisplay() {
+    const feeDisplay = document.querySelector('.firb-fee-estimate');
+    const continueBtn = document.querySelector('[onclick="nextWizardStep()"]');
+
+    if (wizardState.answers.purchasePrice) {
+        const fee = estimateFIRBFee();
+        if (feeDisplay) {
+            feeDisplay.innerHTML = `
+                <div class="flex justify-between items-center">
+                    <span class="font-semibold">Estimated FIRB Fee:</span>
+                    <span class="text-xl font-bold text-blue-600">${formatCurrency(fee)}</span>
+                </div>
+                <p class="text-xs text-gray-600 mt-2">Based on individual applicant. Company fees are higher.</p>
+            `;
+        }
+        if (continueBtn) {
+            continueBtn.disabled = false;
+            continueBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        }
+    } else {
+        if (feeDisplay) {
+            feeDisplay.innerHTML = '';
+        }
+        if (continueBtn) {
+            continueBtn.disabled = true;
+            continueBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        }
+    }
 }
 
 function handleWizardStateChange(value) {
@@ -946,6 +991,15 @@ function getAlternativeProperties(citizenshipStatus, visaType) {
 function proceedToFullCalculator() {
     const { purchasePrice, state: stateCode, propertyType, citizenshipStatus, visaType } = wizardState.answers;
 
+    console.log('[WIZARD] Proceeding to calculator with data:', {
+        purchasePrice, stateCode, propertyType, citizenshipStatus, visaType
+    });
+
+    // Ensure formData object exists
+    if (!state.formData) {
+        state.formData = {};
+    }
+
     // Pre-populate calculator with wizard data
     state.propertyValue = parseFloat(purchasePrice);
     state.state = stateCode;
@@ -958,28 +1012,27 @@ function proceedToFullCalculator() {
         'vacant': 'vacantLand',
         'commercial': 'commercial'
     };
-    state.propertyType = propertyTypeMap[propertyType] || 'newDwelling';
+    const mappedPropertyType = propertyTypeMap[propertyType] || 'newDwelling';
+    state.propertyType = mappedPropertyType;
+    state.formData.propertyType = mappedPropertyType;
+    state.formData.propertyValue = purchasePrice;
+    state.formData.state = stateCode;
 
     // Transfer citizenship context to main state
     if (citizenshipStatus) {
         state.citizenshipStatus = citizenshipStatus;
-
-        // Also store in formData for calculations and document checklist
-        if (!state.formData) {
-            state.formData = {};
-        }
         state.formData.citizenshipStatus = citizenshipStatus;
+        console.log('[WIZARD] Transferred citizenship status:', citizenshipStatus);
     }
 
     // Transfer visa type if applicable
     if (visaType) {
         state.visaType = visaType;
-
-        if (!state.formData) {
-            state.formData = {};
-        }
         state.formData.visaType = visaType;
+        console.log('[WIZARD] Transferred visa type:', visaType);
     }
+
+    console.log('[WIZARD] Final state.formData:', state.formData);
 
     // Go to calculator
     goToStep('calculator');
