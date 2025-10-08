@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your FIRB Cost Analysis Results</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f3f4f6;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+        }
+        .header {
+            background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+            padding: 40px 30px;
+            text-align: center;
+        }
+        .header h1 {
+            color: #ffffff;
+            margin: 0 0 10px 0;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .header p {
+            color: #dbeafe;
+            margin: 0;
+            font-size: 16px;
+        }
+        .content {
+            padding: 40px 30px;
+        }
+        .greeting {
+            font-size: 18px;
+            color: #111827;
+            margin: 0 0 20px 0;
+        }
+        .summary-box {
+            background-color: #f9fafb;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .summary-box h2 {
+            color: #1f2937;
+            margin: 0 0 15px 0;
+            font-size: 20px;
+        }
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+        .summary-label {
+            color: #6b7280;
+            font-size: 14px;
+        }
+        .summary-value {
+            color: #111827;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .total-box {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border: 2px solid #2563eb;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .total-label {
+            color: #1e40af;
+            font-size: 14px;
+            margin: 0 0 5px 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .total-amount {
+            color: #1e3a8a;
+            font-size: 36px;
+            font-weight: bold;
+            margin: 0;
+        }
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: #ffffff;
+            text-decoration: none;
+            padding: 16px 32px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .cta-button:hover {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+        }
+        .features-list {
+            background-color: #ecfdf5;
+            border-left: 4px solid #10b981;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .features-list h3 {
+            color: #065f46;
+            margin: 0 0 15px 0;
+            font-size: 18px;
+        }
+        .features-list ul {
+            margin: 0;
+            padding: 0 0 0 20px;
+        }
+        .features-list li {
+            color: #047857;
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+        .next-steps {
+            background-color: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .next-steps h3 {
+            color: #92400e;
+            margin: 0 0 15px 0;
+            font-size: 18px;
+        }
+        .next-steps ol {
+            margin: 0;
+            padding: 0 0 0 20px;
+        }
+        .next-steps li {
+            color: #78350f;
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+        .footer {
+            background-color: #f9fafb;
+            padding: 30px;
+            text-align: center;
+            border-top: 1px solid #e5e7eb;
+        }
+        .footer p {
+            color: #6b7280;
+            font-size: 12px;
+            margin: 5px 0;
+        }
+        .footer a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        .disclaimer {
+            background-color: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .disclaimer p {
+            color: #991b1b;
+            font-size: 12px;
+            margin: 0;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>📊 Your FIRB Cost Analysis</h1>
+            <p>Complete breakdown of foreign buyer costs</p>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <p class="greeting">Hi {{to_name}},</p>
+
+            <p style="color: #4b5563; line-height: 1.6; margin-bottom: 20px;">
+                Thank you for using the FIRB Calculator! Here's your personalized cost analysis for purchasing
+                property in Australia as a foreign buyer.
+            </p>
+
+            <!-- Total Cost Box -->
+            <div class="total-box">
+                <p class="total-label">Total Upfront Investment Required</p>
+                <h2 class="total-amount">{{total_cost}}</h2>
+            </div>
+
+            <!-- Summary -->
+            <div class="summary-box">
+                <h2>📋 Your Calculation Summary</h2>
+                <div class="summary-item">
+                    <span class="summary-label">Property Type:</span>
+                    <span class="summary-value">{{property_type}}</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">State/Territory:</span>
+                    <span class="summary-value">{{property_state}}</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Purchase Price:</span>
+                    <span class="summary-value">{{purchase_price}}</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">FIRB Application Fee:</span>
+                    <span class="summary-value">{{firb_fee}}</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Total Stamp Duty:</span>
+                    <span class="summary-value">{{stamp_duty}}</span>
+                </div>
+            </div>
+
+            <!-- What's Included -->
+            <div class="features-list">
+                <h3>✅ What's Included in Your Report</h3>
+                <ul>
+                    <li><strong>Complete Cost Breakdown:</strong> FIRB fees, stamp duty, surcharges, and land tax</li>
+                    <li><strong>State Comparison:</strong> See how costs vary across all Australian states</li>
+                    <li><strong>Compliance Checklist:</strong> Required documents and key deadlines</li>
+                    <li><strong>Action Plan:</strong> Step-by-step timeline for your property purchase</li>
+                    <li><strong>Professional Contacts:</strong> Recommended advisors and services</li>
+                </ul>
+            </div>
+
+            <!-- CTA Button -->
+            <div style="text-align: center;">
+                <a href="{{save_scenario_link}}" class="cta-button">
+                    💾 Access Your Full Report Online
+                </a>
+            </div>
+
+            <!-- Next Steps -->
+            <div class="next-steps">
+                <h3>🎯 Recommended Next Steps</h3>
+                <ol>
+                    <li>Download and review your detailed PDF report (attached if available)</li>
+                    <li>Consult with an immigration lawyer to verify your visa status and FIRB eligibility</li>
+                    <li>Engage a property lawyer to review contracts before signing</li>
+                    <li>Apply for FIRB approval BEFORE signing any contract of sale</li>
+                    <li>Budget {{total_cost}} for your upfront costs</li>
+                </ol>
+            </div>
+
+            <!-- Consultation CTA (conditional) -->
+            {{#if_consultation_requested}}
+            <div style="background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%); border: 2px solid #10b981; border-radius: 8px; padding: 20px; margin: 20px 0; text-align: center;">
+                <h3 style="color: #065f46; margin: 0 0 10px 0;">🎁 Your Free Consultation</h3>
+                <p style="color: #047857; margin: 0 0 15px 0;">
+                    Thank you for requesting a consultation! Our FIRB specialist will contact you within 2 business days
+                    to schedule your free 15-minute call.
+                </p>
+                <a href="{{consultation_link}}" style="display: inline-block; background-color: #10b981; color: white; text-decoration: none; padding: 12px 24px; border-radius: 6px; font-weight: 600;">
+                    Learn More About Our Services
+                </a>
+            </div>
+            {{/if_consultation_requested}}
+
+            <!-- Disclaimer -->
+            <div class="disclaimer">
+                <p>
+                    <strong>⚠️ Important:</strong> This calculation is for informational purposes only and does not
+                    constitute financial, legal, or tax advice. FIRB regulations and stamp duty rates change frequently.
+                    Always consult with qualified professionals before making property purchase decisions. Do NOT sign
+                    any contract before receiving FIRB approval.
+                </p>
+            </div>
+
+            <p style="color: #4b5563; line-height: 1.6; margin-top: 30px;">
+                Have questions? Reply to this email or visit our website for more resources.
+            </p>
+
+            <p style="color: #4b5563; line-height: 1.6;">
+                Best regards,<br>
+                <strong>The FIRB Calculator Team</strong>
+            </p>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p><strong>FIRB Calculator</strong></p>
+            <p>Professional Property Investment Analysis for Foreign Buyers</p>
+            <p style="margin-top: 15px;">
+                <a href="#">Visit Website</a> |
+                <a href="#">Privacy Policy</a> |
+                <a href="mailto:{{to_email}}?subject=Unsubscribe">Unsubscribe</a>
+            </p>
+            <p style="margin-top: 15px; font-size: 11px;">
+                You're receiving this email because you requested your FIRB calculation results on {{sent_date}}.
+            </p>
+            {{#if_newsletter_signup}}
+            <p style="font-size: 11px;">
+                You've subscribed to receive FIRB updates and property investment tips.
+                You can unsubscribe at any time using the link above.
+            </p>
+            {{/if_newsletter_signup}}
+        </div>
+    </div>
+</body>
+</html>

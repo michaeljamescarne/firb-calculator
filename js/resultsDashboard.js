@@ -416,16 +416,23 @@ function renderActionButtons() {
                 </div>
             </div>
 
-            <div class="grid md:grid-cols-2 gap-4 mb-4">
+            <div class="grid md:grid-cols-3 gap-4 mb-4">
                 <button onclick="showSaveScenarioModal()"
                     class="bg-green-600 text-white px-6 py-4 rounded-lg font-semibold hover:bg-green-700 transform hover:scale-105 transition-all flex items-center justify-center space-x-2">
                     ${icons.fileText('w-5 h-5')}
                     <span>Save Scenario</span>
                 </button>
+                <button onclick="typeof showEmailResultsModal === 'function' && showEmailResultsModal()"
+                    class="bg-gradient-to-r from-orange-500 to-red-500 text-white px-6 py-4 rounded-lg font-semibold hover:from-orange-600 hover:to-red-600 transform hover:scale-105 transition-all flex items-center justify-center space-x-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                    </svg>
+                    <span>Email Results</span>
+                </button>
                 <button onclick="typeof generateProfessionalPDF === 'function' && generateProfessionalPDF()"
                     class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-4 rounded-lg font-semibold hover:from-purple-700 hover:to-pink-700 transform hover:scale-105 transition-all flex items-center justify-center space-x-2">
                     ${icons.download('w-5 h-5')}
-                    <span>Professional PDF Report</span>
+                    <span>PDF Report</span>
                 </button>
             </div>
             <div class="grid md:grid-cols-2 gap-4 mb-6">
