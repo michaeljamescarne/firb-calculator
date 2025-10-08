@@ -41,6 +41,9 @@ function render() {
         case 'compare':
             content += typeof renderScenarioComparison === 'function' ? renderScenarioComparison() : '';
             break;
+        case 'sharedCompare':
+            content += typeof renderSharedComparisonPage === 'function' ? renderSharedComparisonPage() : '';
+            break;
         case 'faq':
             content += renderFAQPage();
             break;
