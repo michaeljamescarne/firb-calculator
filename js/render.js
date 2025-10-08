@@ -69,10 +69,17 @@ function render() {
         if (typeof addCollapsibleStyles === 'function') {
             addCollapsibleStyles();
         }
+        // Initialize investment tool
+        if (typeof initInvestmentTool === 'function') {
+            initInvestmentTool(state.calculatedFees);
+        }
         // Initialize charts after DOM is ready
         setTimeout(() => {
             if (typeof initializeDashboardCharts === 'function') {
                 initializeDashboardCharts();
+            }
+            if (typeof initInvestmentCharts === 'function') {
+                initInvestmentCharts();
             }
         }, 100);
     }

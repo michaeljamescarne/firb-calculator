@@ -39,6 +39,13 @@ function renderResultsDashboard() {
                         <!-- Detailed Breakdown with Collapsible Sections -->
                         ${renderDetailedBreakdown(fees)}
 
+                        <!-- Investment Analysis Tool -->
+                        <div id="investment-container" class="mt-8">
+                            ${typeof renderInvestmentInputsForm === 'function' && typeof renderInvestmentAnalysis === 'function'
+                                ? renderInvestmentInputsForm() + renderInvestmentAnalysis()
+                                : ''}
+                        </div>
+
                         <!-- Action Buttons -->
                         ${renderActionButtons()}
                     </div>
