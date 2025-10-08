@@ -846,7 +846,9 @@ function renderEligibilityResult() {
         purchasePrice = 0,
         canProceedToCalculator = false,
         message = '',
-        caveat = ''
+        caveat = '',
+        alternatives = null,
+        conditions = null
     } = result;
 
     // Additional validation
@@ -972,20 +974,26 @@ function renderEligibilityResult() {
                         </div>
 
                         <!-- Important conditions -->
-                        <div class="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-                            <h3 class="font-bold text-gray-900 mb-2 flex items-center">
-                                <svg class="w-5 h-5 text-yellow-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
-                                </svg>
-                                Important Conditions
-                            </h3>
-                            <p class="text-sm text-gray-700">${reason}</p>
-                            ${visaType && VISA_TYPES[visaType] ? `
-                                <p class="text-sm text-gray-700 mt-2">
-                                    <strong>Visa Condition:</strong> ${VISA_TYPES[visaType].condition}
-                                </p>
-                            ` : ''}
-                        </div>
+                        ${conditions || reason || (visaType && VISA_TYPES[visaType]) ? `
+                            <div class="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                                <h3 class="font-bold text-gray-900 mb-2 flex items-center">
+                                    <svg class="w-5 h-5 text-yellow-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                                    </svg>
+                                    Important Conditions
+                                </h3>
+                                ${conditions ? `
+                                    <p class="text-sm text-gray-700">${conditions}</p>
+                                ` : `
+                                    <p class="text-sm text-gray-700">${reason}</p>
+                                `}
+                                ${visaType && VISA_TYPES[visaType] && !conditions ? `
+                                    <p class="text-sm text-gray-700 mt-2">
+                                        <strong>Visa Condition:</strong> ${VISA_TYPES[visaType].condition}
+                                    </p>
+                                ` : ''}
+                            </div>
+                        ` : ''}
 
                         <!-- Required documents -->
                         ${getRequiredDocumentsSection(documentsKey)}
@@ -1060,17 +1068,27 @@ function renderEligibilityResult() {
                         <h2 class="text-xl font-bold text-gray-900 mb-4">What You CAN Buy</h2>
                         <p class="text-gray-700 mb-4">Based on your situation, you are eligible to purchase:</p>
                         <ul class="space-y-2">
-                            ${getAlternativeProperties(citizenshipStatus, visaType).map(alt => `
-                                <li class="flex items-start">
-                                    <svg class="w-5 h-5 text-green-600 mr-3 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                    </svg>
-                                    <div>
-                                        <div class="font-semibold">${alt.label}</div>
-                                        <div class="text-sm text-gray-600">${alt.description}</div>
-                                    </div>
-                                </li>
-                            `).join('')}
+                            ${alternatives && alternatives.length > 0
+                                ? alternatives.map(altText => `
+                                    <li class="flex items-start">
+                                        <svg class="w-5 h-5 text-green-600 mr-3 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                        </svg>
+                                        <span class="text-gray-700">${altText}</span>
+                                    </li>
+                                `).join('')
+                                : getAlternativeProperties(citizenshipStatus, visaType).map(alt => `
+                                    <li class="flex items-start">
+                                        <svg class="w-5 h-5 text-green-600 mr-3 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                        </svg>
+                                        <div>
+                                            <div class="font-semibold">${alt.label}</div>
+                                            <div class="text-sm text-gray-600">${alt.description}</div>
+                                        </div>
+                                    </li>
+                                `).join('')
+                            }
                         </ul>
                     </div>
 
