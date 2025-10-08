@@ -416,12 +416,19 @@ function renderActionButtons() {
                 </div>
             </div>
 
-            <div class="grid md:grid-cols-3 gap-4 mb-6">
+            <div class="grid md:grid-cols-2 gap-4 mb-4">
                 <button onclick="showSaveScenarioModal()"
                     class="bg-green-600 text-white px-6 py-4 rounded-lg font-semibold hover:bg-green-700 transform hover:scale-105 transition-all flex items-center justify-center space-x-2">
                     ${icons.fileText('w-5 h-5')}
                     <span>Save Scenario</span>
                 </button>
+                <button onclick="typeof generateProfessionalPDF === 'function' && generateProfessionalPDF()"
+                    class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-4 rounded-lg font-semibold hover:from-purple-700 hover:to-pink-700 transform hover:scale-105 transition-all flex items-center justify-center space-x-2">
+                    ${icons.download('w-5 h-5')}
+                    <span>Professional PDF Report</span>
+                </button>
+            </div>
+            <div class="grid md:grid-cols-2 gap-4 mb-6">
                 <button onclick="handlePayment()"
                     ${state.isProcessingPayment ? 'disabled' : ''}
                     class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-4 rounded-lg font-semibold hover:from-blue-700 hover:to-indigo-700 transform hover:scale-105 transition-all flex items-center justify-center space-x-2 ${state.isProcessingPayment ? 'opacity-50 cursor-not-allowed' : ''}">
