@@ -435,28 +435,67 @@ function renderStep4_State() {
 function handleCitizenshipChange(value) {
     wizardState.answers.citizenshipStatus = value;
 
-    // Australian citizens don't need FIRB
+    // Australian citizens don't need FIRB - use centralized module for message
     if (value === 'australian') {
+        let message = 'As an Australian citizen, you can purchase any residential property without FIRB approval. You only pay standard stamp duty and fees.';
+        let reason = 'Australian citizens do not require FIRB approval';
+
+        // Try to get message from FIRB module if available
+        if (typeof window.FIRBEligibility !== 'undefined' && typeof window.FIRBEligibility.checkFIRBEligibility === 'function') {
+            try {
+                const { checkFIRBEligibility } = window.FIRBEligibility;
+                const firbResult = checkFIRBEligibility({
+                    citizenshipStatus: 'australian',
+                    propertyType: 'established' // Any property type works for citizens
+                });
+                reason = firbResult.reason;
+                message = firbResult.reason;
+                console.log('[WIZARD] Using FIRB module result for Australian citizen:', firbResult);
+            } catch (error) {
+                console.warn('[WIZARD] Could not use FIRB module, using fallback message:', error);
+            }
+        }
+
         showEligibilityResult({
             eligible: true,
             noFIRBRequired: true,
-            reason: 'Australian citizens do not require FIRB approval',
+            reason: reason,
             canProceedToCalculator: false,
-            message: 'As an Australian citizen, you can purchase any residential property without FIRB approval. You only pay standard stamp duty and fees.'
+            message: message
         });
         return;
     }
 
-    // For permanent residents, need more info
+    // For permanent residents - use centralized module for message
     if (value === 'permanent') {
-        // Skip to results - usually no FIRB needed
+        let message = 'As a permanent resident ordinarily resident in Australia, you can purchase residential property without FIRB approval.';
+        let reason = 'Permanent residents ordinarily resident in Australia generally do not require FIRB approval';
+        let caveat = 'Note: You must be ordinarily resident in Australia. If you spend most of your time overseas, FIRB approval may be required.';
+
+        // Try to get message from FIRB module if available
+        if (typeof window.FIRBEligibility !== 'undefined' && typeof window.FIRBEligibility.checkFIRBEligibility === 'function') {
+            try {
+                const { checkFIRBEligibility } = window.FIRBEligibility;
+                const firbResult = checkFIRBEligibility({
+                    citizenshipStatus: 'permanent',
+                    propertyType: 'established',
+                    isOrdinarilyResident: true
+                });
+                reason = firbResult.reason;
+                message = firbResult.reason;
+                console.log('[WIZARD] Using FIRB module result for PR:', firbResult);
+            } catch (error) {
+                console.warn('[WIZARD] Could not use FIRB module, using fallback message:', error);
+            }
+        }
+
         showEligibilityResult({
             eligible: true,
             noFIRBRequired: true,
-            reason: 'Permanent residents ordinarily resident in Australia generally do not require FIRB approval',
+            reason: reason,
             canProceedToCalculator: false,
-            caveat: 'Note: You must be ordinarily resident in Australia. If you spend most of your time overseas, FIRB approval may be required.',
-            message: 'As a permanent resident ordinarily resident in Australia, you can purchase residential property without FIRB approval.'
+            caveat: caveat,
+            message: message
         });
         return;
     }
@@ -560,49 +599,65 @@ function previousWizardStep() {
 
 /**
  * Check property eligibility based on current answers
+ * Uses the centralized checkFIRBEligibility module
  */
 function checkPropertyEligibility(propertyType) {
     const { citizenshipStatus, visaType } = wizardState.answers;
 
-    // Foreign nationals
-    if (citizenshipStatus === 'foreign') {
-        if (propertyType === 'new' || propertyType === 'offThePlan') {
-            return { eligible: true, message: 'Generally allowed for foreign buyers' };
+    // Map wizard property types to module property types
+    const propertyTypeMap = {
+        'new': 'newDwelling',
+        'offThePlan': 'newDwelling',
+        'established': 'established',
+        'vacant': 'vacantLand',
+        'commercial': 'commercial'
+    };
+    const mappedPropertyType = propertyTypeMap[propertyType] || 'newDwelling';
+
+    try {
+        // Check if module is loaded
+        if (typeof window.FIRBEligibility === 'undefined' || typeof window.FIRBEligibility.checkFIRBEligibility !== 'function') {
+            console.warn('[WIZARD] FIRBEligibility module not loaded - using fallback logic');
+            return { eligible: true, message: 'Eligibility depends on specific circumstances' };
         }
-        if (propertyType === 'established') {
-            return { eligible: false, message: 'Not allowed - consider new dwellings instead' };
+
+        const { checkFIRBEligibility } = window.FIRBEligibility;
+
+        // Call the centralized eligibility checker
+        const result = checkFIRBEligibility({
+            citizenshipStatus: citizenshipStatus || 'foreign',
+            visaType: visaType || null,
+            propertyType: mappedPropertyType
+        });
+
+        console.log('[WIZARD] checkPropertyEligibility result:', result);
+
+        // Map result to wizard format
+        if (result.result === 'not_allowed') {
+            return {
+                eligible: false,
+                message: result.reason
+            };
+        } else if (result.result === 'conditional') {
+            return {
+                eligible: true,
+                message: result.conditions || result.reason
+            };
+        } else if (result.result === 'required') {
+            return {
+                eligible: true,
+                message: result.reason
+            };
+        } else {
+            return {
+                eligible: true,
+                message: result.reason
+            };
         }
-        if (propertyType === 'vacant') {
-            return { eligible: true, message: 'Allowed with development approval' };
-        }
-        if (propertyType === 'commercial') {
-            return { eligible: true, message: 'Allowed - different FIRB rules apply' };
-        }
+    } catch (error) {
+        console.error('[WIZARD] Error in checkPropertyEligibility:', error);
+        return { eligible: true, message: 'Check specific eligibility conditions' };
     }
-
-    // Temporary residents
-    if (citizenshipStatus === 'temporary' && visaType) {
-        const visa = VISA_TYPES[visaType];
-        if (!visa) return { eligible: true, message: 'Check visa conditions' };
-
-        if (propertyType === 'established' && !visa.canBuyEstablished) {
-            return { eligible: false, message: 'Your visa type does not allow established dwellings' };
-        }
-        if (propertyType === 'established' && visa.canBuyEstablished) {
-            return { eligible: true, message: `Allowed - ${visa.condition}` };
-        }
-        if (propertyType === 'new' || propertyType === 'offThePlan') {
-            return { eligible: true, message: 'Allowed for most visa types' };
-        }
-        if (propertyType === 'vacant' && !visa.canBuyVacant) {
-            return { eligible: false, message: 'Your visa type does not allow vacant land' };
-        }
-        if (propertyType === 'vacant' && visa.canBuyVacant) {
-            return { eligible: true, message: 'Allowed with development plans' };
-        }
-    }
-
-    return { eligible: true, message: 'Eligibility depends on specific circumstances' };
 }
 
 /**
@@ -645,6 +700,7 @@ function getStateSurcharge(state) {
 
 /**
  * Calculate final eligibility result
+ * Uses the centralized checkFIRBEligibility module
  */
 function calculateEligibilityResult() {
     console.log('[WIZARD] calculateEligibilityResult - wizardState.answers:', wizardState.answers);
@@ -675,26 +731,83 @@ function calculateEligibilityResult() {
         citizenshipStatus, visaType, propertyType, purchasePrice, stateCode
     });
 
-    const eligibility = checkPropertyEligibility(propertyType);
-    const firbFee = estimateFIRBFee();
-    const surcharge = getStateSurcharge(stateCode);
-
-    const result = {
-        eligible: eligibility.eligible,
-        noFIRBRequired: false,
-        reason: eligibility.message,
-        firbFee,
-        surcharge,
-        state: stateCode,
-        propertyType,
-        citizenshipStatus,
-        visaType,
-        purchasePrice,
-        canProceedToCalculator: eligibility.eligible
+    // Map wizard property types to module property types
+    const propertyTypeMap = {
+        'new': 'newDwelling',
+        'offThePlan': 'newDwelling',
+        'established': 'established',
+        'vacant': 'vacantLand',
+        'commercial': 'commercial'
     };
+    const mappedPropertyType = propertyTypeMap[propertyType] || 'newDwelling';
 
-    console.log('[WIZARD] Eligibility result:', result);
-    showEligibilityResult(result);
+    try {
+        // Check if module is loaded
+        if (typeof window.FIRBEligibility === 'undefined' || typeof window.FIRBEligibility.checkFIRBEligibility !== 'function') {
+            console.error('[WIZARD] FIRBEligibility module not loaded - using fallback');
+
+            // Fallback to old logic
+            const eligibility = checkPropertyEligibility(propertyType);
+            const firbFee = estimateFIRBFee();
+            const surcharge = getStateSurcharge(stateCode);
+
+            const result = {
+                eligible: eligibility.eligible,
+                noFIRBRequired: false,
+                reason: eligibility.message,
+                firbFee,
+                surcharge,
+                state: stateCode,
+                propertyType,
+                citizenshipStatus,
+                visaType,
+                purchasePrice,
+                canProceedToCalculator: eligibility.eligible
+            };
+
+            console.log('[WIZARD] Eligibility result (fallback):', result);
+            showEligibilityResult(result);
+            return;
+        }
+
+        const { checkFIRBEligibility } = window.FIRBEligibility;
+
+        // Call the centralized eligibility checker
+        const firbResult = checkFIRBEligibility({
+            citizenshipStatus: citizenshipStatus || 'foreign',
+            visaType: visaType || null,
+            propertyType: mappedPropertyType
+        });
+
+        console.log('[WIZARD] FIRB eligibility check result:', firbResult);
+
+        const firbFee = estimateFIRBFee();
+        const surcharge = getStateSurcharge(stateCode);
+
+        // Map FIRB module result to wizard result format
+        const result = {
+            eligible: firbResult.result !== 'not_allowed',
+            noFIRBRequired: !firbResult.firbRequired,
+            reason: firbResult.reason,
+            conditions: firbResult.conditions,
+            alternatives: firbResult.alternatives,
+            firbFee,
+            surcharge,
+            state: stateCode,
+            propertyType,
+            citizenshipStatus,
+            visaType,
+            purchasePrice,
+            canProceedToCalculator: firbResult.result !== 'not_allowed',
+            firbModuleResult: firbResult  // Store full result for reference
+        };
+
+        console.log('[WIZARD] Eligibility result:', result);
+        showEligibilityResult(result);
+    } catch (error) {
+        console.error('[WIZARD] Error in calculateEligibilityResult:', error);
+        showToast('Error calculating eligibility: ' + error.message, 'error');
+    }
 }
 
 /**
