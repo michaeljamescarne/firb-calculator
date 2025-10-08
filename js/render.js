@@ -300,6 +300,12 @@ function renderHome() {
             </div>
         </section>
 
+        <section class="py-20 bg-white">
+            <div class="max-w-7xl mx-auto px-4">
+                ${typeof renderAustraliaMap === 'function' ? renderAustraliaMap() : ''}
+            </div>
+        </section>
+
         <section class="py-20 bg-gray-50">
             <div class="max-w-7xl mx-auto px-4">
                 <h2 class="text-3xl font-bold text-gray-900 mb-12 text-center">Understanding the Fees</h2>
