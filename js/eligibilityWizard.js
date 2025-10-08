@@ -1268,6 +1268,12 @@ function proceedToFullCalculator() {
         console.log('[WIZARD] Transferred visa type:', visaType);
     }
 
+    // Determine if FIRB is required based on citizenship status
+    // Australian citizens and permanent residents (ordinarily resident) are exempt
+    const firbRequired = citizenshipStatus !== 'australian' && citizenshipStatus !== 'permanent';
+    state.formData.firbRequired = firbRequired;
+    console.log('[WIZARD] Set firbRequired:', firbRequired);
+
     console.log('[WIZARD] Final state.formData:', state.formData);
 
     // Go to calculator

@@ -264,15 +264,22 @@ function calculateAllFees(formData) {
     const entityType = formData.entityType || 'individual';
     const depositPercent = parseFloat(formData.depositPercent) || 30;
 
-    // Foreign investment fees (one-time)
-    const firbFee = calculateFIRBFee(
+    // Check if FIRB is required (for foreign nationals, temporary residents)
+    // Australian citizens and permanent residents (ordinarily resident) are exempt
+    const firbRequired = formData.firbRequired !== false; // Default to true for backward compatibility
+
+    console.log('[CALCULATIONS] firbRequired:', firbRequired, 'citizenshipStatus:', formData.citizenshipStatus);
+
+    // Foreign investment fees (one-time) - only if FIRB required
+    const firbFee = firbRequired ? calculateFIRBFee(
         formData.propertyValue,
         formData.propertyType,
         formData.firstHomeBuyer,
         entityType
-    );
-    const stampDutySurcharge = calculateStampDutySurcharge(formData.propertyValue, formData.state);
-    const legalFees = 2500;
+    ) : 0;
+
+    const stampDutySurcharge = firbRequired ? calculateStampDutySurcharge(formData.propertyValue, formData.state) : 0;
+    const legalFees = firbRequired ? 2500 : 0;
 
     // Standard property purchase fees (one-time)
     const standardFees = {
@@ -289,13 +296,13 @@ function calculateAllFees(formData) {
         waterRates: 300
     };
 
-    // Annual fees for foreign owners
+    // Annual fees for foreign owners - only if FIRB required
     const annualFees = {
-        vacancyFee: calculateAnnualVacancyFee(formData.propertyValue, formData.propertyType),
-        landTaxSurcharge: calculateLandTaxSurcharge(formData.propertyValue, formData.state),
-        councilRates: 2400,  // Annual estimate
-        waterRates: 1200,    // Annual estimate
-        insurance: Math.max(800, val * 0.003) // Rough estimate: 0.3% of property value, min $800
+        vacancyFee: firbRequired ? calculateAnnualVacancyFee(formData.propertyValue, formData.propertyType) : 0,
+        landTaxSurcharge: firbRequired ? calculateLandTaxSurcharge(formData.propertyValue, formData.state) : 0,
+        councilRates: 2400,  // Annual estimate (applies to all)
+        waterRates: 1200,    // Annual estimate (applies to all)
+        insurance: Math.max(800, val * 0.003) // Rough estimate: 0.3% of property value, min $800 (applies to all)
     };
 
     const standardTotal = Object.values(standardFees).reduce((sum, fee) => sum + fee, 0);
@@ -324,6 +331,7 @@ function calculateAllFees(formData) {
 
         // Metadata
         depositPercent: depositPercent,
-        entityType: entityType
+        entityType: entityType,
+        firbRequired: firbRequired  // Include FIRB requirement status
     };
 }

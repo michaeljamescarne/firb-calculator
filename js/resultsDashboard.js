@@ -87,15 +87,26 @@ function renderSummaryCards(fees) {
                 <p class="text-xs text-blue-100">${t('upfrontCostsDesc')}</p>
             </div>
 
-            <!-- FIRB Fee Card -->
-            <div class="bg-white p-6 rounded-xl shadow-md border-l-4 border-orange-500 transform hover:scale-105 transition-transform duration-300">
-                <div class="flex items-center justify-between mb-2">
-                    <h3 class="text-xs font-semibold text-gray-600 uppercase">${t('firbAppFee')}</h3>
-                    ${icons.fileText('w-4 h-4 text-orange-500')}
+            <!-- FIRB Fee Card - Only show if FIRB required -->
+            ${fees.firbRequired ? `
+                <div class="bg-white p-6 rounded-xl shadow-md border-l-4 border-orange-500 transform hover:scale-105 transition-transform duration-300">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-xs font-semibold text-gray-600 uppercase">${t('firbAppFee')}</h3>
+                        ${icons.fileText('w-4 h-4 text-orange-500')}
+                    </div>
+                    <div class="text-2xl font-bold text-gray-900">${formatCurrency(fees.firb)}</div>
+                    <p class="text-xs text-gray-500 mt-1">${state.formData.entityType !== 'individual' ? '⚠️ Entity rate' : 'Individual rate'}</p>
                 </div>
-                <div class="text-2xl font-bold text-gray-900">${formatCurrency(fees.firb)}</div>
-                <p class="text-xs text-gray-500 mt-1">${state.formData.entityType !== 'individual' ? '⚠️ Entity rate' : 'Individual rate'}</p>
-            </div>
+            ` : `
+                <div class="bg-white p-6 rounded-xl shadow-md border-l-4 border-green-500 transform hover:scale-105 transition-transform duration-300">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-xs font-semibold text-gray-600 uppercase">FIRB Fee</h3>
+                        ${icons.checkCircle('w-4 h-4 text-green-500')}
+                    </div>
+                    <div class="text-2xl font-bold text-green-600">$0</div>
+                    <p class="text-xs text-gray-500 mt-1">✓ No FIRB required</p>
+                </div>
+            `}
 
             <!-- Total Stamp Duty Card -->
             <div class="bg-white p-6 rounded-xl shadow-md border-l-4 border-red-500 transform hover:scale-105 transition-transform duration-300">
@@ -277,27 +288,39 @@ function renderDetailedBreakdown(fees) {
                 Detailed Cost Breakdown
             </h2>
 
-            <!-- Foreign Investment Fees (Collapsible) -->
-            <div class="border border-orange-200 rounded-lg mb-4">
-                <button onclick="toggleSection('foreign-fees')"
-                    class="w-full flex items-center justify-between p-4 bg-orange-50 hover:bg-orange-100 transition-colors rounded-t-lg">
-                    <div class="flex items-center">
-                        ${icons.globe('w-5 h-5 text-orange-600 mr-3')}
-                        <h3 class="text-lg font-semibold text-gray-900">${t('foreignInvestmentFees')}</h3>
-                    </div>
-                    <div class="flex items-center space-x-4">
-                        <span class="text-xl font-bold text-orange-600">${formatCurrency(fees.foreignTotal)}</span>
-                        <span id="foreign-fees-icon" class="transform transition-transform">▼</span>
-                    </div>
-                </button>
-                <div id="foreign-fees" class="collapsible-content">
-                    <div class="p-4 space-y-3">
-                        ${renderFeeLineItem('firbAppFee', 'FIRB Application Fee', fees.firb, 'paidToGov', 'This fee is paid to the Australian Treasury for FIRB review and approval.')}
-                        ${renderFeeLineItem('stampSurcharge', 'Foreign Buyer Stamp Duty Surcharge', fees.stampDuty, 'addStateTax', `Additional ${state.formData.state} state tax of 7-8% for foreign purchasers.`)}
-                        ${renderFeeLineItem('legalFeesCard', 'Legal & Conveyancing Fees', fees.legal, 'profFees', 'Professional fees for FIRB application assistance and legal representation.')}
+            <!-- Foreign Investment Fees (Collapsible) - Only show if FIRB required -->
+            ${fees.firbRequired ? `
+                <div class="border border-orange-200 rounded-lg mb-4">
+                    <button onclick="toggleSection('foreign-fees')"
+                        class="w-full flex items-center justify-between p-4 bg-orange-50 hover:bg-orange-100 transition-colors rounded-t-lg">
+                        <div class="flex items-center">
+                            ${icons.globe('w-5 h-5 text-orange-600 mr-3')}
+                            <h3 class="text-lg font-semibold text-gray-900">${t('foreignInvestmentFees')}</h3>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <span class="text-xl font-bold text-orange-600">${formatCurrency(fees.foreignTotal)}</span>
+                            <span id="foreign-fees-icon" class="transform transition-transform">▼</span>
+                        </div>
+                    </button>
+                    <div id="foreign-fees" class="collapsible-content">
+                        <div class="p-4 space-y-3">
+                            ${renderFeeLineItem('firbAppFee', 'FIRB Application Fee', fees.firb, 'paidToGov', 'This fee is paid to the Australian Treasury for FIRB review and approval.')}
+                            ${renderFeeLineItem('stampSurcharge', 'Foreign Buyer Stamp Duty Surcharge', fees.stampDuty, 'addStateTax', `Additional ${state.formData.state} state tax of 7-8% for foreign purchasers.`)}
+                            ${renderFeeLineItem('legalFeesCard', 'Legal & Conveyancing Fees', fees.legal, 'profFees', 'Professional fees for FIRB application assistance and legal representation.')}
+                        </div>
                     </div>
                 </div>
-            </div>
+            ` : `
+                <div class="border border-green-200 rounded-lg mb-4 bg-green-50 p-4">
+                    <div class="flex items-center">
+                        ${icons.checkCircle('w-5 h-5 text-green-600 mr-3')}
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900">No Foreign Investment Fees Required</h3>
+                            <p class="text-sm text-gray-600 mt-1">As an Australian citizen or permanent resident (ordinarily resident), you are exempt from FIRB fees and foreign buyer surcharges.</p>
+                        </div>
+                    </div>
+                </div>
+            `}
 
             <!-- Standard Property Fees (Collapsible) -->
             <div class="border border-blue-200 rounded-lg mb-4">
