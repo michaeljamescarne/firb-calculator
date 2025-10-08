@@ -34,6 +34,11 @@ document.addEventListener('DOMContentLoaded', function() {
         initScenariosSystem();
     }
 
+    // Initialize FAQ system
+    if (typeof initFAQSystem === 'function') {
+        initFAQSystem();
+    }
+
     // Render the initial page
     render();
 

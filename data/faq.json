@@ -1,0 +1,990 @@
+{
+  "categories": [
+    {
+      "id": "firb-process",
+      "name": "FIRB Process",
+      "icon": "FileText",
+      "questions": [
+        {
+          "id": "faq-1",
+          "question": "What is FIRB and why do I need approval?",
+          "answer": "The Foreign Investment Review Board (FIRB) is an Australian government body that reviews foreign investment proposals. Under the Foreign Acquisitions and Takeovers Act 1975, foreign persons must obtain FIRB approval before purchasing residential property in Australia. This ensures foreign investment benefits the Australian community and complies with national interest requirements.",
+          "keywords": ["firb", "approval", "foreign investment", "what is"],
+          "popular": true,
+          "views": 15420,
+          "relatedQuestions": ["faq-2", "faq-21", "faq-36"],
+          "calculatorScenario": null,
+          "officialSources": [
+            {
+              "title": "Foreign Investment Review Board",
+              "url": "https://firb.gov.au"
+            }
+          ]
+        },
+        {
+          "id": "faq-2",
+          "question": "How long does FIRB approval take?",
+          "answer": "Standard FIRB applications typically take 30 days from the date of receipt of a complete application. However, this can vary based on complexity. Simple residential property purchases by temporary residents usually process within 30 days, while more complex applications may take 90+ days. You can pay an additional fee for expedited processing (10 days).",
+          "keywords": ["processing time", "how long", "timeline", "approval"],
+          "popular": true,
+          "views": 12350,
+          "relatedQuestions": ["faq-1", "faq-3", "faq-38"],
+          "calculatorScenario": null,
+          "officialSources": [
+            {
+              "title": "FIRB Processing Times",
+              "url": "https://firb.gov.au/guidance-resources/guidance-notes/gn02"
+            }
+          ]
+        },
+        {
+          "id": "faq-3",
+          "question": "Can I start looking at properties before FIRB approval?",
+          "answer": "Yes, you can inspect properties, attend auctions, and even sign contracts 'subject to FIRB approval' before receiving approval. However, you cannot settle (complete the purchase) until FIRB approval is granted. Most contracts include a FIRB approval condition that allows you to withdraw if approval is denied. It's recommended to apply for FIRB approval early in your property search.",
+          "keywords": ["before approval", "contract", "subject to", "looking"],
+          "popular": false,
+          "views": 3240,
+          "relatedQuestions": ["faq-2", "faq-4", "faq-56"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-4",
+          "question": "What happens if I purchase without FIRB approval?",
+          "answer": "Purchasing residential property without FIRB approval when required is a serious offence under Australian law. Penalties include fines up to $3.3 million for individuals ($33 million for corporations), criminal prosecution, forced divestment (selling the property), and loss of any capital gains. You may also face difficulties with property settlement and finance approval. Always obtain FIRB approval before settling.",
+          "keywords": ["without approval", "penalties", "illegal", "fine"],
+          "popular": false,
+          "views": 5670,
+          "relatedQuestions": ["faq-1", "faq-56", "faq-57"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-5",
+          "question": "Do I need a new FIRB approval for each property?",
+          "answer": "Yes, you need separate FIRB approval for each residential property purchase. Each application is property-specific and includes the address, purchase price, and settlement details. If you're purchasing multiple properties simultaneously, you must submit separate applications for each. The only exception is for developers purchasing multiple lots in a single development project.",
+          "keywords": ["multiple properties", "each property", "separate", "new approval"],
+          "popular": false,
+          "views": 2890,
+          "relatedQuestions": ["faq-1", "faq-2", "faq-36"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-6",
+          "question": "Can FIRB approval be denied?",
+          "answer": "Yes, FIRB can deny approval if the application doesn't meet eligibility criteria or if it's contrary to national interest. Common reasons for denial include: purchasing established property as a temporary resident without living in it, incomplete applications, property type restrictions, or national security concerns. Denial rates are low (approximately 1-2%) for straightforward residential purchases when all criteria are met.",
+          "keywords": ["denied", "rejection", "refused", "decline"],
+          "popular": false,
+          "views": 4120,
+          "relatedQuestions": ["faq-4", "faq-21", "faq-22"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-7",
+          "question": "What information do I need for a FIRB application?",
+          "answer": "Required information includes: your full name, date of birth, passport details, visa type and number, Australian address (or foreign address), property address, purchase price, settlement date, property type (established/new/vacant land), intended use (residence/investment), and proof of funds. You'll also need to provide details about any associates or joint purchasers.",
+          "keywords": ["application", "documents", "required", "information"],
+          "popular": true,
+          "views": 8760,
+          "relatedQuestions": ["faq-2", "faq-8", "faq-36"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-8",
+          "question": "Can I apply for FIRB approval online?",
+          "answer": "Yes, all FIRB applications must be submitted online through the FIRB portal at firb.gov.au. You'll create an account, complete the online application form, upload supporting documents, and pay the application fee. The system provides instant confirmation of receipt and allows you to track your application status. You cannot submit paper applications for residential property purchases.",
+          "keywords": ["online", "portal", "how to apply", "submit"],
+          "popular": false,
+          "views": 6540,
+          "relatedQuestions": ["faq-7", "faq-2", "faq-36"],
+          "calculatorScenario": null,
+          "officialSources": [
+            {
+              "title": "FIRB Online Portal",
+              "url": "https://firb.gov.au/apply-online"
+            }
+          ]
+        },
+        {
+          "id": "faq-9",
+          "question": "Is FIRB approval transferable to another property?",
+          "answer": "No, FIRB approval is specific to the property address and purchase details in your application. If you decide to purchase a different property, you must submit a new application with the new property details and pay a new application fee. However, if only minor details change (like a slight price adjustment), you may be able to submit a variation request.",
+          "keywords": ["transferable", "different property", "change property", "switch"],
+          "popular": false,
+          "views": 1980,
+          "relatedQuestions": ["faq-5", "faq-10", "faq-36"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-10",
+          "question": "Can I withdraw or cancel my FIRB application?",
+          "answer": "Yes, you can withdraw your FIRB application at any time before a decision is made. However, application fees are non-refundable regardless of the outcome or if you withdraw. To withdraw, contact FIRB via the online portal or email with your application reference number. If you later decide to proceed with the purchase, you'll need to submit a new application.",
+          "keywords": ["withdraw", "cancel", "refund", "application"],
+          "popular": false,
+          "views": 1560,
+          "relatedQuestions": ["faq-9", "faq-36", "faq-37"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-11",
+          "question": "What is a 'no objection' notification?",
+          "answer": "A 'no objection' notification is FIRB's formal approval of your application. It states that the Treasurer does not object to your proposed property purchase subject to the conditions outlined. This notification is usually valid for 12 months from issue, meaning you must settle the property within that timeframe. Keep this document as you'll need it for settlement and compliance purposes.",
+          "keywords": ["no objection", "approval letter", "notification", "certificate"],
+          "popular": false,
+          "views": 3420,
+          "relatedQuestions": ["faq-2", "faq-12", "faq-60"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-12",
+          "question": "What conditions are typically attached to FIRB approval?",
+          "answer": "Common conditions include: settling within 12 months, notifying FIRB of the actual settlement date within 30 days, using the property as stated in your application (e.g., primary residence), demolishing and rebuilding within 4 years (for vacant land), and complying with vacancy fee requirements. Temporary residents must also vacate and sell the property within 3 months of their visa expiring.",
+          "keywords": ["conditions", "requirements", "obligations", "compliance"],
+          "popular": true,
+          "views": 5890,
+          "relatedQuestions": ["faq-11", "faq-60", "faq-61"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-13",
+          "question": "Can I apply for FIRB approval before finding a property?",
+          "answer": "No, FIRB applications are property-specific and require the exact property address, purchase price, and other details. You cannot obtain 'pre-approval' or general approval to purchase any property. However, you can prepare all your documentation in advance so you're ready to apply quickly once you find a property. Processing times are relatively fast (30 days standard).",
+          "keywords": ["before finding", "pre-approval", "general approval", "advance"],
+          "popular": false,
+          "views": 2340,
+          "relatedQuestions": ["faq-2", "faq-3", "faq-7"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-14",
+          "question": "Do I need FIRB approval to inherit property?",
+          "answer": "Generally, no FIRB approval is required to inherit residential property through a will or estate distribution. However, you must notify FIRB of the acquisition within 30 days and may need to sell the property within a specified timeframe (usually 3 years) if you're a foreign person who wouldn't normally be eligible to hold that property type. Exemptions may apply in certain circumstances.",
+          "keywords": ["inherit", "inheritance", "estate", "will"],
+          "popular": false,
+          "views": 1120,
+          "relatedQuestions": ["faq-1", "faq-21", "faq-64"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-15",
+          "question": "Can I get expedited FIRB processing?",
+          "answer": "Yes, you can request expedited processing for an additional fee. The expedited service aims to process applications within 10 days instead of the standard 30 days. The additional fee is significant (typically $10,000+) and is in addition to the standard application fee. Expedited processing is only recommended if you have urgent settlement deadlines and cannot wait the standard 30 days.",
+          "keywords": ["expedited", "fast track", "urgent", "quick"],
+          "popular": false,
+          "views": 2670,
+          "relatedQuestions": ["faq-2", "faq-36", "faq-37"],
+          "calculatorScenario": null,
+          "officialSources": []
+        }
+      ]
+    },
+    {
+      "id": "eligibility-visa",
+      "name": "Eligibility & Visa Types",
+      "icon": "UserCheck",
+      "questions": [
+        {
+          "id": "faq-21",
+          "question": "Who is considered a 'foreign person' under FIRB rules?",
+          "answer": "A foreign person includes: individuals not Australian citizens or permanent residents, foreign corporations (incorporated overseas or with >50% foreign ownership), trusts where >50% of beneficiaries are foreign persons, and foreign government entities. Even Australian citizens can be considered foreign persons if they hold dual citizenship with certain countries or act on behalf of foreign entities.",
+          "keywords": ["foreign person", "definition", "who needs", "eligibility"],
+          "popular": true,
+          "views": 11200,
+          "relatedQuestions": ["faq-1", "faq-22", "faq-23"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-22",
+          "question": "What property can I buy on a temporary resident visa?",
+          "answer": "Temporary residents can purchase: one established dwelling to live in as their primary residence (must sell when visa expires), new dwellings or off-the-plan properties without restrictions, and vacant land for development. You cannot purchase established property for investment purposes unless it will be your primary residence. You must live in the property for at least 6 months of each year to avoid vacancy fees.",
+          "keywords": ["temporary resident", "457 visa", "482 visa", "student visa", "work visa"],
+          "popular": true,
+          "views": 14560,
+          "relatedQuestions": ["faq-21", "faq-23", "faq-24"],
+          "calculatorScenario": {
+            "entityType": "individual",
+            "propertyType": "established"
+          },
+          "officialSources": []
+        },
+        {
+          "id": "faq-23",
+          "question": "Can I buy property on a student visa?",
+          "answer": "Yes, student visa holders (subclass 500) are temporary residents and can purchase one established dwelling to live in as their primary residence, or any number of new dwellings or vacant land. You must apply for FIRB approval and pay the applicable fees. The property must be your principal place of residence, and you must sell it within 3 months of your visa expiring or leaving Australia permanently.",
+          "keywords": ["student visa", "500 visa", "university", "international student"],
+          "popular": true,
+          "views": 9870,
+          "relatedQuestions": ["faq-22", "faq-24", "faq-62"],
+          "calculatorScenario": {
+            "entityType": "individual",
+            "propertyType": "established"
+          },
+          "officialSources": []
+        },
+        {
+          "id": "faq-24",
+          "question": "What's the difference between temporary and permanent residents for FIRB?",
+          "answer": "Permanent residents are not considered foreign persons and do not need FIRB approval to purchase any residential property in Australia. Temporary residents are foreign persons who must obtain FIRB approval but have certain concessions (can buy established property to live in). Permanent residency includes PR visa holders and New Zealand citizens on Special Category Visas (subclass 444).",
+          "keywords": ["permanent resident", "PR", "difference", "visa types"],
+          "popular": true,
+          "views": 8340,
+          "relatedQuestions": ["faq-21", "faq-22", "faq-25"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-25",
+          "question": "Do New Zealand citizens need FIRB approval?",
+          "answer": "New Zealand citizens living in Australia on a Special Category Visa (subclass 444) are generally not considered foreign persons and do not need FIRB approval. However, if they're living outside Australia or purchasing as an investment while overseas, they may be considered foreign persons. New Zealand citizens on other visa types (like temporary work visas) are treated as temporary residents.",
+          "keywords": ["new zealand", "nz citizen", "444 visa", "kiwi"],
+          "popular": false,
+          "views": 3210,
+          "relatedQuestions": ["faq-24", "faq-21", "faq-26"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-26",
+          "question": "Can foreign investors buy property purely for investment?",
+          "answer": "Yes, but only new dwellings, off-the-plan properties, or vacant land for development. Foreign investors cannot purchase established dwellings for investment purposes. The rationale is that new property purchases increase Australia's housing stock, while established property purchases do not. There are no restrictions on the number of new properties or vacant land parcels you can purchase with FIRB approval.",
+          "keywords": ["investment", "investor", "rental", "overseas investor"],
+          "popular": true,
+          "views": 13450,
+          "relatedQuestions": ["faq-21", "faq-27", "faq-28"],
+          "calculatorScenario": {
+            "entityType": "individual",
+            "propertyType": "new"
+          },
+          "officialSources": []
+        },
+        {
+          "id": "faq-27",
+          "question": "What qualifies as a 'new dwelling' for FIRB purposes?",
+          "answer": "A new dwelling is a property that has never been occupied or sold as a place of residence. This includes newly constructed houses and apartments, off-the-plan purchases, and substantially renovated properties (>50% of floor space rebuilt). Properties that were previously display homes may still qualify as new if never sold residentially. The developer must certify the dwelling is new.",
+          "keywords": ["new dwelling", "off the plan", "new property", "definition"],
+          "popular": false,
+          "views": 4560,
+          "relatedQuestions": ["faq-26", "faq-28", "faq-29"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-28",
+          "question": "Can I buy an apartment in a building with established apartments?",
+          "answer": "Yes, if your specific apartment is 'new' (never previously sold or occupied as a residence), you can purchase it even if other apartments in the building are established. The key is whether your individual unit is new, not the building. Off-the-plan purchases in existing buildings undergoing renovation or conversion are generally permitted if the units qualify as new dwellings.",
+          "keywords": ["apartment", "unit", "new apartment", "established building"],
+          "popular": false,
+          "views": 2890,
+          "relatedQuestions": ["faq-27", "faq-26", "faq-29"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-29",
+          "question": "What are the rules for vacant land purchases?",
+          "answer": "Foreign persons can purchase vacant land with FIRB approval, subject to conditions: you must commence construction within 4 years of approval, the development must be continuous once started, you must build a dwelling (not leave it vacant), and you must notify FIRB when construction completes. Land used for primary production (farming) has different rules and generally cannot be purchased by foreign persons without special approval.",
+          "keywords": ["vacant land", "land purchase", "development", "building"],
+          "popular": false,
+          "views": 5670,
+          "relatedQuestions": ["faq-26", "faq-27", "faq-30"],
+          "calculatorScenario": {
+            "entityType": "individual",
+            "propertyType": "vacant"
+          },
+          "officialSources": []
+        },
+        {
+          "id": "faq-30",
+          "question": "Can I purchase property through a company or trust?",
+          "answer": "Yes, but the entity may be considered a foreign person if it has significant foreign ownership or control (generally >20% for companies, >40% for trusts, or any foreign person has decision-making power). Foreign companies and trusts need FIRB approval and are subject to the same property type restrictions. Additional fees may apply based on the entity type and structure. Complex structures may face higher scrutiny.",
+          "keywords": ["company", "trust", "entity", "corporate"],
+          "popular": false,
+          "views": 4230,
+          "relatedQuestions": ["faq-21", "faq-31", "faq-70"],
+          "calculatorScenario": {
+            "entityType": "company"
+          },
+          "officialSources": []
+        },
+        {
+          "id": "faq-31",
+          "question": "What if I'm buying with an Australian citizen or permanent resident?",
+          "answer": "If you're purchasing as joint tenants or tenants in common with an Australian citizen or permanent resident, you still need FIRB approval for your share. The approval will specify that you're purchasing a percentage of the property. Your share is subject to the same restrictions (e.g., if you're a temporary resident buying established property, it must be your primary residence). Fees are calculated based on your share of the purchase price.",
+          "keywords": ["joint purchase", "co-buyer", "spouse", "partner", "shared"],
+          "popular": false,
+          "views": 3450,
+          "relatedQuestions": ["faq-21", "faq-32", "faq-70"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-32",
+          "question": "Do I still need FIRB approval if I marry an Australian citizen?",
+          "answer": "Your FIRB status depends on your visa status, not your marital status. If you're on a temporary visa (including partner visas in the temporary stage), you remain a foreign person and need FIRB approval. Once you receive permanent residency, you're no longer a foreign person. If you purchased property while a temporary resident and then gain PR, existing FIRB conditions cease to apply.",
+          "keywords": ["married", "spouse", "partner visa", "marriage"],
+          "popular": false,
+          "views": 2780,
+          "relatedQuestions": ["faq-24", "faq-31", "faq-33"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-33",
+          "question": "What happens to my property when I get permanent residency?",
+          "answer": "Once you obtain permanent residency, you cease to be a foreign person for FIRB purposes. Existing FIRB conditions on properties you own (such as the requirement to sell when your visa expires) no longer apply. You can keep the property indefinitely, rent it out, or purchase additional properties without FIRB approval. You should keep records of your PR grant date for compliance purposes.",
+          "keywords": ["PR granted", "permanent residency", "after PR", "get PR"],
+          "popular": true,
+          "views": 6540,
+          "relatedQuestions": ["faq-24", "faq-32", "faq-62"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-34",
+          "question": "Can foreign persons buy retirement village units?",
+          "answer": "Generally yes, but it depends on the structure. If purchasing a new retirement unit, standard new dwelling rules apply. Established units in retirement villages may be available to temporary residents if used as their primary residence. However, many retirement villages have lease structures rather than freehold ownership, which may have different FIRB implications. Always check with FIRB before committing.",
+          "keywords": ["retirement", "retirement village", "seniors", "aged care"],
+          "popular": false,
+          "views": 890,
+          "relatedQuestions": ["faq-27", "faq-22", "faq-71"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-35",
+          "question": "Are there different rules for different countries?",
+          "answer": "Generally, FIRB rules apply equally to all foreign persons regardless of nationality. However, certain countries have Free Trade Agreements (FTAs) with Australia that may affect investment thresholds for commercial property. For residential property, the rules are consistent. Some countries face additional scrutiny under national security provisions. Developers from certain countries may have special developer pathways.",
+          "keywords": ["country", "nationality", "citizenship", "different rules"],
+          "popular": false,
+          "views": 1670,
+          "relatedQuestions": ["faq-21", "faq-26", "faq-71"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-36",
+          "question": "What is the current FIRB application fee?",
+          "answer": "FIRB application fees vary by property value: Under $1M = $13,200; $1M-$1.999M = $26,400; $2M-$2.999M = $39,600; and increases by $13,200 for each additional $1M. There's also a $5,500 fee for vacant land under $1.5M. These fees are in addition to stamp duty surcharges and other costs. Fees are indexed annually on 1 January. Companies may pay higher fees.",
+          "keywords": ["fee", "cost", "application fee", "how much", "price"],
+          "popular": true,
+          "views": 18900,
+          "relatedQuestions": ["faq-37", "faq-38", "faq-39"],
+          "calculatorScenario": {
+            "action": "calculate"
+          },
+          "officialSources": [
+            {
+              "title": "FIRB Fees Schedule",
+              "url": "https://firb.gov.au/guidance-resources/fees"
+            }
+          ]
+        },
+        {
+          "id": "faq-37",
+          "question": "Are FIRB fees refundable?",
+          "answer": "No, FIRB application fees are non-refundable regardless of the outcome. You will not receive a refund if your application is denied, if you withdraw your application, or if you decide not to proceed with the purchase after approval is granted. The fee covers the cost of processing your application, not the outcome. Make sure you're eligible before applying.",
+          "keywords": ["refund", "non-refundable", "money back", "refundable"],
+          "popular": false,
+          "views": 4560,
+          "relatedQuestions": ["faq-36", "faq-10", "faq-6"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-38",
+          "question": "What is the vacancy fee and who pays it?",
+          "answer": "The vacancy fee is an annual charge for foreign-owned residential properties left vacant (not occupied or genuinely available for rent for more than 183 days per year). The fee is equal to the FIRB application fee annually. Temporary residents living in their property as their primary residence are generally exempt. The fee discourages foreign owners from leaving properties empty and wasting housing stock.",
+          "keywords": ["vacancy fee", "annual fee", "vacant property", "empty"],
+          "popular": true,
+          "views": 7890,
+          "relatedQuestions": ["faq-60", "faq-61", "faq-39"],
+          "calculatorScenario": {
+            "action": "calculate"
+          },
+          "officialSources": []
+        },
+        {
+          "id": "faq-39",
+          "question": "Can I claim tax deductions on FIRB fees?",
+          "answer": "FIRB application fees are generally not tax-deductible as they're capital in nature (related to acquiring an asset). However, you may be able to include them in your property's cost base for capital gains tax (CGT) purposes when you eventually sell. Annual vacancy fees and compliance costs may be deductible against rental income. Consult a tax professional for your specific circumstances.",
+          "keywords": ["tax", "deductible", "tax deduction", "ato"],
+          "popular": false,
+          "views": 3210,
+          "relatedQuestions": ["faq-36", "faq-38", "faq-46"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-40",
+          "question": "What if my visa type changes after purchasing?",
+          "answer": "If your visa changes (e.g., from student to skilled worker), your FIRB obligations depend on whether you remain a foreign person. Temporary to temporary visa changes generally don't affect your obligations. Temporary to permanent residency means you cease to be a foreign person and existing FIRB conditions no longer apply. You must notify FIRB of significant changes within 30 days.",
+          "keywords": ["visa change", "change visa", "different visa", "visa transition"],
+          "popular": false,
+          "views": 2340,
+          "relatedQuestions": ["faq-33", "faq-32", "faq-62"],
+          "calculatorScenario": null,
+          "officialSources": []
+        }
+      ]
+    },
+    {
+      "id": "costs-fees",
+      "name": "Costs & Fees",
+      "icon": "DollarSign",
+      "questions": [
+        {
+          "id": "faq-41",
+          "question": "What is the stamp duty surcharge and how much is it?",
+          "answer": "The stamp duty surcharge is an additional tax foreign persons pay when purchasing residential property in most Australian states. Rates vary by state: NSW 8%, VIC 8%, QLD 7%, SA 7%, WA 7%, TAS 8%, ACT 0%, NT 0%. This is in addition to standard stamp duty that all buyers pay. For an $850,000 property in NSW, the surcharge alone would be $68,000 (8% of $850,000).",
+          "keywords": ["stamp duty", "surcharge", "tax", "state tax"],
+          "popular": true,
+          "views": 16780,
+          "relatedQuestions": ["faq-42", "faq-43", "faq-44"],
+          "calculatorScenario": {
+            "action": "calculate"
+          },
+          "officialSources": []
+        },
+        {
+          "id": "faq-42",
+          "question": "What is the land tax surcharge?",
+          "answer": "The land tax surcharge is an annual tax foreign owners pay on residential investment properties in most states. Rates vary: NSW 2%, VIC 1.5%, QLD 2%, SA 0.5%, WA 4%, TAS 1.5%, ACT 0.75%, NT 0%. It's calculated on the land value component of your property. This is ongoing as long as you own the property. Some states have exemptions for properties you live in as your primary residence.",
+          "keywords": ["land tax", "annual tax", "surcharge", "ongoing"],
+          "popular": true,
+          "views": 14230,
+          "relatedQuestions": ["faq-41", "faq-43", "faq-38"],
+          "calculatorScenario": {
+            "action": "calculate"
+          },
+          "officialSources": []
+        },
+        {
+          "id": "faq-43",
+          "question": "Which states have the lowest foreign buyer costs?",
+          "answer": "Northern Territory has the lowest costs with 0% stamp duty surcharge and 0% land tax surcharge, making it the most affordable for foreign buyers. ACT also has no stamp duty (it's replaced by land tax) and low land tax surcharge (0.75%). South Australia has the lowest land tax surcharge (0.5%) among states with stamp duty. Use our calculator to compare total costs across states.",
+          "keywords": ["cheapest state", "lowest cost", "best state", "comparison"],
+          "popular": true,
+          "views": 11890,
+          "relatedQuestions": ["faq-41", "faq-42", "faq-44"],
+          "calculatorScenario": {
+            "action": "map"
+          },
+          "officialSources": []
+        },
+        {
+          "id": "faq-44",
+          "question": "What are the total upfront costs for foreign buyers?",
+          "answer": "Total upfront costs typically include: FIRB application fee ($13,200-$100,000+ based on price), stamp duty surcharge (7-8% in most states), standard stamp duty (3-5% typically), legal/conveyancing fees ($1,500-$3,000), building/pest inspection ($500-$1,000), and lender's mortgage insurance if borrowing >80% (1-3% of loan). For an $850,000 property in NSW, total upfront costs could exceed $140,000.",
+          "keywords": ["total cost", "upfront", "all fees", "how much total"],
+          "popular": true,
+          "views": 15670,
+          "relatedQuestions": ["faq-36", "faq-41", "faq-45"],
+          "calculatorScenario": {
+            "action": "calculate"
+          },
+          "officialSources": []
+        },
+        {
+          "id": "faq-45",
+          "question": "What ongoing costs should I budget for?",
+          "answer": "Ongoing annual costs include: land tax surcharge (0.5-4% of land value), vacancy fee if applicable (equal to FIRB fee), council rates ($1,500-$3,000), strata fees for apartments ($3,000-$8,000+), property management if renting out (7-10% of rent), landlord insurance ($500-$1,500), maintenance and repairs (budget 1% of property value), and utilities if not tenant-paid. Total annual costs can be $10,000-$25,000+.",
+          "keywords": ["ongoing costs", "annual costs", "yearly", "expenses"],
+          "popular": true,
+          "views": 9870,
+          "relatedQuestions": ["faq-42", "faq-38", "faq-44"],
+          "calculatorScenario": {
+            "action": "calculate"
+          },
+          "officialSources": []
+        },
+        {
+          "id": "faq-46",
+          "question": "How do foreign buyer costs compare to local buyers?",
+          "answer": "Foreign buyers pay significantly more: FIRB application fee ($13,200+ vs $0), stamp duty surcharge (7-8% additional vs 0%), annual land tax surcharge ($5,000-$30,000+ vs $0), and potential vacancy fees. For an $850,000 property, a foreign buyer might pay $100,000+ more upfront and $10,000-$20,000 more annually. Over 10 years, this could total $200,000-$300,000 in additional costs.",
+          "keywords": ["comparison", "local buyer", "difference", "vs australian"],
+          "popular": true,
+          "views": 10450,
+          "relatedQuestions": ["faq-44", "faq-45", "faq-41"],
+          "calculatorScenario": {
+            "action": "calculate"
+          },
+          "officialSources": []
+        },
+        {
+          "id": "faq-47",
+          "question": "Are there any ways to reduce foreign buyer fees?",
+          "answer": "Legal ways to reduce fees include: purchasing in NT or ACT (lower/no surcharges), buying new dwellings which may have stamp duty concessions, obtaining permanent residency before purchasing, living in the property as your primary residence to avoid vacancy fees, choosing lower-priced properties (FIRB fees are tiered), and structuring ownership to minimize taxable land value. Avoid illegal schemes claiming to avoid foreign buyer status.",
+          "keywords": ["reduce", "lower", "save money", "minimize"],
+          "popular": false,
+          "views": 6780,
+          "relatedQuestions": ["faq-43", "faq-46", "faq-33"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-48",
+          "question": "What fees apply for off-the-plan purchases?",
+          "answer": "Off-the-plan purchases typically have: FIRB application fee (standard rates apply), no stamp duty surcharge in some states for new properties (check state rules), potential stamp duty concessions or exemptions for first-home buyers, and standard legal fees. The FIRB fee is based on the contract price, not the eventual market value. Settlement may be 1-3 years away, so ensure your FIRB approval remains valid.",
+          "keywords": ["off the plan", "new property", "presale", "development"],
+          "popular": false,
+          "views": 5430,
+          "relatedQuestions": ["faq-27", "faq-41", "faq-49"],
+          "calculatorScenario": {
+            "entityType": "individual",
+            "propertyType": "new"
+          },
+          "officialSources": []
+        },
+        {
+          "id": "faq-49",
+          "question": "Do I pay GST on residential property?",
+          "answer": "Generally, no. Residential property sales are GST-free (input-taxed). However, GST applies to new residential properties sold by developers/builders within the first sale. This GST is usually included in the purchase price you see. If you're buying vacant land to build on, GST may apply to the land sale. Commercial property has different GST rules. Consult a tax professional for complex situations.",
+          "keywords": ["gst", "tax", "goods and services tax", "10%"],
+          "popular": false,
+          "views": 3210,
+          "relatedQuestions": ["faq-48", "faq-41", "faq-39"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-50",
+          "question": "What happens if I can't afford the stamp duty surcharge?",
+          "answer": "Stamp duty (including surcharges) must be paid within 30-90 days of settlement (varies by state) or you'll face penalties and interest. Options if struggling to pay: factor it into your loan (requires higher deposit), arrange a payment plan with the state revenue office (may be available in hardship), consider purchasing in a lower-cost state, or delay purchasing until you have sufficient funds. Unpaid stamp duty can result in property liens.",
+          "keywords": ["can't pay", "afford", "payment plan", "hardship"],
+          "popular": false,
+          "views": 2340,
+          "relatedQuestions": ["faq-41", "faq-44", "faq-47"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-51",
+          "question": "Are there any first-home buyer concessions for foreign buyers?",
+          "answer": "Generally, no. Most first-home buyer grants and stamp duty concessions are only available to Australian citizens and permanent residents. Foreign persons (including temporary residents) are typically excluded from these schemes, even if it's their first property purchase. Some states may offer concessions for new properties to all buyers regardless of residency. Check your state's specific rules.",
+          "keywords": ["first home buyer", "fhb", "grant", "concession"],
+          "popular": false,
+          "views": 4560,
+          "relatedQuestions": ["faq-24", "faq-47", "faq-48"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-52",
+          "question": "How is land value calculated for land tax?",
+          "answer": "Land value is the unimproved value of the land (excluding buildings and improvements), as determined by the state's valuer-general. It's typically 40-70% of the total property value, depending on the property type and location. Land tax surcharge is calculated on this land value component, not the total purchase price. Land values are reassessed periodically (every 1-3 years depending on state).",
+          "keywords": ["land value", "calculation", "how calculated", "valuation"],
+          "popular": false,
+          "views": 3890,
+          "relatedQuestions": ["faq-42", "faq-45", "faq-53"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-53",
+          "question": "Do land tax surcharges increase over time?",
+          "answer": "Land tax surcharge rates (percentages) are set by state governments and can change annually through legislation, though major changes are uncommon. However, your actual land tax bill can increase if your land value increases (through market appreciation or reassessment), even if rates stay the same. Some states also have progressive land tax scales where rates increase with value. Review state budgets annually for rate changes.",
+          "keywords": ["increase", "rates change", "go up", "inflation"],
+          "popular": false,
+          "views": 2670,
+          "relatedQuestions": ["faq-42", "faq-52", "faq-45"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-54",
+          "question": "What legal fees should I expect?",
+          "answer": "Legal/conveyancing fees typically range from $1,500-$3,000 for straightforward purchases, but can be higher for complex transactions. This covers contract review, title searches, liaising with lender and vendor's solicitor, settlement attendance, and registration. Additional costs may include FIRB compliance advice ($500-$1,500), property searches ($200-$500), and registration fees ($200-$500). Foreign buyers should ensure their lawyer understands FIRB requirements.",
+          "keywords": ["legal fees", "solicitor", "conveyancer", "lawyer"],
+          "popular": false,
+          "views": 5430,
+          "relatedQuestions": ["faq-44", "faq-55", "faq-7"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-55",
+          "question": "Should I use a buyer's agent and what do they cost?",
+          "answer": "A buyer's agent represents your interests when purchasing property. They typically charge 1.5-3% of the purchase price, or a fixed fee of $5,000-$20,000+ depending on price range and services. For foreign buyers unfamiliar with the Australian market, a buyer's agent can be valuable for property research, negotiation, and navigating the purchase process. Ensure they understand FIRB requirements and timelines.",
+          "keywords": ["buyer's agent", "buyers advocate", "agent fee", "advocate"],
+          "popular": false,
+          "views": 3210,
+          "relatedQuestions": ["faq-54", "faq-44", "faq-3"],
+          "calculatorScenario": null,
+          "officialSources": []
+        }
+      ]
+    },
+    {
+      "id": "compliance-penalties",
+      "name": "Compliance & Penalties",
+      "icon": "AlertTriangle",
+      "questions": [
+        {
+          "id": "faq-56",
+          "question": "What are the penalties for non-compliance?",
+          "answer": "Penalties for FIRB non-compliance are severe: criminal prosecution with up to 10 years imprisonment, civil penalties up to $3.3 million for individuals ($33 million for corporations), forced divestment orders (must sell the property), denial of capital gains, and difficulty obtaining future FIRB approvals. Common violations include purchasing without approval, breaching approval conditions, and failing to submit annual vacancy fee returns.",
+          "keywords": ["penalties", "fines", "punishment", "consequences"],
+          "popular": true,
+          "views": 8760,
+          "relatedQuestions": ["faq-4", "faq-57", "faq-60"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-57",
+          "question": "What is a divestment order?",
+          "answer": "A divestment order is a legal direction forcing you to sell property acquired in breach of FIRB rules. The Treasurer can order divestment if you purchased without approval, provided false information, or breached approval conditions. You must sell within the specified timeframe (typically 6-12 months) and may not profit from the sale. Divestment orders are recorded publicly and can affect future approvals.",
+          "keywords": ["divestment", "forced sale", "sell property", "order"],
+          "popular": false,
+          "views": 2890,
+          "relatedQuestions": ["faq-56", "faq-4", "faq-58"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-58",
+          "question": "Can I voluntarily disclose a FIRB breach?",
+          "answer": "Yes, voluntary disclosure of FIRB breaches may result in reduced penalties. If you discover you should have obtained FIRB approval but didn't, contact FIRB immediately to disclose and seek retrospective approval (if available). While penalties may still apply, voluntary disclosure demonstrates cooperation and may result in civil penalties rather than criminal prosecution. Seeking legal advice before disclosure is recommended.",
+          "keywords": ["voluntary disclosure", "admit", "confess", "retrospective"],
+          "popular": false,
+          "views": 1560,
+          "relatedQuestions": ["faq-56", "faq-57", "faq-4"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-59",
+          "question": "How does FIRB monitor compliance?",
+          "answer": "FIRB monitors compliance through: annual vacancy fee returns (must be submitted even if exempt), state revenue office data sharing (stamp duty and land tax records), financial institution reporting, public tips and complaints, random audits, and title searches. Failure to submit required documentation or respond to FIRB inquiries can trigger investigations. Always maintain records of your FIRB approval, occupation, and rental history.",
+          "keywords": ["monitoring", "audit", "compliance", "checking"],
+          "popular": false,
+          "views": 3210,
+          "relatedQuestions": ["faq-60", "faq-61", "faq-56"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-60",
+          "question": "What is the annual vacancy fee compliance requirement?",
+          "answer": "All foreign owners must submit an annual vacancy fee return to the ATO by 30 June each year, even if exempt from paying the fee. The return declares whether the property was occupied or genuinely available for rent for at least 183 days in the year. Records must prove occupancy (utilities, tenancy agreements, etc.). Failure to submit the return by the deadline results in automatic liability for the vacancy fee, even if the property was occupied.",
+          "keywords": ["vacancy fee return", "compliance", "annual return", "ato"],
+          "popular": true,
+          "views": 7890,
+          "relatedQuestions": ["faq-38", "faq-61", "faq-59"],
+          "calculatorScenario": null,
+          "officialSources": [
+            {
+              "title": "ATO Vacancy Fee",
+              "url": "https://www.ato.gov.au/General/Foreign-investment/Vacancy-fees/"
+            }
+          ]
+        },
+        {
+          "id": "faq-61",
+          "question": "What evidence do I need to prove occupancy for vacancy fee exemption?",
+          "answer": "Acceptable evidence includes: utility bills showing usage (electricity, gas, water), tenancy agreements with rent receipts, property management reports showing advertising and tenant selection, council rates notices, mail delivery records, and visitor visa/travel records if you occupied it. Keep records for at least 5 years. Properties must be occupied or genuinely available for rent (at market rates) for at least 183 days per year.",
+          "keywords": ["evidence", "proof", "occupancy", "documentation"],
+          "popular": false,
+          "views": 4560,
+          "relatedQuestions": ["faq-60", "faq-38", "faq-59"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-62",
+          "question": "What happens if my visa expires while I own property?",
+          "answer": "If you're a temporary resident and your visa expires, you must sell the property within 3 months of visa expiry or leaving Australia permanently (whichever is earlier). If you obtain a new temporary visa, you may apply for new FIRB approval to retain the property. If you obtain permanent residency, you can keep the property indefinitely. Failure to sell when required can result in penalties and divestment orders.",
+          "keywords": ["visa expires", "visa expiry", "leaving australia", "expire"],
+          "popular": true,
+          "views": 6780,
+          "relatedQuestions": ["faq-22", "faq-33", "faq-63"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-63",
+          "question": "Can I get an extension to sell if my visa expires?",
+          "answer": "In limited circumstances, you may be able to request an extension to the 3-month selling period, such as severe market downturns making sale difficult, or if you have a pending permanent residency application. Extensions are not automatic and require formal application to FIRB with supporting evidence. It's best to plan ahead and list the property for sale before your visa expires to avoid rushed sales at unfavorable prices.",
+          "keywords": ["extension", "more time", "delay", "selling period"],
+          "popular": false,
+          "views": 2340,
+          "relatedQuestions": ["faq-62", "faq-64", "faq-65"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-64",
+          "question": "What if I can't sell within the required timeframe?",
+          "answer": "Failure to sell within the required timeframe (typically 3 months after visa expiry) is a breach of FIRB conditions. Consequences can include: civil penalties, divestment orders forcing immediate sale, loss of capital gains, and difficulty obtaining future FIRB approvals. If genuinely unable to sell due to circumstances beyond your control, contact FIRB immediately to explain and request guidance. Professional legal advice is essential.",
+          "keywords": ["cannot sell", "unable to sell", "can't sell", "market"],
+          "popular": false,
+          "views": 1890,
+          "relatedQuestions": ["faq-62", "faq-63", "faq-57"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-65",
+          "question": "Do I need to notify FIRB when I sell?",
+          "answer": "Yes, you must notify FIRB of disposal (sale) within 30 days of settlement. This applies whether you're selling voluntarily or because your visa expired. The notification includes sale date, sale price, and purchaser details. This is separate from any capital gains tax obligations to the ATO. Failure to notify is a breach of FIRB conditions and may affect future applications.",
+          "keywords": ["notify", "disposal", "selling", "notification"],
+          "popular": false,
+          "views": 3450,
+          "relatedQuestions": ["faq-62", "faq-66", "faq-12"],
+          "calculatorScenario": null,
+          "officialSources": []
+        }
+      ]
+    },
+    {
+      "id": "selling-property",
+      "name": "Selling Property",
+      "icon": "Home",
+      "questions": [
+        {
+          "id": "faq-66",
+          "question": "Do I need FIRB approval to sell my property?",
+          "answer": "No, you don't need FIRB approval to sell property you already own. However, you must notify FIRB of the disposal within 30 days of settlement. If selling to another foreign person, the purchaser will need their own FIRB approval to buy. If you're selling because your visa expired, ensure you meet the 3-month deadline to avoid penalties.",
+          "keywords": ["sell", "selling approval", "dispose", "sale"],
+          "popular": false,
+          "views": 4230,
+          "relatedQuestions": ["faq-65", "faq-62", "faq-67"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-67",
+          "question": "What taxes apply when I sell as a foreign resident?",
+          "answer": "Capital gains tax (CGT) applies at your marginal tax rate (up to 45% for foreign residents, with no 50% CGT discount available to foreign residents). A 12.5% withholding tax is deducted from the settlement proceeds by the purchaser (for properties >$750,000) and remitted to the ATO. You may claim a refund when you file your tax return if the withholding exceeds your actual CGT liability. Seek professional tax advice.",
+          "keywords": ["capital gains tax", "cgt", "tax on sale", "selling tax"],
+          "popular": true,
+          "views": 8760,
+          "relatedQuestions": ["faq-68", "faq-69", "faq-39"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-68",
+          "question": "What is the withholding tax on property sales?",
+          "answer": "Foreign residents selling Australian property valued at $750,000 or more face a 12.5% withholding tax deducted from the settlement proceeds. The purchaser must withhold this amount and remit it to the ATO within 14 days. You can apply for a variation to reduce the withholding if it exceeds your expected CGT liability. Properties under $750,000 have a 10% withholding rate if you're a foreign resident.",
+          "keywords": ["withholding", "withholding tax", "12.5%", "settlement"],
+          "popular": false,
+          "views": 5670,
+          "relatedQuestions": ["faq-67", "faq-69", "faq-66"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-69",
+          "question": "Can I avoid capital gains tax by becoming a PR before selling?",
+          "answer": "Obtaining permanent residency before selling can provide significant tax benefits. Australian residents receive a 50% CGT discount if they've held the property for more than 12 months (foreign residents get no discount). Additionally, if the property was your main residence while a resident, you may qualify for the main residence exemption. The CGT calculation depends on your residency status at the time of each event (purchase and sale).",
+          "keywords": ["avoid cgt", "pr before selling", "tax planning", "resident"],
+          "popular": false,
+          "views": 4560,
+          "relatedQuestions": ["faq-67", "faq-33", "faq-68"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-70",
+          "question": "What if I'm selling property owned through a company or trust?",
+          "answer": "Property held through a company or trust has complex tax implications when sold. Companies pay a flat 30% (or 25% for small companies) CGT with no discount. Trusts may distribute capital gains to beneficiaries who pay tax at their marginal rates. Foreign-owned entities face additional withholding obligations. Restructuring before sale may optimize tax outcomes. Always obtain professional tax and legal advice before selling.",
+          "keywords": ["company sale", "trust sale", "entity", "corporate"],
+          "popular": false,
+          "views": 2890,
+          "relatedQuestions": ["faq-30", "faq-67", "faq-69"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-71",
+          "question": "Can I do a like-kind exchange or rollover?",
+          "answer": "Australia generally doesn't offer 'like-kind exchange' or '1031 exchange' provisions like the US. Capital gains tax applies when you dispose of property, regardless of whether you purchase another property. Limited rollover relief exists for specific circumstances (e.g., marriage breakdown, small business restructures) but these rarely apply to foreign residential property investors. Plan for CGT liability when selling, even if reinvesting proceeds.",
+          "keywords": ["1031", "exchange", "rollover", "swap"],
+          "popular": false,
+          "views": 1670,
+          "relatedQuestions": ["faq-67", "faq-69", "faq-39"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-72",
+          "question": "How do I calculate my capital gain?",
+          "answer": "Capital gain = Sale price - (Purchase price + Purchase costs + Improvement costs + Selling costs). Purchase costs include stamp duty, FIRB fees, legal fees, and inspection costs. Improvement costs include renovations that add value (not repairs). Selling costs include agent commission, legal fees, and marketing. Foreign residents don't receive the 50% CGT discount. Losses can be offset against other capital gains but not other income.",
+          "keywords": ["calculate", "capital gain", "calculation", "work out"],
+          "popular": false,
+          "views": 5430,
+          "relatedQuestions": ["faq-67", "faq-68", "faq-39"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-73",
+          "question": "What agent fees should I expect when selling?",
+          "answer": "Real estate agent commission typically ranges from 1.5-3% of the sale price (plus GST), varying by location and property value. Luxury properties may negotiate lower percentages. Additional costs include professional photography ($300-$800), marketing campaign ($2,000-$10,000+ for premium marketing), styling/staging ($2,000-$8,000), and auctioneer fees ($600-$1,000). Total selling costs often reach 3-5% of sale price.",
+          "keywords": ["agent commission", "selling fees", "real estate", "commission"],
+          "popular": false,
+          "views": 3210,
+          "relatedQuestions": ["faq-72", "faq-66", "faq-67"],
+          "calculatorScenario": null,
+          "officialSources": []
+        }
+      ]
+    },
+    {
+      "id": "special-situations",
+      "name": "Special Situations",
+      "icon": "HelpCircle",
+      "questions": [
+        {
+          "id": "faq-74",
+          "question": "Can I buy property at auction?",
+          "answer": "Yes, foreign persons can bid at auctions, but you should obtain FIRB approval first or make your bid conditional on FIRB approval. Most auctioneers allow 'subject to FIRB approval' bids, but confirm beforehand. You'll need to pay a deposit (usually 10%) on the day if successful, with settlement typically 30-90 days later. Ensure your FIRB application is submitted well before auction day to avoid delays.",
+          "keywords": ["auction", "bidding", "bid", "auctions"],
+          "popular": false,
+          "views": 4560,
+          "relatedQuestions": ["faq-3", "faq-2", "faq-75"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-75",
+          "question": "What if the property is in a flood or bushfire zone?",
+          "answer": "FIRB approval is not affected by flood or bushfire zoning, but you should conduct thorough due diligence. Obtain appropriate building reports, check council flood/bushfire overlays, review insurance availability and costs (which can be very high or unavailable in high-risk areas), and understand building restrictions. Properties in high-risk zones may have lower resale values and higher ongoing costs. Insurance is crucial.",
+          "keywords": ["flood", "bushfire", "natural disaster", "risk"],
+          "popular": false,
+          "views": 2340,
+          "relatedQuestions": ["faq-76", "faq-3", "faq-7"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-76",
+          "question": "Can I buy a property with structural issues or defects?",
+          "answer": "Yes, there are no FIRB restrictions on purchasing properties with defects. However, conduct thorough building and pest inspections before purchasing. Be aware that properties requiring substantial renovation (>50% of floor space rebuilt) may qualify as 'new dwellings' after renovation, potentially affecting FIRB classification. Budget for repair costs and consider whether defects affect property value and resale prospects.",
+          "keywords": ["defects", "structural", "repairs", "problems"],
+          "popular": false,
+          "views": 1890,
+          "relatedQuestions": ["faq-75", "faq-27", "faq-77"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-77",
+          "question": "What about properties with tenants already in place?",
+          "answer": "You can purchase properties with existing tenants. Existing leases transfer to you as the new owner, and you must honor the lease terms and conditions. This means you may not be able to occupy the property as your primary residence immediately if required by FIRB conditions. Ensure existing tenancy arrangements align with your FIRB approval conditions, especially if you're a temporary resident required to occupy the property.",
+          "keywords": ["tenanted", "existing tenant", "lease", "rented"],
+          "popular": false,
+          "views": 3210,
+          "relatedQuestions": ["faq-22", "faq-38", "faq-60"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-78",
+          "question": "Can I buy a property that's in foreclosure or mortgagee sale?",
+          "answer": "Yes, foreign persons can purchase foreclosure properties (mortgagee-in-possession sales) subject to standard FIRB approval. These properties are often sold 'as is' with shortened settlement periods, so ensure you can obtain FIRB approval within the required timeframe. Consider expedited processing if necessary. Foreclosure properties may have maintenance issues, so inspections are crucial even if sold at auction.",
+          "keywords": ["foreclosure", "mortgagee sale", "distressed", "bank sale"],
+          "popular": false,
+          "views": 1560,
+          "relatedQuestions": ["faq-74", "faq-76", "faq-15"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-79",
+          "question": "What about buying in a retirement village or over-55s community?",
+          "answer": "Retirement villages often operate under lease or license agreements rather than freehold ownership, which may have different FIRB implications. Some retirement villages have age restrictions (55+ or 60+) which you must meet. Review the village contract carefully, as exit fees (deferred management fees) can be substantial (20-30% of sale price or capital gain). FIRB approval requirements depend on the ownership structure.",
+          "keywords": ["retirement village", "over 55", "seniors", "retirement"],
+          "popular": false,
+          "views": 1120,
+          "relatedQuestions": ["faq-34", "faq-30", "faq-27"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-80",
+          "question": "Can I buy property in joint venture with a developer?",
+          "answer": "Foreign persons can participate in joint ventures or property development partnerships, but complex FIRB rules apply. Different approval processes exist for developments, developers, and development financing. The structure of the joint venture (partnership, company, trust) affects FIRB requirements. Commercial property elements may have different thresholds. Specialized legal advice is essential for development projects and joint ventures.",
+          "keywords": ["joint venture", "developer", "development", "partnership"],
+          "popular": false,
+          "views": 890,
+          "relatedQuestions": ["faq-30", "faq-29", "faq-26"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-81",
+          "question": "What if I want to subdivide or develop the property?",
+          "answer": "You can subdivide or develop property you own, subject to council approval and FIRB conditions. If your FIRB approval was for vacant land with a condition to build within 4 years, you must comply. Subdividing and selling portions may require new FIRB approvals for foreign purchasers. Substantial redevelopment (>50% rebuilt) may create 'new dwellings' with different FIRB classifications. Major developments may require separate FIRB applications.",
+          "keywords": ["subdivide", "develop", "development", "building"],
+          "popular": false,
+          "views": 2670,
+          "relatedQuestions": ["faq-29", "faq-27", "faq-80"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-82",
+          "question": "Can I rent out part of my property (e.g., a room)?",
+          "answer": "If you're a temporary resident required to live in the property as your primary residence, you can rent out individual rooms while living there (e.g., student accommodation, boarders). However, you must still occupy the property as your primary residence. Renting out the entire property while living elsewhere breaches FIRB conditions and may trigger vacancy fees. Keep records of your occupancy and any rental income for tax purposes.",
+          "keywords": ["rent room", "share house", "boarder", "lodger"],
+          "popular": false,
+          "views": 2340,
+          "relatedQuestions": ["faq-22", "faq-38", "faq-60"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-83",
+          "question": "What happens if I need to leave Australia temporarily?",
+          "answer": "Short-term absences (holidays, work trips) don't affect your FIRB obligations if the property remains your primary residence and you intend to return. For temporary residents, extended absences (>6 months) may trigger vacancy fee obligations if the property isn't genuinely rented out. Keep evidence of your intention to return and maintain the property as your residence (maintain utilities, personal belongings, etc.). Multiple properties or extended absences may require specific advice.",
+          "keywords": ["temporary absence", "holiday", "travel", "overseas"],
+          "popular": false,
+          "views": 3450,
+          "relatedQuestions": ["faq-22", "faq-60", "faq-61"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-84",
+          "question": "Can I transfer property to a family member?",
+          "answer": "Transferring property to a family member is possible but has FIRB and tax implications. If the family member is a foreign person, they'll need FIRB approval. Transfers between spouses during marriage generally don't require approval but notify FIRB within 30 days. Transfers may trigger capital gains tax or stamp duty. Relationship breakdowns and inheritances have special provisions. Seek legal and tax advice before any transfer.",
+          "keywords": ["transfer", "gift", "family", "spouse"],
+          "popular": false,
+          "views": 2890,
+          "relatedQuestions": ["faq-31", "faq-14", "faq-67"],
+          "calculatorScenario": null,
+          "officialSources": []
+        },
+        {
+          "id": "faq-85",
+          "question": "What if I declare bankruptcy?",
+          "answer": "Bankruptcy doesn't automatically terminate FIRB obligations. If your property is sold by the bankruptcy trustee, standard FIRB disposal notifications apply. If the trustee sells to a foreign person, they'll need FIRB approval. Your bankruptcy won't exempt you from FIRB penalty obligations for past breaches. However, financial hardship may be considered in penalty assessments. Notify FIRB of bankruptcy and seek advice from your trustee.",
+          "keywords": ["bankruptcy", "bankrupt", "insolvent", "trustee"],
+          "popular": false,
+          "views": 670,
+          "relatedQuestions": ["faq-66", "faq-65", "faq-64"],
+          "calculatorScenario": null,
+          "officialSources": []
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "version": "1.0",
+    "lastUpdated": "2025-01-08",
+    "totalQuestions": 80,
+    "totalCategories": 6
+  }
+}

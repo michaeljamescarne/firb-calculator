@@ -38,6 +38,9 @@ function render() {
         case 'compare':
             content += typeof renderScenarioComparison === 'function' ? renderScenarioComparison() : '';
             break;
+        case 'faq':
+            content += renderFAQPage();
+            break;
         default:
             content += renderHome();
     }
@@ -90,6 +93,7 @@ function renderHeader() {
                         <nav class="hidden md:flex space-x-6">
                             <button onclick="goToStep('home')" class="text-gray-700 hover:text-blue-600">${t('navHome')}</button>
                             <button onclick="goToStep('eligibility')" class="text-gray-700 hover:text-blue-600">${t('navCalculator')}</button>
+                            <button onclick="goToStep('faq')" class="text-gray-700 hover:text-blue-600">FAQs</button>
                         </nav>
 
                         <div class="flex space-x-2">
@@ -108,6 +112,7 @@ function renderHeader() {
                     <div class="py-4 border-t mt-4 md:hidden">
                         <button onclick="goToStep('home'); toggleMobileMenu();" class="block w-full text-left py-2">${t('navHome')}</button>
                         <button onclick="goToStep('eligibility'); toggleMobileMenu();" class="block w-full text-left py-2">${t('navCalculator')}</button>
+                        <button onclick="goToStep('faq'); toggleMobileMenu();" class="block w-full text-left py-2">FAQs</button>
                     </div>
                 ` : ''}
             </div>
@@ -307,6 +312,12 @@ function renderHome() {
         </section>
 
         <section class="py-20 bg-gray-50">
+            <div class="max-w-7xl mx-auto px-4">
+                ${typeof renderPopularFAQs === 'function' ? renderPopularFAQs(6) : ''}
+            </div>
+        </section>
+
+        <section class="py-20 bg-white">
             <div class="max-w-7xl mx-auto px-4">
                 <h2 class="text-3xl font-bold text-gray-900 mb-12 text-center">Understanding the Fees</h2>
                 <div class="grid md:grid-cols-3 gap-8">
@@ -846,6 +857,29 @@ function renderResults() {
 }
 
 /**
+ * Render FAQ page
+ * @returns {string} HTML string for FAQ page
+ */
+function renderFAQPage() {
+    return `
+        <section class="py-20 bg-gray-50 min-h-screen">
+            <div class="max-w-7xl mx-auto px-4">
+                <button onclick="goToStep('home')" class="text-blue-600 mb-8 flex items-center space-x-2">
+                    ${icons.arrowLeft('w-5 h-5')}
+                    <span>${t('back')}</span>
+                </button>
+
+                <div id="faq-container">
+                    ${typeof renderFAQSection === 'function' ? renderFAQSection() : '<div class="text-center py-12">Loading FAQs...</div>'}
+                </div>
+            </div>
+
+            ${typeof generateFAQSchema === 'function' ? generateFAQSchema() : ''}
+        </section>
+    `;
+}
+
+/**
  * Render footer component
  * @returns {string} HTML string for footer
  */
@@ -861,7 +895,8 @@ function renderFooter() {
                     <div>
                         <h3 class="text-lg font-bold mb-4">${t('quickLinks')}</h3>
                         <button onclick="goToStep('home')" class="block text-gray-400 hover:text-white mb-2">${t('navHome')}</button>
-                        <button onclick="goToStep('eligibility')" class="block text-gray-400 hover:text-white">${t('navCalculator')}</button>
+                        <button onclick="goToStep('eligibility')" class="block text-gray-400 hover:text-white mb-2">${t('navCalculator')}</button>
+                        <button onclick="goToStep('faq')" class="block text-gray-400 hover:text-white">FAQs</button>
                     </div>
                     <div>
                         <h3 class="text-lg font-bold mb-4">${t('contact')}</h3>
