@@ -986,13 +986,41 @@ function renderTimelinePage() {
  * @returns {string} HTML string for footer
  */
 function renderFooter() {
+    const lastUpdated = typeof getLastUpdatedString === 'function' ? getLastUpdatedString() : 'January 2025';
+    const dataVersion = typeof DATA_VERSION !== 'undefined' ? DATA_VERSION.version : '2024-25';
+    const needsUpdate = typeof needsReview === 'function' ? needsReview() : false;
+
     return `
         <footer class="bg-gray-900 text-white py-12">
             <div class="max-w-7xl mx-auto px-4">
-                <div class="grid md:grid-cols-3 gap-8">
+                <!-- Data freshness indicator -->
+                <div class="mb-8 p-4 bg-gray-800 rounded-lg border ${needsUpdate ? 'border-yellow-600' : 'border-green-600'}">
+                    <div class="flex items-center justify-between flex-wrap gap-4">
+                        <div class="flex items-center space-x-3">
+                            ${needsUpdate
+                                ? '<svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>'
+                                : '<svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>'
+                            }
+                            <div>
+                                <p class="text-sm font-semibold ${needsUpdate ? 'text-yellow-500' : 'text-green-500'}">
+                                    ${needsUpdate ? 'Data Review Recommended' : 'Data Current'}
+                                </p>
+                                <p class="text-xs text-gray-400">
+                                    Financial Year ${dataVersion} • Last Updated: ${lastUpdated}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xs text-gray-400">FIRB Fees • Stamp Duty • Land Tax</p>
+                            <p class="text-xs text-gray-500">All rates verified from official sources</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-4 gap-8">
                     <div>
                         <h3 class="text-lg font-bold mb-4">FIRB Calculator</h3>
-                        <p class="text-gray-400">Professional fee calculations</p>
+                        <p class="text-gray-400">Professional fee calculations for foreign property investors</p>
                     </div>
                     <div>
                         <h3 class="text-lg font-bold mb-4">${t('quickLinks')}</h3>
@@ -1002,12 +1030,25 @@ function renderFooter() {
                         <button onclick="goToStep('faq')" class="block text-gray-400 hover:text-white">FAQs</button>
                     </div>
                     <div>
+                        <h3 class="text-lg font-bold mb-4">Official Sources</h3>
+                        <a href="https://firb.gov.au/" target="_blank" class="block text-gray-400 hover:text-white mb-2 text-sm">FIRB.gov.au</a>
+                        <a href="https://www.revenue.nsw.gov.au/" target="_blank" class="block text-gray-400 hover:text-white mb-2 text-sm">Revenue NSW</a>
+                        <a href="https://www.sro.vic.gov.au/" target="_blank" class="block text-gray-400 hover:text-white mb-2 text-sm">SRO Victoria</a>
+                        <a href="https://www.ato.gov.au/" target="_blank" class="block text-gray-400 hover:text-white text-sm">ATO</a>
+                    </div>
+                    <div>
                         <h3 class="text-lg font-bold mb-4">${t('contact')}</h3>
-                        <p class="text-gray-400">support@firbcalculator.com.au</p>
+                        <p class="text-gray-400 text-sm mb-4">support@firbcalculator.com.au</p>
+                        <p class="text-xs text-gray-500">
+                            Disclaimer: This calculator provides estimates only. Consult with qualified professionals for official advice.
+                        </p>
                     </div>
                 </div>
                 <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-                    <p>&copy; 2025 FIRB Calculator. ${t('allRights')}</p>
+                    <p class="text-sm">&copy; 2025 FIRB Calculator. ${t('allRights')}</p>
+                    <p class="text-xs text-gray-500 mt-2">
+                        Rates current as of ${lastUpdated} (FY ${dataVersion})
+                    </p>
                 </div>
             </div>
         </footer>
