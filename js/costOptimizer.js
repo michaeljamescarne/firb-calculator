@@ -147,7 +147,16 @@ function calculateOptimizations(current) {
  * Compare established dwelling vs new apartment
  */
 function calculatePropertyTypeOptimization(current) {
-    const purchasePrice = current.inputs.purchasePrice;
+    const purchasePrice = current.inputs?.purchasePrice;
+
+    // Validate purchase price
+    if (!purchasePrice || isNaN(purchasePrice) || purchasePrice <= 0) {
+        console.error('[OPTIMIZER] ERROR: Invalid purchasePrice in calculatePropertyTypeOptimization:', purchasePrice);
+        return null;
+    }
+
+    console.log('[OPTIMIZER] Calculating property type optimization for price:', purchasePrice);
+
     const currentType = current.inputs.propertyType;
 
     // Calculate costs for both property types at same price

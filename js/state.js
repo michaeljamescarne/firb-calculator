@@ -25,13 +25,36 @@ const state = {
         firstHomeBuyer: '',
         state: '',
         entityType: 'individual',  // individual, company, trust
-        depositPercent: '30'       // Default 30% for foreign buyers
+        depositPercent: '30',       // Default 30% for foreign buyers
+        citizenshipStatus: '',
+        visaType: ''
     },
     calculatedFees: null,
     isCalculating: false,
     isProcessingPayment: false,
     savedCalculations: []
 };
+
+/**
+ * Ensure formData is always properly initialized
+ */
+function ensureFormDataInitialized() {
+    if (!state.formData) {
+        console.warn('[STATE] formData was null/undefined - initializing');
+        state.formData = {
+            address: '',
+            propertyValue: '',
+            propertyType: '',
+            firstHomeBuyer: '',
+            state: '',
+            entityType: 'individual',
+            depositPercent: '30',
+            citizenshipStatus: '',
+            visaType: ''
+        };
+    }
+    return state.formData;
+}
 
 /**
  * Navigate to a specific step in the application

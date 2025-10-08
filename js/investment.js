@@ -71,6 +71,15 @@ function calculateInvestmentAnalysis() {
         return;
     }
 
+    // Validate purchase price before calculations
+    if (!inputs.purchasePrice || isNaN(inputs.purchasePrice) || inputs.purchasePrice <= 0) {
+        console.error('[INVESTMENT] ERROR: Invalid purchasePrice:', inputs.purchasePrice);
+        investmentState.calculations = null;
+        return;
+    }
+
+    console.log('[INVESTMENT] Calculating with purchasePrice:', inputs.purchasePrice);
+
     // Calculate total investment required
     const totalInvestment = inputs.purchasePrice + firb.grandTotal;
 
@@ -92,8 +101,8 @@ function calculateInvestmentAnalysis() {
     // Annual cash flow
     const annualCashFlow = annualRentNet - annualExpenses;
 
-    // Rental yields
-    const grossRentalYield = (annualRentGross / inputs.purchasePrice) * 100;
+    // Rental yields (with safety check)
+    const grossRentalYield = inputs.purchasePrice > 0 ? (annualRentGross / inputs.purchasePrice) * 100 : 0;
     const netRentalYield = (annualCashFlow / totalInvestment) * 100;
 
     // Year-by-year projections

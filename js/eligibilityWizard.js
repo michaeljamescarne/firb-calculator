@@ -609,7 +609,22 @@ function checkPropertyEligibility(propertyType) {
  * Estimate FIRB fee based on current answers
  */
 function estimateFIRBFee() {
-    const price = parseFloat(wizardState.answers.purchasePrice || 0);
+    // Safely access purchasePrice with fallback
+    const purchasePrice = wizardState.answers?.purchasePrice;
+
+    if (!purchasePrice) {
+        console.warn('[WIZARD] estimateFIRBFee called with no purchasePrice');
+        return 0;
+    }
+
+    const price = parseFloat(purchasePrice);
+
+    if (isNaN(price) || price <= 0) {
+        console.warn('[WIZARD] estimateFIRBFee called with invalid price:', purchasePrice);
+        return 0;
+    }
+
+    console.log('[WIZARD] Estimating FIRB fee for price:', price);
 
     if (price < 1000000) return 13200;
     if (price < 2000000) return 26400;
@@ -632,7 +647,33 @@ function getStateSurcharge(state) {
  * Calculate final eligibility result
  */
 function calculateEligibilityResult() {
-    const { citizenshipStatus, visaType, propertyType, purchasePrice, state: stateCode } = wizardState.answers;
+    console.log('[WIZARD] calculateEligibilityResult - wizardState.answers:', wizardState.answers);
+
+    // Destructure with proper validation
+    const { citizenshipStatus, visaType, propertyType, purchasePrice, state: stateCode } = wizardState.answers || {};
+
+    // Validate required fields
+    if (!propertyType) {
+        console.error('[WIZARD] ERROR: propertyType is missing');
+        showToast('Please select a property type', 'error');
+        return;
+    }
+
+    if (!stateCode) {
+        console.error('[WIZARD] ERROR: state is missing');
+        showToast('Please select a state', 'error');
+        return;
+    }
+
+    if (!purchasePrice) {
+        console.error('[WIZARD] ERROR: purchasePrice is missing');
+        showToast('Please enter a purchase price', 'error');
+        return;
+    }
+
+    console.log('[WIZARD] Calculating eligibility with:', {
+        citizenshipStatus, visaType, propertyType, purchasePrice, stateCode
+    });
 
     const eligibility = checkPropertyEligibility(propertyType);
     const firbFee = estimateFIRBFee();
@@ -652,6 +693,7 @@ function calculateEligibilityResult() {
         canProceedToCalculator: eligibility.eligible
     };
 
+    console.log('[WIZARD] Eligibility result:', result);
     showEligibilityResult(result);
 }
 
@@ -670,11 +712,34 @@ function showEligibilityResult(result) {
  */
 function renderEligibilityResult() {
     const result = wizardState.result;
-    if (!result) return '';
+    if (!result) {
+        console.error('[WIZARD] renderEligibilityResult called with no result');
+        return '';
+    }
 
-    const { eligible, noFIRBRequired, reason, firbFee, surcharge, state: stateCode,
-            propertyType, citizenshipStatus, visaType, purchasePrice, canProceedToCalculator,
-            message, caveat } = result;
+    console.log('[WIZARD] Rendering eligibility result:', result);
+
+    // Destructure with defaults to prevent undefined errors
+    const {
+        eligible = false,
+        noFIRBRequired = false,
+        reason = '',
+        firbFee = 0,
+        surcharge = 0,
+        state: stateCode = '',
+        propertyType = '',
+        citizenshipStatus = '',
+        visaType = '',
+        purchasePrice = 0,
+        canProceedToCalculator = false,
+        message = '',
+        caveat = ''
+    } = result;
+
+    // Additional validation
+    if (!purchasePrice || purchasePrice === 0) {
+        console.error('[WIZARD] ERROR: purchasePrice is missing or zero in result:', result);
+    }
 
     // For Australian citizens and PR
     if (noFIRBRequired) {
@@ -989,20 +1054,60 @@ function getAlternativeProperties(citizenshipStatus, visaType) {
  * Proceed to full calculator with wizard data
  */
 function proceedToFullCalculator() {
-    const { purchasePrice, state: stateCode, propertyType, citizenshipStatus, visaType } = wizardState.answers;
+    // Safely destructure with fallback
+    const {
+        purchasePrice,
+        state: stateCode,
+        propertyType,
+        citizenshipStatus,
+        visaType
+    } = wizardState.answers || {};
 
-    console.log('[WIZARD] Proceeding to calculator with data:', {
+    console.log('[WIZARD] proceedToFullCalculator called');
+    console.log('[WIZARD] wizardState.answers:', wizardState.answers);
+    console.log('[WIZARD] Extracted values:', {
         purchasePrice, stateCode, propertyType, citizenshipStatus, visaType
     });
 
-    // Ensure formData object exists
+    // Validate required fields before proceeding
+    if (!purchasePrice) {
+        console.error('[WIZARD] ERROR: Cannot proceed - purchasePrice is missing');
+        showToast('Purchase price is required', 'error');
+        return;
+    }
+
+    if (!stateCode) {
+        console.error('[WIZARD] ERROR: Cannot proceed - state is missing');
+        showToast('State selection is required', 'error');
+        return;
+    }
+
+    if (!propertyType) {
+        console.error('[WIZARD] ERROR: Cannot proceed - propertyType is missing');
+        showToast('Property type is required', 'error');
+        return;
+    }
+
+    // Ensure formData object exists and is properly initialized
     if (!state.formData) {
+        console.log('[WIZARD] Initializing state.formData');
         state.formData = {};
     }
 
+    // Validate and parse purchase price
+    const parsedPrice = parseFloat(purchasePrice);
+    if (isNaN(parsedPrice) || parsedPrice <= 0) {
+        console.error('[WIZARD] ERROR: Invalid purchase price:', purchasePrice);
+        showToast('Invalid purchase price', 'error');
+        return;
+    }
+
     // Pre-populate calculator with wizard data
-    state.propertyValue = parseFloat(purchasePrice);
+    state.propertyValue = parsedPrice;
     state.state = stateCode;
+
+    console.log('[WIZARD] Set state.propertyValue:', state.propertyValue);
+    console.log('[WIZARD] Set state.state:', state.state);
 
     // Map wizard property type to calculator property type
     const propertyTypeMap = {
