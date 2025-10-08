@@ -532,76 +532,127 @@ function renderCalculator() {
                     <h2 class="text-3xl font-bold mb-8">${t('propCalc')}</h2>
                     <div class="space-y-6">
                         <div>
-                            <label class="block font-semibold mb-2" for="property-address">${t('propAddress')}</label>
-                            <input type="text"
-                                id="property-address"
-                                value="${escapeHTML(state.formData.address)}"
-                                oninput="updateForm('address', this.value)"
-                                placeholder="${t('enterAddress')}"
-                                aria-label="${t('propAddress')}"
-                                aria-required="true"
-                                class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+                            <label class="block font-semibold mb-2" for="property-address">
+                                ${t('propAddress')}
+                                <span class="text-red-500">*</span>
+                            </label>
+                            <div class="relative">
+                                <input type="text"
+                                    id="property-address"
+                                    value="${escapeHTML(state.formData.address)}"
+                                    oninput="handleValidatedAddressInput(this)"
+                                    placeholder="${t('enterAddress')}"
+                                    aria-label="${t('propAddress')}"
+                                    aria-required="true"
+                                    aria-invalid="false"
+                                    maxlength="200"
+                                    class="w-full px-4 py-3 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" />
+                            </div>
+                            <div id="property-address-error" class="hidden text-red-600 text-sm mt-1 flex items-center">
+                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                                </svg>
+                                <span></span>
+                            </div>
                         </div>
 
                         <div>
-                            <label class="block font-semibold mb-2" for="property-value">${t('purchasePrice')}</label>
-                            <input type="text"
-                                id="property-value"
-                                value="${formatNumberWithCommas(state.formData.propertyValue)}"
-                                oninput="handlePropertyValueInput(this)"
-                                placeholder="850,000"
-                                aria-label="${t('purchasePrice')}"
-                                aria-required="true"
-                                class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
-                            <p class="text-xs text-gray-500 mt-1">Enter amount in AUD</p>
+                            <label class="block font-semibold mb-2" for="property-value">
+                                ${t('purchasePrice')}
+                                <span class="text-red-500">*</span>
+                            </label>
+                            <div class="relative">
+                                <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-semibold">$</span>
+                                <input type="text"
+                                    id="property-value"
+                                    value="${formatNumberWithCommas(state.formData.propertyValue)}"
+                                    oninput="handleValidatedPropertyValueInput(this)"
+                                    placeholder="850,000"
+                                    aria-label="${t('purchasePrice')}"
+                                    aria-required="true"
+                                    aria-invalid="false"
+                                    inputmode="decimal"
+                                    class="w-full pl-8 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" />
+                            </div>
+                            <p class="text-xs text-gray-500 mt-1">Enter amount in AUD (e.g., 850,000 or 850,000.50)</p>
+                            <div id="property-value-error" class="hidden text-red-600 text-sm mt-1 flex items-center">
+                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                                </svg>
+                                <span></span>
+                            </div>
                         </div>
 
                         <div>
-                            <label class="block font-semibold mb-2" for="property-type">${t('propType')}</label>
+                            <label class="block font-semibold mb-2" for="property-type">
+                                ${t('propType')}
+                                <span class="text-red-500">*</span>
+                            </label>
                             <select id="property-type"
                                 value="${state.formData.propertyType}"
-                                onchange="updateForm('propertyType', this.value)"
+                                onchange="handleValidatedSelectChange('propertyType', this.value, this); render();"
                                 aria-label="${t('propType')}"
                                 aria-required="true"
-                                class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                aria-invalid="false"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
                                 <option value="">${t('selectType')}</option>
-                                <option value="established">${t('established')}</option>
-                                <option value="newDwelling">${t('newDwelling')}</option>
-                                <option value="vacant">${t('vacant')}</option>
+                                <option value="established" ${state.formData.propertyType === 'established' ? 'selected' : ''}>${t('established')}</option>
+                                <option value="newDwelling" ${state.formData.propertyType === 'newDwelling' ? 'selected' : ''}>${t('newDwelling')}</option>
+                                <option value="vacant" ${state.formData.propertyType === 'vacant' ? 'selected' : ''}>${t('vacant')}</option>
                             </select>
+                            <div id="property-type-error" class="hidden text-red-600 text-sm mt-1 flex items-center">
+                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                                </svg>
+                                <span></span>
+                            </div>
                         </div>
 
                         <div>
-                            <label class="block font-semibold mb-2" for="property-state">${t('state')}</label>
+                            <label class="block font-semibold mb-2" for="property-state">
+                                ${t('state')}
+                                <span class="text-red-500">*</span>
+                            </label>
                             <select id="property-state"
                                 value="${state.formData.state}"
-                                onchange="updateForm('state', this.value)"
+                                onchange="handleValidatedSelectChange('state', this.value, this); render();"
                                 aria-label="${t('state')}"
                                 aria-required="true"
-                                class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                aria-invalid="false"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
                                 <option value="">${t('selectState')}</option>
-                                <option value="NSW">NSW</option>
-                                <option value="VIC">VIC</option>
-                                <option value="QLD">QLD</option>
-                                <option value="SA">SA</option>
-                                <option value="WA">WA</option>
-                                <option value="TAS">TAS</option>
-                                <option value="ACT">ACT</option>
-                                <option value="NT">NT</option>
+                                <option value="NSW" ${state.formData.state === 'NSW' ? 'selected' : ''}>NSW</option>
+                                <option value="VIC" ${state.formData.state === 'VIC' ? 'selected' : ''}>VIC</option>
+                                <option value="QLD" ${state.formData.state === 'QLD' ? 'selected' : ''}>QLD</option>
+                                <option value="SA" ${state.formData.state === 'SA' ? 'selected' : ''}>SA</option>
+                                <option value="WA" ${state.formData.state === 'WA' ? 'selected' : ''}>WA</option>
+                                <option value="TAS" ${state.formData.state === 'TAS' ? 'selected' : ''}>TAS</option>
+                                <option value="ACT" ${state.formData.state === 'ACT' ? 'selected' : ''}>ACT</option>
+                                <option value="NT" ${state.formData.state === 'NT' ? 'selected' : ''}>NT</option>
                             </select>
+                            <div id="property-state-error" class="hidden text-red-600 text-sm mt-1 flex items-center">
+                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                                </svg>
+                                <span></span>
+                            </div>
                         </div>
 
                         <div>
-                            <label class="block font-semibold mb-2" for="entity-type">${t('entityType')}</label>
+                            <label class="block font-semibold mb-2" for="entity-type">
+                                ${t('entityType')}
+                                <span class="text-red-500">*</span>
+                            </label>
                             <select id="entity-type"
                                 value="${state.formData.entityType}"
-                                onchange="updateForm('entityType', this.value); render();"
+                                onchange="handleValidatedSelectChange('entityType', this.value, this); render();"
                                 aria-label="${t('entityType')}"
                                 aria-required="true"
-                                class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                                <option value="individual">${t('individual')}</option>
-                                <option value="company">${t('company')}</option>
-                                <option value="trust">${t('trust')}</option>
+                                aria-invalid="false"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+                                <option value="individual" ${state.formData.entityType === 'individual' ? 'selected' : ''}>${t('individual')}</option>
+                                <option value="company" ${state.formData.entityType === 'company' ? 'selected' : ''}>${t('company')}</option>
+                                <option value="trust" ${state.formData.entityType === 'trust' ? 'selected' : ''}>${t('trust')}</option>
                             </select>
                             <p class="text-xs text-gray-500 mt-1">${t('entityTypeHelp')}</p>
                         </div>
@@ -624,31 +675,45 @@ function renderCalculator() {
                         </div>
 
                         <div>
-                            <label class="block font-semibold mb-2">${t('firstHome')}</label>
+                            <label class="block font-semibold mb-2">
+                                ${t('firstHome')}
+                                <span class="text-red-500">*</span>
+                            </label>
                             <div class="flex space-x-4" role="radiogroup" aria-label="${t('firstHome')}">
-                                <label class="flex items-center">
+                                <label class="flex items-center px-4 py-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors ${state.formData.firstHomeBuyer === 'yes' ? 'bg-blue-50 border-blue-500' : ''}">
                                     <input type="radio" name="firstHome" value="yes"
                                         ${state.formData.firstHomeBuyer === 'yes' ? 'checked' : ''}
-                                        onchange="updateForm('firstHomeBuyer', 'yes'); render();"
+                                        onchange="handleValidatedSelectChange('firstHomeBuyer', 'yes', this); render();"
                                         aria-label="Yes, first home buyer"
-                                        class="mr-2" />Yes
+                                        class="mr-2 w-4 h-4" />
+                                    <span class="font-medium">Yes</span>
                                 </label>
-                                <label class="flex items-center">
+                                <label class="flex items-center px-4 py-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors ${state.formData.firstHomeBuyer === 'no' ? 'bg-blue-50 border-blue-500' : ''}">
                                     <input type="radio" name="firstHome" value="no"
                                         ${state.formData.firstHomeBuyer === 'no' ? 'checked' : ''}
-                                        onchange="updateForm('firstHomeBuyer', 'no'); render();"
+                                        onchange="handleValidatedSelectChange('firstHomeBuyer', 'no', this); render();"
                                         aria-label="No, not first home buyer"
-                                        class="mr-2" />No
+                                        class="mr-2 w-4 h-4" />
+                                    <span class="font-medium">No</span>
                                 </label>
+                            </div>
+                            <div id="first-home-buyer-error" class="hidden text-red-600 text-sm mt-1 flex items-center">
+                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                                </svg>
+                                <span></span>
                             </div>
                         </div>
 
-                        <button onclick="handleCalculate()"
+                        <button onclick="handleValidatedCalculate()"
                             ${state.isCalculating ? 'disabled' : ''}
-                            class="w-full bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-700 flex items-center justify-center space-x-2 ${state.isCalculating ? 'opacity-50 cursor-not-allowed' : ''}">
+                            class="w-full bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2 transition-all">
                             ${icons.calculator('w-5 h-5')}
                             <span>${state.isCalculating ? t('calculating') : t('calcFees')}</span>
                         </button>
+                        <p class="text-xs text-gray-500 text-center mt-2">
+                            <span class="text-red-500">*</span> Required fields
+                        </p>
                     </div>
 
                     <!-- Contextual Alerts -->
