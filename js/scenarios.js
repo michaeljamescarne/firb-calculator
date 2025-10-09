@@ -73,7 +73,9 @@ function loadAutoSavedData() {
                 state.formData = autoSaveData.formData;
             }
             if (autoSaveData.isEligible) {
-                state.isEligible = autoSaveData.isEligible;
+                // TEMPORARY FIX: Don't restore old eligibility data to prevent overriding new calculations
+                console.log('[SCENARIOS] Skipping restoration of old eligibility data:', autoSaveData.isEligible);
+                // state.isEligible = autoSaveData.isEligible;
             }
 
             lastAutoSave = autoSaveData.timestamp;
