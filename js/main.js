@@ -44,6 +44,17 @@ document.addEventListener('DOMContentLoaded', function() {
         initTimelineSystem();
     }
 
+    // Check critical modules are loaded
+    console.log('[MAIN DEBUG] Checking critical modules on initialization...');
+    console.log('[MAIN DEBUG] window.FIRBEligibility:', typeof window.FIRBEligibility);
+    console.log('[MAIN DEBUG] window.FIRBConstants:', typeof window.FIRBConstants);
+    console.log('[MAIN DEBUG] window.state:', typeof window.state);
+    
+    if (typeof window.FIRBEligibility === 'undefined') {
+        console.error('❌ CRITICAL: FIRB Eligibility module not loaded on initialization!');
+        console.error('This will cause eligibility wizard to use fallback logic');
+    }
+
     // Render the initial page
     render();
 
@@ -65,6 +76,10 @@ function runFIRBEligibilityTests() {
 
     try {
         // Check if the module is loaded
+        console.log('[MAIN DEBUG] Checking FIRB Eligibility module on page load...');
+        console.log('[MAIN DEBUG] window.FIRBEligibility:', typeof window.FIRBEligibility);
+        console.log('[MAIN DEBUG] window.FIRBConstants:', typeof window.FIRBConstants);
+        
         if (typeof window.FIRBEligibility === 'undefined') {
             console.error('❌ ERROR: FIRB Eligibility module not loaded!');
             console.error('Make sure src/utils/firbEligibility.js is included in index.html');

@@ -791,8 +791,13 @@ function calculateEligibilityResult() {
 
     try {
         // Check if module is loaded
+        console.log('[WIZARD DEBUG] Checking FIRBEligibility module availability...');
+        console.log('[WIZARD DEBUG] window.FIRBEligibility:', typeof window.FIRBEligibility);
+        console.log('[WIZARD DEBUG] window.FIRBEligibility.checkFIRBEligibility:', typeof window.FIRBEligibility?.checkFIRBEligibility);
+        
         if (typeof window.FIRBEligibility === 'undefined' || typeof window.FIRBEligibility.checkFIRBEligibility !== 'function') {
             console.error('[WIZARD] FIRBEligibility module not loaded - using fallback');
+            console.error('[WIZARD] Available modules:', Object.keys(window).filter(key => key.includes('FIRB')));
 
             // Fallback to old logic
             const eligibility = checkPropertyEligibility(propertyType);

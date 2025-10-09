@@ -3,8 +3,8 @@
  * Handles caching, offline support, and background sync
  */
 
-const CACHE_NAME = 'firb-calculator-v1.0.0';
-const RUNTIME_CACHE = 'firb-runtime-v1.0.0';
+const CACHE_NAME = 'firb-calculator-v1.1.0';
+const RUNTIME_CACHE = 'firb-runtime-v1.1.0';
 
 // Files to cache immediately on install
 const PRECACHE_URLS = [
@@ -28,7 +28,22 @@ const PRECACHE_URLS = [
     './js/charts.js',
     './js/resultsDashboard.js',
     './js/render.js',
+    './js/formValidation.js',
+    './js/eligibilityWizard.js',
     './js/main.js',
+    './js/browserCompatibility.js',
+    './js/errorHandling.js',
+    './js/mobileFixes.js',
+    './js/comparisonUI.js',
+    './js/comparisonExport.js',
+    './js/scenarioComparison.js',
+    './js/checklistUI.js',
+    './js/checklistEmail.js',
+    './js/documentChecklist.js',
+    './js/dataRates2024_25.js',
+    './src/constants/firbConstants.js',
+    './src/utils/firbEligibility.js',
+    './data/faq.json',
     './manifest.json'
 ];
 
