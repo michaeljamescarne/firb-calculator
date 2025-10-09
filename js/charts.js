@@ -3,14 +3,6 @@
  * @file charts.js
  */
 
-/**
- * Check if external libraries are loaded and ready
- * @returns {boolean} True if all libraries are available
- */
-function checkExternalLibraries() {
-    return !!(window.Recharts && window.React && window.ReactDOM);
-}
-
 const { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } = window.Recharts || {};
 
 /**
@@ -56,23 +48,12 @@ function renderCSSBarChartFallback(data, title = 'Cost Breakdown') {
  * @param {Object} fees - Calculated fees object
  */
 function renderPieChart(fees) {
-    console.log('[PIE CHART DEBUG] renderPieChart called with fees:', fees);
     const container = document.getElementById('pie-chart-container');
-    if (!container) {
-        console.error('[PIE CHART DEBUG] Container not found');
-        return;
-    }
+    if (!container) return;
 
-    // Check if external libraries are available with timeout
-    const librariesLoaded = checkExternalLibraries();
-    if (!librariesLoaded) {
-        console.log('[PIE CHART DEBUG] External libraries not loaded - using CSS fallback');
-        console.log('[PIE CHART DEBUG] window.Recharts:', typeof window.Recharts);
-        console.log('[PIE CHART DEBUG] window.React:', typeof window.React);
-        console.log('[PIE CHART DEBUG] window.ReactDOM:', typeof window.ReactDOM);
-    } else {
-        console.log('[PIE CHART DEBUG] External libraries loaded - using Recharts');
-    }
+    // Check if Recharts is available
+    if (!window.Recharts || !window.React || !window.ReactDOM) {
+        console.warn('Recharts, React, or ReactDOM not loaded - using CSS fallback');
 
         // Prepare data for fallback chart
         const data = [
@@ -85,40 +66,8 @@ function renderPieChart(fees) {
             { name: 'Other Fees', value: fees.standard.transferFee + fees.standard.mortgageRegistration + fees.standard.councilRates + fees.standard.waterRates, color: '#6b7280' }
         ].filter(item => item.value > 0);
 
-        console.log('[PIE CHART DEBUG] Fallback data:', data);
-
-        // Try CSS fallback first
-        try {
-            container.innerHTML = renderCSSBarChartFallback(data, 'Cost Breakdown');
-            console.log('[PIE CHART DEBUG] CSS fallback rendered successfully');
-        } catch (error) {
-            console.error('[PIE CHART DEBUG] CSS fallback failed:', error);
-            // Ultimate fallback - simple table
-            const total = data.reduce((sum, item) => sum + item.value, 0);
-            container.innerHTML = `
-                <div class="text-center">
-                    <h4 class="text-lg font-semibold mb-4">Cost Breakdown</h4>
-                    <div class="space-y-2">
-                        ${data.map(item => `
-                            <div class="flex justify-between items-center p-2 bg-gray-50 rounded">
-                                <div class="flex items-center">
-                                    <div class="w-4 h-4 rounded mr-2" style="background-color: ${item.color}"></div>
-                                    <span class="text-sm">${item.name}</span>
-                                </div>
-                                <span class="font-semibold">${formatCurrency(item.value)}</span>
-                            </div>
-                        `).join('')}
-                        <div class="border-t pt-2 mt-2">
-                            <div class="flex justify-between items-center font-bold">
-                                <span>Total</span>
-                                <span>${formatCurrency(total)}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-            console.log('[PIE CHART DEBUG] Table fallback rendered');
-        }
+        // Render CSS fallback
+        container.innerHTML = renderCSSBarChartFallback(data, 'Cost Breakdown');
 
         // Initialize Lucide icons
         if (typeof lucide !== 'undefined') {
@@ -203,15 +152,12 @@ function renderPieChart(fees) {
  * @param {Object} fees - Calculated fees object
  */
 function renderDonutChart(fees) {
-    console.log('[DONUT CHART DEBUG] renderDonutChart called with fees:', fees);
     const container = document.getElementById('donut-chart-container');
-    if (!container) {
-        console.error('[DONUT CHART DEBUG] Container not found');
-        return;
-    }
+    if (!container) return;
 
-    // Always use fallback for now to ensure charts show
-    console.log('[DONUT CHART DEBUG] Using CSS fallback for guaranteed rendering');
+    // Check if Recharts is available
+    if (!window.Recharts || !window.React || !window.ReactDOM) {
+        console.warn('Recharts, React, or ReactDOM not loaded - using CSS fallback');
 
         // Prepare data for fallback chart
         const data = [
@@ -231,60 +177,6 @@ function renderDonutChart(fees) {
         }
         return;
     }
-
-    // Prepare data for donut chart
-    const data = [
-        { name: 'Vacancy Fee', value: fees.annual.vacancyFee, color: '#f59e0b' },
-        { name: 'Land Tax Surcharge', value: fees.annual.landTaxSurcharge, color: '#ef4444' },
-        { name: 'Council Rates', value: fees.annual.councilRates, color: '#3b82f6' },
-        { name: 'Water Rates', value: fees.annual.waterRates, color: '#06b6d4' },
-        { name: 'Insurance', value: fees.annual.insurance, color: '#10b981' }
-    ].filter(item => item.value > 0);
-
-    const CustomTooltip = ({ active, payload }) => {
-        if (active && payload && payload.length) {
-            return React.createElement('div', {
-                style: {
-                    backgroundColor: 'white',
-                    border: '1px solid #e5e7eb',
-                    borderRadius: '8px',
-                    padding: '12px',
-                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-                }
-            }, [
-                React.createElement('p', { key: 'label', style: { fontWeight: 'bold', marginBottom: '4px' } }, payload[0].name),
-                React.createElement('p', { key: 'value', style: { color: payload[0].payload.color } }, formatCurrency(payload[0].value) + '/year')
-            ]);
-        }
-        return null;
-    };
-
-    const chart = React.createElement(ResponsiveContainer, { width: '100%', height: 300 },
-        React.createElement(PieChart, null,
-            React.createElement(Pie, {
-                data: data,
-                cx: '50%',
-                cy: '50%',
-                innerRadius: 60,
-                outerRadius: 100,
-                fill: '#8884d8',
-                paddingAngle: 2,
-                dataKey: 'value',
-                animationBegin: 0,
-                animationDuration: 800
-            }, data.map((entry, index) =>
-                React.createElement(Cell, { key: `cell-${index}`, fill: entry.color })
-            )),
-            React.createElement(Tooltip, { content: React.createElement(CustomTooltip) }),
-            React.createElement(Legend, {
-                verticalAlign: 'bottom',
-                height: 36,
-                iconType: 'circle'
-            })
-        )
-    );
-
-    ReactDOM.render(chart, container);
 }
 
 /**
@@ -292,15 +184,12 @@ function renderDonutChart(fees) {
  * @param {Array} stateCosts - Array of state cost objects
  */
 function renderBarChart(stateCosts) {
-    console.log('[BAR CHART DEBUG] renderBarChart called with stateCosts:', stateCosts);
     const container = document.getElementById('bar-chart-container');
-    if (!container) {
-        console.error('[BAR CHART DEBUG] Container not found');
-        return;
-    }
+    if (!container) return;
 
-    // Always use fallback for now to ensure charts show
-    console.log('[BAR CHART DEBUG] Using CSS fallback for guaranteed rendering');
+    // Check if Recharts is available
+    if (!window.Recharts || !window.React || !window.ReactDOM) {
+        console.warn('Recharts, React, or ReactDOM not loaded - using CSS fallback');
 
         // Sort by total cost
         const sortedData = [...stateCosts].sort((a, b) => a.total - b.total);
