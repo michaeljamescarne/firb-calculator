@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FIRB Module Test</title>
+</head>
+<body>
+    <h1>FIRB Module Debug Test</h1>
+    <div id="results"></div>
+    
+    <script>
+        // Test function to run after modules load
+        function testFIRBModule() {
+            console.log('=== FIRB MODULE DEBUG TEST ===');
+            
+            // Check if constants are loaded
+            console.log('1. Checking FIRBConstants...');
+            if (typeof window.FIRBConstants !== 'undefined') {
+                console.log('✅ FIRBConstants loaded:', window.FIRBConstants);
+            } else {
+                console.log('❌ FIRBConstants NOT loaded');
+            }
+            
+            // Check if eligibility module is loaded
+            console.log('2. Checking FIRBEligibility...');
+            if (typeof window.FIRBEligibility !== 'undefined') {
+                console.log('✅ FIRBEligibility loaded:', window.FIRBEligibility);
+                
+                // Test foreign national case
+                console.log('3. Testing foreign national + new dwelling...');
+                try {
+                    const result = window.FIRBEligibility.checkFIRBEligibility({
+                        citizenshipStatus: 'foreign',
+                        propertyType: 'newDwelling'
+                    });
+                    console.log('✅ Test result:', result);
+                    console.log('FIRB Required:', result.firbRequired);
+                    console.log('Result:', result.result);
+                    
+                    document.getElementById('results').innerHTML = `
+                        <h2>Test Results:</h2>
+                        <p><strong>Foreign National + New Dwelling:</strong></p>
+                        <p>FIRB Required: ${result.firbRequired}</p>
+                        <p>Result: ${result.result}</p>
+                        <p>Reason: ${result.reason}</p>
+                    `;
+                } catch (error) {
+                    console.log('❌ Test failed:', error);
+                    document.getElementById('results').innerHTML = `
+                        <h2>Test Failed:</h2>
+                        <p>Error: ${error.message}</p>
+                    `;
+                }
+            } else {
+                console.log('❌ FIRBEligibility NOT loaded');
+                document.getElementById('results').innerHTML = '<p>❌ FIRBEligibility module not loaded</p>';
+            }
+        }
+        
+        // Run test after a short delay to ensure modules are loaded
+        setTimeout(testFIRBModule, 1000);
+    </script>
+    
+    <!-- Load modules in same order as main app -->
+    <script src="src/constants/firbConstants.js"></script>
+    <script src="src/utils/firbEligibility.js"></script>
+</body>
+</html>

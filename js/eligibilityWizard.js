@@ -799,8 +799,13 @@ function calculateEligibilityResult() {
 
     try {
         // Check if module is loaded
+        console.log('[WIZARD DEBUG] Checking FIRBEligibility module...');
+        console.log('[WIZARD DEBUG] window.FIRBEligibility:', typeof window.FIRBEligibility);
+        console.log('[WIZARD DEBUG] checkFIRBEligibility function:', typeof window.FIRBEligibility?.checkFIRBEligibility);
+        
         if (typeof window.FIRBEligibility === 'undefined' || typeof window.FIRBEligibility.checkFIRBEligibility !== 'function') {
             console.error('[WIZARD] FIRBEligibility module not loaded - using fallback');
+            console.log('[WIZARD DEBUG] Using fallback logic for citizenship:', citizenshipStatus);
 
             // Fallback to basic logic based on citizenship status
             const firbFee = estimateFIRBFee();
@@ -858,9 +863,16 @@ function calculateEligibilityResult() {
             return;
         }
 
+        console.log('[WIZARD DEBUG] FIRBEligibility module loaded successfully');
         const { checkFIRBEligibility } = window.FIRBEligibility;
 
         // Call the centralized eligibility checker
+        console.log('[WIZARD DEBUG] Calling checkFIRBEligibility with:', {
+            citizenshipStatus: citizenshipStatus || 'foreign',
+            visaType: visaType || null,
+            propertyType: mappedPropertyType
+        });
+        
         const firbResult = checkFIRBEligibility({
             citizenshipStatus: citizenshipStatus || 'foreign',
             visaType: visaType || null,
@@ -868,6 +880,8 @@ function calculateEligibilityResult() {
         });
 
         console.log('[WIZARD] FIRB eligibility check result:', firbResult);
+        console.log('[WIZARD DEBUG] firbResult.firbRequired:', firbResult.firbRequired);
+        console.log('[WIZARD DEBUG] firbResult.result:', firbResult.result);
 
         const firbFee = estimateFIRBFee();
         const surcharge = getStateSurcharge(stateCode);
@@ -891,6 +905,8 @@ function calculateEligibilityResult() {
         };
 
         console.log('[WIZARD] Eligibility result:', result);
+        console.log('[WIZARD DEBUG] Final noFIRBRequired:', result.noFIRBRequired);
+        console.log('[WIZARD DEBUG] Final eligible:', result.eligible);
         showEligibilityResult(result);
     } catch (error) {
         console.error('[WIZARD] Error in calculateEligibilityResult:', error);
