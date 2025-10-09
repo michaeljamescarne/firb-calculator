@@ -298,19 +298,13 @@ function handleValidatedAddressInput(input) {
     // Remove any HTML/script tags for security
     value = sanitizeHTML(value);
 
-    // Format the address for consistency
-    value = formatAddress(value);
-
-    // Update the input field with formatted value
-    input.value = value;
-
-    // Update state
+    // Update state with raw value (don't format during typing)
     state.formData.address = value;
 
     // Mark field as touched
     validationState.touched.address = true;
 
-    // Debounced validation
+    // Debounced validation (formatting happens in validation)
     debouncedValidateAddress(value, input);
 }
 
@@ -323,6 +317,30 @@ const debouncedValidateAddress = debounce((value, inputElement) => {
 
     updateFieldValidationUI(inputElement, result);
 }, 500);
+
+/**
+ * Format address on blur (when user finishes typing)
+ * @param {HTMLInputElement} input - Input element
+ */
+function handleAddressBlur(input) {
+    let value = input.value;
+    
+    if (value && value.trim()) {
+        // Format the address for consistency
+        const formattedValue = formatAddress(value);
+        
+        // Only update if formatting changed the value
+        if (formattedValue !== value) {
+            input.value = formattedValue;
+            state.formData.address = formattedValue;
+        }
+        
+        // Re-validate with formatted value
+        const result = validateField('address', formattedValue);
+        validationState.errors.address = result.error;
+        updateFieldValidationUI(input, result);
+    }
+}
 
 /**
  * Validate select/dropdown field
@@ -611,6 +629,7 @@ function resetValidationState() {
 // Export functions to global scope for HTML access
 if (typeof window !== 'undefined') {
     window.handleValidatedAddressInput = handleValidatedAddressInput;
+    window.handleAddressBlur = handleAddressBlur;
     window.handleValidatedPropertyValueInput = handleValidatedPropertyValueInput;
     window.handleValidatedSelectChange = handleValidatedSelectChange;
     window.handleValidatedCalculate = handleValidatedCalculate;

@@ -574,6 +574,7 @@ function renderCalculator() {
                                     id="property-address"
                                     value="${escapeHTML(state.formData.address)}"
                                     oninput="handleValidatedAddressInput(this)"
+                                    onblur="handleAddressBlur(this)"
                                     placeholder="${t('enterAddress')}"
                                     aria-label="${t('propAddress')}"
                                     aria-required="true"
