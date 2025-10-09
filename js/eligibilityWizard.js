@@ -937,9 +937,13 @@ function showEligibilityResult(result) {
  * Render eligibility result page
  */
 function renderEligibilityResult() {
+    console.log('[RENDER DEBUG] renderEligibilityResult function called at:', new Date().toISOString());
+    console.log('[RENDER DEBUG] wizardState:', wizardState);
+    console.log('[RENDER DEBUG] wizardState.result:', wizardState.result);
     const result = wizardState.result;
     if (!result) {
         console.error('[WIZARD] renderEligibilityResult called with no result');
+        console.error('[WIZARD] wizardState:', wizardState);
         return '';
     }
 
