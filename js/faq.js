@@ -663,7 +663,7 @@ function renderPopularFAQs(limit = 6) {
                 ${topQuestions.map(q => `
                     <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100">
                         <div class="flex items-start gap-3 mb-3">
-                            ${renderIcon(q.categoryIcon, 'w-5 h-5 text-blue-600 flex-shrink-0 mt-1')}
+                            ${q.categoryIcon ? renderIcon(q.categoryIcon, 'w-5 h-5 text-blue-600 flex-shrink-0 mt-1') : ''}
                             <h3 class="font-semibold text-gray-900 leading-tight">
                                 ${q.question}
                             </h3>
