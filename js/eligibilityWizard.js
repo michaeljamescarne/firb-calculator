@@ -666,7 +666,15 @@ function checkPropertyEligibility(propertyType) {
         // Check if module is loaded
         if (typeof window.FIRBEligibility === 'undefined' || typeof window.FIRBEligibility.checkFIRBEligibility !== 'function') {
             console.warn('[WIZARD] FIRBEligibility module not loaded - using fallback logic');
-            return { eligible: true, message: 'Eligibility depends on specific circumstances' };
+            
+            // Basic fallback logic based on citizenship and property type
+            if (citizenshipStatus === 'australian' || citizenshipStatus === 'permanent') {
+                return { eligible: true, message: 'No FIRB approval required' };
+            } else if (citizenshipStatus === 'foreign' && propertyType === 'established') {
+                return { eligible: false, message: 'Foreign nationals cannot purchase established dwellings' };
+            } else {
+                return { eligible: true, message: 'FIRB approval required' };
+            }
         }
 
         const { checkFIRBEligibility } = window.FIRBEligibility;
@@ -794,23 +802,55 @@ function calculateEligibilityResult() {
         if (typeof window.FIRBEligibility === 'undefined' || typeof window.FIRBEligibility.checkFIRBEligibility !== 'function') {
             console.error('[WIZARD] FIRBEligibility module not loaded - using fallback');
 
-            // Fallback to old logic
-            const eligibility = checkPropertyEligibility(propertyType);
+            // Fallback to basic logic based on citizenship status
             const firbFee = estimateFIRBFee();
             const surcharge = getStateSurcharge(stateCode);
+            
+            // Determine FIRB requirement based on citizenship status
+            let noFIRBRequired = false;
+            let eligible = true;
+            let reason = '';
+            
+            if (citizenshipStatus === 'australian') {
+                noFIRBRequired = true;
+                eligible = true;
+                reason = 'Australian citizens do not require FIRB approval for residential property purchases';
+            } else if (citizenshipStatus === 'permanent') {
+                noFIRBRequired = true;
+                eligible = true;
+                reason = 'Permanent residents ordinarily resident in Australia do not require FIRB approval';
+            } else if (citizenshipStatus === 'foreign') {
+                noFIRBRequired = false;
+                if (propertyType === 'established') {
+                    eligible = false;
+                    reason = 'Foreign nationals are NOT permitted to purchase established dwellings';
+                } else {
+                    eligible = true;
+                    reason = 'Foreign nationals can purchase new dwellings and vacant land with FIRB approval';
+                }
+            } else if (citizenshipStatus === 'temporary') {
+                noFIRBRequired = false;
+                eligible = true;
+                reason = 'Temporary residents require FIRB approval for property purchases';
+            } else {
+                // Default case
+                noFIRBRequired = false;
+                eligible = true;
+                reason = 'FIRB approval may be required - please consult FIRB guidelines';
+            }
 
             const result = {
-                eligible: eligibility.eligible,
-                noFIRBRequired: false,
-                reason: eligibility.message,
-                firbFee,
-                surcharge,
+                eligible: eligible,
+                noFIRBRequired: noFIRBRequired,
+                reason: reason,
+                firbFee: noFIRBRequired ? 0 : firbFee,
+                surcharge: noFIRBRequired ? 0 : surcharge,
                 state: stateCode,
                 propertyType,
                 citizenshipStatus,
                 visaType,
                 purchasePrice,
-                canProceedToCalculator: eligibility.eligible
+                canProceedToCalculator: eligible
             };
 
             console.log('[WIZARD] Eligibility result (fallback):', result);
