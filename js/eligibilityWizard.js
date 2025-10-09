@@ -924,7 +924,10 @@ function calculateEligibilityResult() {
  */
 function showEligibilityResult(result) {
     console.log('[SHOW DEBUG] showEligibilityResult called with:', result);
+    console.log('[SHOW DEBUG] wizardState before setting result:', wizardState);
     wizardState.result = result;
+    console.log('[SHOW DEBUG] wizardState after setting result:', wizardState);
+    console.log('[SHOW DEBUG] wizardState.result after setting:', wizardState.result);
     state.currentStep = 'eligibilityResult';
     console.log('[SHOW DEBUG] Set currentStep to:', state.currentStep);
     console.log('[SHOW DEBUG] About to call render()');
