@@ -79,6 +79,9 @@ function render() {
         addAlertStyles();
     }
 
+    // Add deposit slider styles
+    addDepositSliderStyles();
+
     // Initialize dashboard charts if on results page
     if (state.currentStep === 'results' && state.calculatedFees) {
         // Add collapsible styles
@@ -102,6 +105,16 @@ function render() {
                 initInvestmentCharts();
             }
         }, 100);
+        
+        // Retry chart initialization if libraries failed to load
+        setTimeout(() => {
+            if (!window.Recharts || !window.React || !window.ReactDOM) {
+                console.warn('[CHARTS] External libraries not loaded, retrying chart initialization...');
+                if (typeof initializeDashboardCharts === 'function') {
+                    initializeDashboardCharts();
+                }
+            }
+        }, 2000);
     }
 }
 
@@ -684,16 +697,30 @@ function renderCalculator() {
                         <div>
                             <label class="block font-semibold mb-2" for="deposit-percent">${t('depositPercent')}</label>
                             <div class="flex items-center space-x-4">
-                                <input type="range"
-                                    id="deposit-percent"
-                                    min="10"
-                                    max="100"
-                                    step="5"
-                                    value="${state.formData.depositPercent}"
-                                    oninput="updateForm('depositPercent', this.value); document.getElementById('deposit-value').textContent = this.value + '%';"
-                                    aria-label="${t('depositPercent')}"
-                                    class="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" />
+                                <div class="flex-1 relative">
+                                    <input type="range"
+                                        id="deposit-percent"
+                                        min="10"
+                                        max="100"
+                                        step="5"
+                                        value="${state.formData.depositPercent}"
+                                        oninput="updateForm('depositPercent', this.value); document.getElementById('deposit-value').textContent = this.value + '%';"
+                                        aria-label="${t('depositPercent')}"
+                                        class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer deposit-slider" />
+                                </div>
                                 <span id="deposit-value" class="text-lg font-bold text-blue-600 w-16 text-right">${state.formData.depositPercent}%</span>
+                            </div>
+                            <div class="flex justify-between text-xs text-gray-500 mt-2 px-1">
+                                <span>10%</span>
+                                <span>20%</span>
+                                <span>30%</span>
+                                <span>40%</span>
+                                <span>50%</span>
+                                <span>60%</span>
+                                <span>70%</span>
+                                <span>80%</span>
+                                <span>90%</span>
+                                <span>100%</span>
                             </div>
                             <p class="text-xs text-gray-500 mt-1">${t('depositPercentHelp')}</p>
                         </div>
@@ -1077,4 +1104,78 @@ function renderFooter() {
             </div>
         </footer>
     `;
+}
+
+/**
+ * Add deposit slider styles for better visibility
+ */
+function addDepositSliderStyles() {
+    // Check if styles already added
+    if (document.getElementById('deposit-slider-styles')) return;
+    
+    const style = document.createElement('style');
+    style.id = 'deposit-slider-styles';
+    style.textContent = `
+        .deposit-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            background: transparent;
+            cursor: pointer;
+        }
+        
+        .deposit-slider::-webkit-slider-track {
+            background: #e5e7eb;
+            height: 8px;
+            border-radius: 4px;
+            border: none;
+        }
+        
+        .deposit-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background: #3b82f6;
+            cursor: pointer;
+            border: 2px solid #ffffff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            margin-top: -6px;
+        }
+        
+        .deposit-slider::-moz-range-track {
+            background: #e5e7eb;
+            height: 8px;
+            border-radius: 4px;
+            border: none;
+        }
+        
+        .deposit-slider::-moz-range-thumb {
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background: #3b82f6;
+            cursor: pointer;
+            border: 2px solid #ffffff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .deposit-slider::-ms-track {
+            background: #e5e7eb;
+            height: 8px;
+            border-radius: 4px;
+            border: none;
+        }
+        
+        .deposit-slider::-ms-thumb {
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background: #3b82f6;
+            cursor: pointer;
+            border: 2px solid #ffffff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+    `;
+    document.head.appendChild(style);
 }

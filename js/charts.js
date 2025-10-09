@@ -48,12 +48,19 @@ function renderCSSBarChartFallback(data, title = 'Cost Breakdown') {
  * @param {Object} fees - Calculated fees object
  */
 function renderPieChart(fees) {
+    console.log('[PIE CHART DEBUG] renderPieChart called with fees:', fees);
     const container = document.getElementById('pie-chart-container');
-    if (!container) return;
+    if (!container) {
+        console.error('[PIE CHART DEBUG] Container not found');
+        return;
+    }
 
     // Check if Recharts is available
     if (!window.Recharts || !window.React || !window.ReactDOM) {
-        console.warn('Recharts, React, or ReactDOM not loaded - using CSS fallback');
+        console.warn('[PIE CHART DEBUG] Recharts, React, or ReactDOM not loaded - using CSS fallback');
+        console.log('[PIE CHART DEBUG] window.Recharts:', typeof window.Recharts);
+        console.log('[PIE CHART DEBUG] window.React:', typeof window.React);
+        console.log('[PIE CHART DEBUG] window.ReactDOM:', typeof window.ReactDOM);
 
         // Prepare data for fallback chart
         const data = [
@@ -66,8 +73,40 @@ function renderPieChart(fees) {
             { name: 'Other Fees', value: fees.standard.transferFee + fees.standard.mortgageRegistration + fees.standard.councilRates + fees.standard.waterRates, color: '#6b7280' }
         ].filter(item => item.value > 0);
 
-        // Render CSS fallback
-        container.innerHTML = renderCSSBarChartFallback(data, 'Cost Breakdown');
+        console.log('[PIE CHART DEBUG] Fallback data:', data);
+
+        // Try CSS fallback first
+        try {
+            container.innerHTML = renderCSSBarChartFallback(data, 'Cost Breakdown');
+            console.log('[PIE CHART DEBUG] CSS fallback rendered successfully');
+        } catch (error) {
+            console.error('[PIE CHART DEBUG] CSS fallback failed:', error);
+            // Ultimate fallback - simple table
+            const total = data.reduce((sum, item) => sum + item.value, 0);
+            container.innerHTML = `
+                <div class="text-center">
+                    <h4 class="text-lg font-semibold mb-4">Cost Breakdown</h4>
+                    <div class="space-y-2">
+                        ${data.map(item => `
+                            <div class="flex justify-between items-center p-2 bg-gray-50 rounded">
+                                <div class="flex items-center">
+                                    <div class="w-4 h-4 rounded mr-2" style="background-color: ${item.color}"></div>
+                                    <span class="text-sm">${item.name}</span>
+                                </div>
+                                <span class="font-semibold">${formatCurrency(item.value)}</span>
+                            </div>
+                        `).join('')}
+                        <div class="border-t pt-2 mt-2">
+                            <div class="flex justify-between items-center font-bold">
+                                <span>Total</span>
+                                <span>${formatCurrency(total)}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            console.log('[PIE CHART DEBUG] Table fallback rendered');
+        }
 
         // Initialize Lucide icons
         if (typeof lucide !== 'undefined') {

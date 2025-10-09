@@ -669,17 +669,43 @@ function getLandTaxRate(stateCode) {
  * Must be called after DOM is ready
  */
 function initializeDashboardCharts() {
-    if (!state.calculatedFees) return;
+    console.log('[CHARTS DEBUG] initializeDashboardCharts called');
+    console.log('[CHARTS DEBUG] state.calculatedFees:', state.calculatedFees);
+    console.log('[CHARTS DEBUG] window.Recharts:', typeof window.Recharts);
+    console.log('[CHARTS DEBUG] window.React:', typeof window.React);
+    console.log('[CHARTS DEBUG] window.ReactDOM:', typeof window.ReactDOM);
+    
+    if (!state.calculatedFees) {
+        console.warn('[CHARTS DEBUG] No calculated fees available');
+        return;
+    }
 
     const fees = state.calculatedFees;
+    console.log('[CHARTS DEBUG] Fees object:', fees);
+    
     const comparisons = calculateComparisonScenarios(fees, parseFloat(state.formData.propertyValue));
+    console.log('[CHARTS DEBUG] Comparisons calculated:', comparisons);
+
+    // Check if chart containers exist
+    const pieContainer = document.getElementById('pie-chart-container');
+    const donutContainer = document.getElementById('donut-chart-container');
+    const barContainer = document.getElementById('bar-chart-container');
+    
+    console.log('[CHARTS DEBUG] Pie container:', pieContainer);
+    console.log('[CHARTS DEBUG] Donut container:', donutContainer);
+    console.log('[CHARTS DEBUG] Bar container:', barContainer);
 
     // Render Pie Chart
+    console.log('[CHARTS DEBUG] Rendering pie chart...');
     renderPieChart(fees);
 
     // Render Donut Chart
+    console.log('[CHARTS DEBUG] Rendering donut chart...');
     renderDonutChart(fees);
 
     // Render Bar Chart
+    console.log('[CHARTS DEBUG] Rendering bar chart...');
     renderBarChart(comparisons.allStateCosts);
+    
+    console.log('[CHARTS DEBUG] All charts rendered');
 }
