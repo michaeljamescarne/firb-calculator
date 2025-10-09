@@ -337,13 +337,13 @@ function calculateTimingOptimization(current) {
  * Calculate costs for permanent resident (no foreign buyer fees)
  */
 function calculatePRCosts(inputs) {
-    const state = inputs.state;
+    const stateCode = inputs.state;
     const price = inputs.purchasePrice;
     const propertyType = inputs.propertyType;
     const firstTime = inputs.firstTimeBuyer;
 
     // Get standard stamp duty (no surcharge)
-    const stampDuty = calculateStampDuty(state, price, propertyType, firstTime, false); // false = not foreign
+    const stampDuty = calculateStampDuty(stateCode, price, propertyType, firstTime, false); // false = not foreign
 
     return {
         firbFee: 0,
