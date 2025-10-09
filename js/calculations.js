@@ -264,11 +264,30 @@ function calculateAllFees(formData) {
     const entityType = formData.entityType || 'individual';
     const depositPercent = parseFloat(formData.depositPercent) || 30;
 
-    // Check if FIRB is required (for foreign nationals, temporary residents)
-    // Australian citizens and permanent residents (ordinarily resident) are exempt
-    const firbRequired = formData.firbRequired !== false; // Default to true for backward compatibility
-
-    console.log('[CALCULATIONS] firbRequired:', firbRequired, 'citizenshipStatus:', formData.citizenshipStatus);
+    // Use sophisticated FIRB eligibility logic if available
+    let firbRequired = true; // Default to true for safety
+    let eligibilityResult = null;
+    
+    if (window.FIRBEligibility?.checkFIRBEligibility && formData.citizenshipStatus && formData.propertyType) {
+        try {
+            eligibilityResult = window.FIRBEligibility.checkFIRBEligibility({
+                citizenshipStatus: formData.citizenshipStatus,
+                visaType: formData.visaType,
+                propertyType: formData.propertyType,
+                isOrdinarilyResident: true // Default to ordinarily resident
+            });
+            firbRequired = eligibilityResult.firbRequired;
+            console.log('[CALCULATIONS] Using sophisticated FIRB logic:', eligibilityResult);
+        } catch (error) {
+            console.error('[CALCULATIONS] Error in FIRB eligibility check:', error);
+            // Fallback to formData.firbRequired or default
+            firbRequired = formData.firbRequired !== false;
+        }
+    } else {
+        // Fallback to simple logic if sophisticated logic not available
+        firbRequired = formData.firbRequired !== false;
+        console.log('[CALCULATIONS] Using fallback FIRB logic, firbRequired:', firbRequired);
+    }
 
     // Foreign investment fees (one-time) - only if FIRB required
     const firbFee = firbRequired ? calculateFIRBFee(
@@ -332,6 +351,7 @@ function calculateAllFees(formData) {
         // Metadata
         depositPercent: depositPercent,
         entityType: entityType,
-        firbRequired: firbRequired  // Include FIRB requirement status
+        firbRequired: firbRequired,  // Include FIRB requirement status
+        eligibilityResult: eligibilityResult  // Include full eligibility result
     };
 }

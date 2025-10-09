@@ -1316,12 +1316,35 @@ function proceedToFullCalculator() {
         console.log('[WIZARD] Transferred visa type:', visaType);
     }
 
-    // Determine if FIRB is required based on citizenship status
-    // Australian citizens and permanent residents (ordinarily resident) are exempt
-    const firbRequired = citizenshipStatus !== 'australian' && citizenshipStatus !== 'permanent';
-    state.formData.firbRequired = firbRequired;
-    console.log('[WIZARD] Set firbRequired:', firbRequired);
+    // Use the sophisticated FIRB eligibility logic
+    let eligibilityResult;
+    try {
+        eligibilityResult = window.FIRBEligibility?.checkFIRBEligibility({
+            citizenshipStatus: citizenshipStatus,
+            visaType: wizardState.answers.visaType,
+            propertyType: wizardState.answers.propertyType,
+            isOrdinarilyResident: true // Default to ordinarily resident for wizard
+        });
+    } catch (error) {
+        console.error('[WIZARD] Error checking FIRB eligibility:', error);
+        // Fallback to simple logic
+        eligibilityResult = {
+            firbRequired: citizenshipStatus !== 'australian' && citizenshipStatus !== 'permanent',
+            result: 'required',
+            reason: 'Unable to determine eligibility - using basic check'
+        };
+    }
 
+    // Set the FIRB requirement and eligibility data
+    state.formData.firbRequired = eligibilityResult.firbRequired;
+    state.formData.citizenshipStatus = citizenshipStatus;
+    state.formData.visaType = wizardState.answers.visaType;
+    state.formData.propertyType = wizardState.answers.propertyType;
+    
+    // Store the full eligibility result for display
+    state.eligibilityResult = eligibilityResult;
+    
+    console.log('[WIZARD] FIRB eligibility result:', eligibilityResult);
     console.log('[WIZARD] Final state.formData:', state.formData);
 
     // Go to calculator
