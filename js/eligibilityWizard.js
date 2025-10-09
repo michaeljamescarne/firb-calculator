@@ -928,6 +928,11 @@ function showEligibilityResult(result) {
     wizardState.result = result;
     console.log('[SHOW DEBUG] wizardState after setting result:', wizardState);
     console.log('[SHOW DEBUG] wizardState.result after setting:', wizardState.result);
+    
+    // Also store in global state to ensure it's accessible
+    state.eligibilityResult = result;
+    console.log('[SHOW DEBUG] Also stored in state.eligibilityResult:', state.eligibilityResult);
+    
     state.currentStep = 'eligibilityResult';
     console.log('[SHOW DEBUG] Set currentStep to:', state.currentStep);
     console.log('[SHOW DEBUG] About to call render()');
@@ -943,10 +948,19 @@ function renderEligibilityResult() {
     console.log('[RENDER DEBUG] renderEligibilityResult function called at:', new Date().toISOString());
     console.log('[RENDER DEBUG] wizardState:', wizardState);
     console.log('[RENDER DEBUG] wizardState.result:', wizardState.result);
-    const result = wizardState.result;
+    console.log('[RENDER DEBUG] state.eligibilityResult:', state.eligibilityResult);
+    
+    // Try to get result from wizardState first, then fallback to global state
+    let result = wizardState.result;
+    if (!result && state.eligibilityResult) {
+        console.log('[RENDER DEBUG] Using state.eligibilityResult as fallback');
+        result = state.eligibilityResult;
+    }
+    
     if (!result) {
         console.error('[WIZARD] renderEligibilityResult called with no result');
         console.error('[WIZARD] wizardState:', wizardState);
+        console.error('[WIZARD] state.eligibilityResult:', state.eligibilityResult);
         return '';
     }
 
