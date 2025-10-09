@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Comprehensive FIRB Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        .info { background-color: #d1ecf1; border-color: #bee5eb; }
+        pre { background-color: #f8f9fa; padding: 10px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>Comprehensive FIRB Module Test</h1>
+    <div id="results"></div>
+    
+    <script>
+        function log(message, type = 'info') {
+            const div = document.createElement('div');
+            div.className = `test-section ${type}`;
+            div.innerHTML = `<strong>${type.toUpperCase()}:</strong> ${message}`;
+            document.getElementById('results').appendChild(div);
+            console.log(`[${type.toUpperCase()}] ${message}`);
+        }
+        
+        function runTests() {
+            log('Starting comprehensive FIRB module tests...', 'info');
+            
+            // Test 1: Check if constants are loaded
+            log('Test 1: Checking FIRBConstants...', 'info');
+            if (typeof window.FIRBConstants !== 'undefined') {
+                log('✅ FIRBConstants loaded successfully', 'success');
+                log(`Constants: ${JSON.stringify(window.FIRBConstants, null, 2)}`, 'info');
+            } else {
+                log('❌ FIRBConstants NOT loaded', 'error');
+                return;
+            }
+            
+            // Test 2: Check if eligibility module is loaded
+            log('Test 2: Checking FIRBEligibility...', 'info');
+            if (typeof window.FIRBEligibility !== 'undefined') {
+                log('✅ FIRBEligibility loaded successfully', 'success');
+                log(`Module: ${JSON.stringify(Object.keys(window.FIRBEligibility), null, 2)}`, 'info');
+            } else {
+                log('❌ FIRBEligibility NOT loaded', 'error');
+                return;
+            }
+            
+            // Test 3: Test foreign national + new dwelling
+            log('Test 3: Testing foreign national + new dwelling...', 'info');
+            try {
+                const result = window.FIRBEligibility.checkFIRBEligibility({
+                    citizenshipStatus: 'foreign',
+                    propertyType: 'newDwelling'
+                });
+                log('✅ Test completed successfully', 'success');
+                log(`Result: ${JSON.stringify(result, null, 2)}`, 'info');
+                
+                if (result.firbRequired === true) {
+                    log('✅ CORRECT: Foreign national requires FIRB', 'success');
+                } else {
+                    log('❌ INCORRECT: Foreign national should require FIRB but got firbRequired: false', 'error');
+                }
+            } catch (error) {
+                log(`❌ Test failed with error: ${error.message}`, 'error');
+                log(`Stack trace: ${error.stack}`, 'error');
+            }
+            
+            // Test 4: Test Australian citizen
+            log('Test 4: Testing Australian citizen + established dwelling...', 'info');
+            try {
+                const result = window.FIRBEligibility.checkFIRBEligibility({
+                    citizenshipStatus: 'australian',
+                    propertyType: 'established'
+                });
+                log('✅ Test completed successfully', 'success');
+                log(`Result: ${JSON.stringify(result, null, 2)}`, 'info');
+                
+                if (result.firbRequired === false) {
+                    log('✅ CORRECT: Australian citizen does not require FIRB', 'success');
+                } else {
+                    log('❌ INCORRECT: Australian citizen should not require FIRB but got firbRequired: true', 'error');
+                }
+            } catch (error) {
+                log(`❌ Test failed with error: ${error.message}`, 'error');
+            }
+            
+            // Test 5: Simulate wizard logic
+            log('Test 5: Simulating wizard calculateEligibilityResult logic...', 'info');
+            try {
+                // Simulate wizard state
+                const wizardState = {
+                    answers: {
+                        citizenshipStatus: 'foreign',
+                        propertyType: 'new',
+                        purchasePrice: '1000000',
+                        state: 'NSW'
+                    }
+                };
+                
+                // Map wizard property types to module property types
+                const propertyTypeMap = {
+                    'new': 'newDwelling',
+                    'offThePlan': 'newDwelling',
+                    'established': 'established',
+                    'vacant': 'vacantLand',
+                    'commercial': 'commercial'
+                };
+                const mappedPropertyType = propertyTypeMap[wizardState.answers.propertyType] || 'newDwelling';
+                
+                log(`Mapped property type: ${wizardState.answers.propertyType} -> ${mappedPropertyType}`, 'info');
+                
+                // Call the centralized eligibility checker
+                const firbResult = window.FIRBEligibility.checkFIRBEligibility({
+                    citizenshipStatus: wizardState.answers.citizenshipStatus || 'foreign',
+                    visaType: wizardState.answers.visaType || null,
+                    propertyType: mappedPropertyType
+                });
+                
+                log(`FIRB result: ${JSON.stringify(firbResult, null, 2)}`, 'info');
+                
+                // Map FIRB module result to wizard result format
+                const result = {
+                    eligible: firbResult.result !== 'not_allowed',
+                    noFIRBRequired: !firbResult.firbRequired,
+                    reason: firbResult.reason,
+                    firbFee: firbResult.firbRequired ? 13200 : 0,
+                    surcharge: firbResult.firbRequired ? 8 : 0,
+                    state: wizardState.answers.state,
+                    propertyType: wizardState.answers.propertyType,
+                    citizenshipStatus: wizardState.answers.citizenshipStatus,
+                    purchasePrice: wizardState.answers.purchasePrice,
+                    canProceedToCalculator: firbResult.result !== 'not_allowed',
+                    firbModuleResult: firbResult
+                };
+                
+                log(`Final wizard result: ${JSON.stringify(result, null, 2)}`, 'info');
+                
+                if (result.noFIRBRequired === false) {
+                    log('✅ CORRECT: Wizard should show FIRB required', 'success');
+                } else {
+                    log('❌ INCORRECT: Wizard is showing noFIRBRequired: true when it should be false', 'error');
+                }
+                
+            } catch (error) {
+                log(`❌ Wizard simulation failed with error: ${error.message}`, 'error');
+            }
+            
+            log('All tests completed!', 'info');
+        }
+        
+        // Run tests after modules load
+        setTimeout(runTests, 1000);
+    </script>
+    
+    <!-- Load modules in same order as main app -->
+    <script src="src/constants/firbConstants.js"></script>
+    <script src="src/utils/firbEligibility.js"></script>
+</body>
+</html>

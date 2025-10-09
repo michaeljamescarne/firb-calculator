@@ -166,10 +166,72 @@ function debounce(func, wait = 300) {
  */
 function saveToStorage(key, data) {
     try {
-        localStorage.setItem(key, JSON.stringify(data));
+        const serialized = JSON.stringify(data);
+        
+        // Check if data is too large
+        if (serialized.length > 5 * 1024 * 1024) { // 5MB limit
+            console.warn(`[STORAGE] Data too large for ${key}: ${serialized.length} bytes`);
+            return false;
+        }
+        
+        localStorage.setItem(key, serialized);
         return true;
     } catch (e) {
+        if (e.name === 'QuotaExceededError') {
+            console.warn('[STORAGE] Quota exceeded, attempting cleanup');
+            
+            // Try to free up space by removing old data
+            if (cleanupStorage()) {
+                try {
+                    localStorage.setItem(key, JSON.stringify(data));
+                    return true;
+                } catch (e2) {
+                    console.error('[STORAGE] Still quota exceeded after cleanup');
+                    return false;
+                }
+            }
+        }
+        
         console.error('Failed to save to localStorage:', e);
+        return false;
+    }
+}
+
+/**
+ * Cleanup old storage data to free up space
+ * @returns {boolean} Success status
+ */
+function cleanupStorage() {
+    try {
+        const keysToRemove = [];
+        const now = Date.now();
+        const maxAge = 7 * 24 * 60 * 60 * 1000; // 7 days
+        
+        // Find old keys
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key && key.startsWith('firb_')) {
+                try {
+                    const data = JSON.parse(localStorage.getItem(key));
+                    if (data && data.timestamp && (now - data.timestamp) > maxAge) {
+                        keysToRemove.push(key);
+                    }
+                } catch (e) {
+                    // If we can't parse it, it's probably corrupted - remove it
+                    keysToRemove.push(key);
+                }
+            }
+        }
+        
+        // Remove old keys
+        keysToRemove.forEach(key => {
+            localStorage.removeItem(key);
+            console.log(`[STORAGE] Cleaned up old data: ${key}`);
+        });
+        
+        return keysToRemove.length > 0;
+    } catch (e) {
+        console.error('[STORAGE] Cleanup failed:', e);
         return false;
     }
 }

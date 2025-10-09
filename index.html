@@ -87,14 +87,27 @@
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js')
+                navigator.serviceWorker.register('./sw.js')
                     .then(registration => {
-                        console.log('Service Worker registered:', registration);
+                        console.log('Service Worker registered successfully:', registration);
+                        
+                        // Check for updates
+                        registration.addEventListener('updatefound', () => {
+                            const newWorker = registration.installing;
+                            newWorker.addEventListener('statechange', () => {
+                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    console.log('New service worker available. Refresh to update.');
+                                }
+                            });
+                        });
                     })
                     .catch(error => {
-                        console.log('Service Worker registration failed:', error);
+                        console.warn('Service Worker registration failed:', error);
+                        console.log('App will work without offline functionality');
                     });
             });
+        } else {
+            console.log('Service Worker not supported in this browser');
         }
     </script>
 </body>

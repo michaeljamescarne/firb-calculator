@@ -1,7 +1,61 @@
 /**
- * Application state management
+ * Application state management with race condition prevention
  * @file state.js
  */
+
+// State locking mechanism to prevent race conditions
+let stateLock = false;
+const stateLockTimeout = 5000; // 5 seconds max lock time
+
+/**
+ * Acquire state lock
+ * @returns {boolean} True if lock acquired successfully
+ */
+function acquireStateLock() {
+    if (stateLock) {
+        console.warn('[STATE] State is locked, operation queued');
+        return false;
+    }
+    
+    stateLock = true;
+    
+    // Auto-release lock after timeout to prevent deadlocks
+    setTimeout(() => {
+        if (stateLock) {
+            console.warn('[STATE] State lock timeout - releasing lock');
+            stateLock = false;
+        }
+    }, stateLockTimeout);
+    
+    return true;
+}
+
+/**
+ * Release state lock
+ */
+function releaseStateLock() {
+    stateLock = false;
+}
+
+/**
+ * Execute function with state lock
+ * @param {Function} fn - Function to execute
+ * @param {string} operation - Operation name for logging
+ * @returns {*} Function result
+ */
+function withStateLock(fn, operation = 'unknown') {
+    if (!acquireStateLock()) {
+        console.warn(`[STATE] Could not acquire lock for operation: ${operation}`);
+        return null;
+    }
+    
+    try {
+        const result = fn();
+        return result;
+    } finally {
+        releaseStateLock();
+    }
+}
 
 /**
  * Global state object

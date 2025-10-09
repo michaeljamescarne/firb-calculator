@@ -3,6 +3,14 @@
  * @file charts.js
  */
 
+/**
+ * Check if external libraries are loaded and ready
+ * @returns {boolean} True if all libraries are available
+ */
+function checkExternalLibraries() {
+    return !!(window.Recharts && window.React && window.ReactDOM);
+}
+
 const { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } = window.Recharts || {};
 
 /**
@@ -55,11 +63,16 @@ function renderPieChart(fees) {
         return;
     }
 
-    // Always use fallback for now to ensure charts show
-    console.log('[PIE CHART DEBUG] Using CSS fallback for guaranteed rendering');
-    console.log('[PIE CHART DEBUG] window.Recharts:', typeof window.Recharts);
-    console.log('[PIE CHART DEBUG] window.React:', typeof window.React);
-    console.log('[PIE CHART DEBUG] window.ReactDOM:', typeof window.ReactDOM);
+    // Check if external libraries are available with timeout
+    const librariesLoaded = checkExternalLibraries();
+    if (!librariesLoaded) {
+        console.log('[PIE CHART DEBUG] External libraries not loaded - using CSS fallback');
+        console.log('[PIE CHART DEBUG] window.Recharts:', typeof window.Recharts);
+        console.log('[PIE CHART DEBUG] window.React:', typeof window.React);
+        console.log('[PIE CHART DEBUG] window.ReactDOM:', typeof window.ReactDOM);
+    } else {
+        console.log('[PIE CHART DEBUG] External libraries loaded - using Recharts');
+    }
 
         // Prepare data for fallback chart
         const data = [
