@@ -36,12 +36,12 @@ const VALIDATION_RULES = {
         minLength: 5,
         maxLength: 200,
         required: true,
-        pattern: /^[a-zA-Z0-9\s,.\-\/()#]+$/,
+        pattern: /^[a-zA-Z0-9\s,.\-\/()#&']+$/,
         errorMessages: {
             required: 'Property address is required',
             minLength: 'Address must be at least 5 characters',
             maxLength: 'Address cannot exceed 200 characters',
-            pattern: 'Address contains invalid characters',
+            pattern: 'Address contains invalid characters. Only letters, numbers, spaces, commas, periods, hyphens, slashes, parentheses, hash, ampersand, and apostrophe are allowed.',
             invalid: 'Please enter a valid address'
         }
     },
@@ -273,6 +273,22 @@ const debouncedValidatePropertyValue = debounce((value, inputElement) => {
 }, 500);
 
 /**
+ * Format address input for consistency
+ * @param {string} address - Raw address input
+ * @returns {string} - Formatted address
+ */
+function formatAddress(address) {
+    if (!address) return '';
+    
+    return address
+        .trim()
+        .replace(/\s+/g, ' ') // Replace multiple spaces with single space
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+        .join(' ');
+}
+
+/**
  * Enhanced address input handler with validation
  * @param {HTMLInputElement} input - Input element
  */
@@ -281,6 +297,12 @@ function handleValidatedAddressInput(input) {
 
     // Remove any HTML/script tags for security
     value = sanitizeHTML(value);
+
+    // Format the address for consistency
+    value = formatAddress(value);
+
+    // Update the input field with formatted value
+    input.value = value;
 
     // Update state
     state.formData.address = value;
@@ -584,4 +606,14 @@ function clearValidationErrors() {
 function resetValidationState() {
     clearValidationErrors();
     validationState.isSubmitting = false;
+}
+
+// Export functions to global scope for HTML access
+if (typeof window !== 'undefined') {
+    window.handleValidatedAddressInput = handleValidatedAddressInput;
+    window.handleValidatedPropertyValueInput = handleValidatedPropertyValueInput;
+    window.handleValidatedSelectChange = handleValidatedSelectChange;
+    window.handleValidatedCalculate = handleValidatedCalculate;
+    window.clearValidationErrors = clearValidationErrors;
+    window.resetValidationState = resetValidationState;
 }
