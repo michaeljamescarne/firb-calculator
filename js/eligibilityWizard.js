@@ -966,7 +966,13 @@ function renderEligibilityResult() {
     }
 
     // For Australian citizens and PR
+    console.log('[RENDER DEBUG] Checking render conditions:');
+    console.log('[RENDER DEBUG] noFIRBRequired:', noFIRBRequired);
+    console.log('[RENDER DEBUG] eligible:', eligible);
+    console.log('[RENDER DEBUG] canProceedToCalculator:', canProceedToCalculator);
+    
     if (noFIRBRequired) {
+        console.log('[RENDER DEBUG] Taking noFIRBRequired branch (Great News!)');
         return `
             <section class="py-20 bg-gradient-to-br from-green-50 to-white min-h-screen">
                 <div class="max-w-4xl mx-auto px-4">
@@ -1046,6 +1052,7 @@ function renderEligibilityResult() {
 
     // For eligible foreign buyers / temporary residents
     if (eligible && canProceedToCalculator) {
+        console.log('[RENDER DEBUG] Taking eligible branch (You ARE Eligible!)');
         const propertyTypeLabel = PROPERTY_TYPES_WIZARD[propertyType]?.label || propertyType;
         const documentsKey = citizenshipStatus === 'temporary' ? 'temporary_resident' : 'foreign_national';
 
