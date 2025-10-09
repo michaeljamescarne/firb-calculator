@@ -74,7 +74,7 @@ const wizardState = {
 
 // Import from centralized constants (use detailed version for wizard)
 // Use window.FIRBConstants.VISA_TYPES_DETAILED with fallback
-const VISA_TYPES = window.FIRBConstants?.VISA_TYPES_DETAILED || {
+const VISA_TYPES_DETAILED = window.FIRBConstants?.VISA_TYPES_DETAILED || {
     'student': {
         label: 'Student Visa (subclass 500)',
         canBuyEstablished: true,
@@ -348,7 +348,7 @@ function renderVisaTypeSelection() {
             <select onchange="handleVisaTypeChange(this.value)"
                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                 <option value="">Select your visa type...</option>
-                ${Object.entries(VISA_TYPES).map(([key, visa]) => `
+                ${Object.entries(VISA_TYPES_DETAILED).map(([key, visa]) => `
                     <option value="${key}" ${wizardState.answers.visaType === key ? 'selected' : ''}>
                         ${visa.label}
                     </option>
@@ -1022,7 +1022,7 @@ function renderEligibilityResult() {
                         </div>
 
                         <!-- Important conditions -->
-                        ${conditions || reason || (visaType && VISA_TYPES[visaType]) ? `
+                        ${conditions || reason || (visaType && VISA_TYPES_DETAILED[visaType]) ? `
                             <div class="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
                                 <h3 class="font-bold text-gray-900 mb-2 flex items-center">
                                     <svg class="w-5 h-5 text-yellow-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1035,9 +1035,9 @@ function renderEligibilityResult() {
                                 ` : `
                                     <p class="text-sm text-gray-700">${reason}</p>
                                 `}
-                                ${visaType && VISA_TYPES[visaType] && !conditions ? `
+                                ${visaType && VISA_TYPES_DETAILED[visaType] && !conditions ? `
                                     <p class="text-sm text-gray-700 mt-2">
-                                        <strong>Visa Condition:</strong> ${VISA_TYPES[visaType].condition}
+                                        <strong>Visa Condition:</strong> ${VISA_TYPES_DETAILED[visaType].condition}
                                     </p>
                                 ` : ''}
                             </div>
@@ -1202,7 +1202,7 @@ function getAlternativeProperties(citizenshipStatus, visaType) {
     }
 
     if (citizenshipStatus === 'temporary' && visaType) {
-        const visa = VISA_TYPES[visaType];
+        const visa = VISA_TYPES_DETAILED[visaType];
         if (visa) {
             if (visa.canBuyNew) {
                 alternatives.push({
