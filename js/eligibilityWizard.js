@@ -73,6 +73,7 @@ const wizardState = {
 // };
 
 // Import from centralized constants (use detailed version for wizard)
+// Use window.FIRBConstants.VISA_TYPES_DETAILED with fallback
 const VISA_TYPES = window.FIRBConstants?.VISA_TYPES_DETAILED || {
     'student': {
         label: 'Student Visa (subclass 500)',
