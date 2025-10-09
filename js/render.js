@@ -171,21 +171,36 @@ function renderHeader() {
  */
 function renderHome() {
     return `
-        <section class="bg-gradient-to-br from-blue-50 to-white py-20">
-            <div class="max-w-7xl mx-auto px-4 text-center">
-                <h1 class="text-5xl font-bold mb-6">${t('hero')}</h1>
-                <p class="text-xl text-gray-600 mb-8">${t('subtitle')}</p>
-                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                    <button onclick="startEligibilityWizard()" class="bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-700 inline-flex items-center space-x-2">
-                        <span>${t('cta')}</span>
-                        ${icons.arrowRight()}
-                    </button>
-                    <button onclick="runFIRBEligibilityTests()" class="bg-green-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-green-700 inline-flex items-center space-x-2">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                        <span>Run Eligibility Tests</span>
-                    </button>
+        <section class="hero-section">
+            <div class="hero-container">
+                <div class="hero-content">
+                    <h1 class="hero-title">${t('hero')}</h1>
+                    <p class="hero-subtitle">${t('subtitle')}</p>
+                    <div class="hero-actions">
+                        <button onclick="startEligibilityWizard()" class="btn-primary btn-large">
+                            <span>${t('cta')}</span>
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                            </svg>
+                        </button>
+                        <button onclick="runFIRBEligibilityTests()" class="btn-secondary btn-large">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <span>Run Eligibility Tests</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="hero-card">
+                        <div class="card-icon">
+                            <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                            </svg>
+                        </div>
+                        <h3 class="card-title">Professional FIRB Calculator</h3>
+                        <p class="card-description">Accurate fee calculations for foreign property investors</p>
+                    </div>
                 </div>
             </div>
         </section>
