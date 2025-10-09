@@ -199,14 +199,17 @@ function calculatePropertyTypeOptimization(current) {
  */
 function calculateCostsForType(price, type, state) {
     const tempInputs = {
+        propertyValue: price,  // calculateAllFees expects propertyValue, not purchasePrice
         propertyType: type,
-        purchasePrice: price,
         state: state,
-        firstTimeBuyer: false,
+        entityType: 'individual',  // Default entity type
+        depositPercent: 20,        // Default deposit percentage
+        citizenshipStatus: 'foreign',  // Default to foreign for cost comparison
+        firstHomeBuyer: false,
         ownsOtherAustralianProperty: false
     };
 
-    return calculateFees(tempInputs);
+    return calculateAllFees(tempInputs);
 }
 
 /**
@@ -371,7 +374,7 @@ function calculatePRCosts(inputs) {
     const firstTime = inputs.firstTimeBuyer;
 
     // Get standard stamp duty (no surcharge)
-    const stampDuty = calculateStampDuty(stateCode, price, propertyType, firstTime, false); // false = not foreign
+    const stampDuty = calculateStandardStampDuty(price, stateCode);
 
     return {
         firbFee: 0,
@@ -401,8 +404,8 @@ function calculateStructureOptimization(current) {
             yourShare: purchasePrice * 0.5,
             partnerShare: purchasePrice * 0.5,
             firbFee: current.firbApplicationFee, // Still need FIRB approval
-            yourStampDuty: calculateStampDuty(current.inputs.state, purchasePrice * 0.5, current.inputs.propertyType, false, true),
-            partnerStampDuty: calculateStampDuty(current.inputs.state, purchasePrice * 0.5, current.inputs.propertyType, false, false),
+            yourStampDuty: calculateStandardStampDuty(purchasePrice * 0.5, current.inputs.state),
+            partnerStampDuty: calculateStandardStampDuty(purchasePrice * 0.5, current.inputs.state),
             yourSurcharge: current.surchargeStampDuty * 0.5,
             totalCost: 0
         },
