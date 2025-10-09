@@ -80,7 +80,9 @@ function loadAutoSavedData() {
 
             lastAutoSave = autoSaveData.timestamp;
 
-            showNotification('Your previous session was restored', 'info', 3000);
+            // TEMPORARY FIX: Disable session restoration notification
+            console.log('[SCENARIOS] Session restoration disabled - not showing notification');
+            // showNotification('Your previous session was restored', 'info', 3000);
         }
     }
 }
