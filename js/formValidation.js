@@ -36,12 +36,12 @@ const VALIDATION_RULES = {
         minLength: 5,
         maxLength: 200,
         required: true,
-        pattern: /^[a-zA-Z0-9\s,.\-\/()#]+$/,
+        pattern: /^[a-zA-Z0-9\s,.\-\/()#&']+$/,
         errorMessages: {
             required: 'Property address is required',
             minLength: 'Address must be at least 5 characters',
             maxLength: 'Address cannot exceed 200 characters',
-            pattern: 'Address contains invalid characters',
+            pattern: 'Address contains invalid characters. Only letters, numbers, spaces, commas, periods, hyphens, slashes, parentheses, #, &, and apostrophes are allowed',
             invalid: 'Please enter a valid address'
         }
     },
@@ -282,6 +282,12 @@ function handleValidatedAddressInput(input) {
     // Remove any HTML/script tags for security
     value = sanitizeHTML(value);
 
+    // Basic address formatting
+    value = formatAddress(value);
+
+    // Update the input value with formatted version
+    input.value = value;
+
     // Update state
     state.formData.address = value;
 
@@ -290,6 +296,31 @@ function handleValidatedAddressInput(input) {
 
     // Debounced validation
     debouncedValidateAddress(value, input);
+}
+
+/**
+ * Format address input for better consistency
+ * @param {string} address - Raw address input
+ * @returns {string} - Formatted address
+ */
+function formatAddress(address) {
+    if (!address) return '';
+
+    // Trim whitespace
+    let formatted = address.trim();
+
+    // Capitalize first letter of each word (common address formatting)
+    formatted = formatted.replace(/\b\w/g, l => l.toUpperCase());
+
+    // Remove extra spaces
+    formatted = formatted.replace(/\s+/g, ' ');
+
+    // Ensure proper spacing around common punctuation
+    formatted = formatted.replace(/\s*,\s*/g, ', ');
+    formatted = formatted.replace(/\s*\.\s*/g, '. ');
+    formatted = formatted.replace(/\s*#\s*/g, ' #');
+
+    return formatted;
 }
 
 /**

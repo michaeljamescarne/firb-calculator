@@ -578,12 +578,30 @@ function renderCalculator() {
                                     id="property-address"
                                     value="${escapeHTML(state.formData.address)}"
                                     oninput="handleValidatedAddressInput(this)"
+                                    onfocus="showAddressSuggestions(this)"
+                                    onblur="hideAddressSuggestions()"
                                     placeholder="${t('enterAddress')}"
                                     aria-label="${t('propAddress')}"
                                     aria-required="true"
                                     aria-invalid="false"
+                                    autocomplete="street-address"
                                     maxlength="200"
                                     class="w-full px-4 py-3 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" />
+                                <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                    </svg>
+                                </div>
+                                <!-- Address suggestions dropdown -->
+                                <div id="address-suggestions" class="hidden absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                                    <div class="p-2 text-sm text-gray-500 border-b">Common Australian address formats:</div>
+                                    <div class="p-2 hover:bg-gray-50 cursor-pointer" onclick="selectAddressSuggestion('123 Main Street, Suburb, NSW 2000')">123 Main Street, Suburb, NSW 2000</div>
+                                    <div class="p-2 hover:bg-gray-50 cursor-pointer" onclick="selectAddressSuggestion('456 Collins Street, Melbourne, VIC 3000')">456 Collins Street, Melbourne, VIC 3000</div>
+                                    <div class="p-2 hover:bg-gray-50 cursor-pointer" onclick="selectAddressSuggestion('789 Queen Street, Brisbane, QLD 4000')">789 Queen Street, Brisbane, QLD 4000</div>
+                                    <div class="p-2 hover:bg-gray-50 cursor-pointer" onclick="selectAddressSuggestion('321 King William Street, Adelaide, SA 5000')">321 King William Street, Adelaide, SA 5000</div>
+                                    <div class="p-2 hover:bg-gray-50 cursor-pointer" onclick="selectAddressSuggestion('654 St Georges Terrace, Perth, WA 6000')">654 St Georges Terrace, Perth, WA 6000</div>
+                                </div>
                             </div>
                             <div id="property-address-error" class="hidden text-red-600 text-sm mt-1 flex items-center">
                                 <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
@@ -1178,4 +1196,41 @@ function addDepositSliderStyles() {
         }
     `;
     document.head.appendChild(style);
+}
+
+/**
+ * Show address suggestions dropdown
+ * @param {HTMLInputElement} input - Address input element
+ */
+function showAddressSuggestions(input) {
+    const suggestions = document.getElementById('address-suggestions');
+    if (suggestions) {
+        suggestions.classList.remove('hidden');
+    }
+}
+
+/**
+ * Hide address suggestions dropdown
+ */
+function hideAddressSuggestions() {
+    // Delay hiding to allow for click events
+    setTimeout(() => {
+        const suggestions = document.getElementById('address-suggestions');
+        if (suggestions) {
+            suggestions.classList.add('hidden');
+        }
+    }, 200);
+}
+
+/**
+ * Select an address suggestion
+ * @param {string} address - Selected address
+ */
+function selectAddressSuggestion(address) {
+    const input = document.getElementById('property-address');
+    if (input) {
+        input.value = address;
+        handleValidatedAddressInput(input);
+    }
+    hideAddressSuggestions();
 }
