@@ -675,18 +675,41 @@ function renderCalculator() {
                         </div>
 
                         <div>
-                            <label class="block font-semibold mb-2" for="deposit-percent">${t('depositPercent')}</label>
-                            <div class="flex items-center space-x-4">
-                                <input type="range"
-                                    id="deposit-percent"
-                                    min="10"
-                                    max="100"
-                                    step="5"
-                                    value="${state.formData.depositPercent}"
-                                    oninput="updateForm('depositPercent', this.value); document.getElementById('deposit-value').textContent = this.value + '%';"
-                                    aria-label="${t('depositPercent')}"
-                                    class="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" />
-                                <span id="deposit-value" class="text-lg font-bold text-blue-600 w-16 text-right">${state.formData.depositPercent}%</span>
+                            <label class="block font-semibold mb-2" for="deposit-percent">
+                                ${t('depositPercent')}
+                                <span class="text-red-500">*</span>
+                            </label>
+                            <select id="deposit-percent"
+                                value="${state.formData.depositPercent}"
+                                onchange="handleValidatedSelectChange('depositPercent', this.value, this)"
+                                aria-label="${t('depositPercent')}"
+                                aria-required="true"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+                                <option value="10" ${state.formData.depositPercent === '10' ? 'selected' : ''}>10%</option>
+                                <option value="15" ${state.formData.depositPercent === '15' ? 'selected' : ''}>15%</option>
+                                <option value="20" ${state.formData.depositPercent === '20' ? 'selected' : ''}>20%</option>
+                                <option value="25" ${state.formData.depositPercent === '25' ? 'selected' : ''}>25%</option>
+                                <option value="30" ${state.formData.depositPercent === '30' ? 'selected' : ''}>30%</option>
+                                <option value="35" ${state.formData.depositPercent === '35' ? 'selected' : ''}>35%</option>
+                                <option value="40" ${state.formData.depositPercent === '40' ? 'selected' : ''}>40%</option>
+                                <option value="45" ${state.formData.depositPercent === '45' ? 'selected' : ''}>45%</option>
+                                <option value="50" ${state.formData.depositPercent === '50' ? 'selected' : ''}>50%</option>
+                                <option value="55" ${state.formData.depositPercent === '55' ? 'selected' : ''}>55%</option>
+                                <option value="60" ${state.formData.depositPercent === '60' ? 'selected' : ''}>60%</option>
+                                <option value="65" ${state.formData.depositPercent === '65' ? 'selected' : ''}>65%</option>
+                                <option value="70" ${state.formData.depositPercent === '70' ? 'selected' : ''}>70%</option>
+                                <option value="75" ${state.formData.depositPercent === '75' ? 'selected' : ''}>75%</option>
+                                <option value="80" ${state.formData.depositPercent === '80' ? 'selected' : ''}>80%</option>
+                                <option value="85" ${state.formData.depositPercent === '85' ? 'selected' : ''}>85%</option>
+                                <option value="90" ${state.formData.depositPercent === '90' ? 'selected' : ''}>90%</option>
+                                <option value="95" ${state.formData.depositPercent === '95' ? 'selected' : ''}>95%</option>
+                                <option value="100" ${state.formData.depositPercent === '100' ? 'selected' : ''}>100%</option>
+                            </select>
+                            <div id="deposit-percent-error" class="hidden text-red-600 text-sm mt-1 flex items-center">
+                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                                </svg>
+                                <span></span>
                             </div>
                             <p class="text-xs text-gray-500 mt-1">${t('depositPercentHelp')}</p>
                         </div>
