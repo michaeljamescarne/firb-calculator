@@ -84,7 +84,23 @@ function render() {
         }
         // Initialize cost optimizer
         if (typeof initCostOptimizer === 'function') {
-            initCostOptimizer(state.calculatedFees);
+            // Create the data structure expected by cost optimizer
+            const optimizerData = {
+                inputs: {
+                    purchasePrice: parseFloat(state.formData.propertyValue),
+                    state: state.formData.state,
+                    propertyType: state.formData.propertyType,
+                    entityType: state.formData.entityType,
+                    depositPercent: parseFloat(state.formData.depositPercent),
+                    citizenshipStatus: state.formData.citizenshipStatus,
+                    visaType: state.formData.visaType
+                },
+                grandTotal: state.calculatedFees.grandTotal,
+                foreignTotal: state.calculatedFees.foreignTotal,
+                standardTotal: state.calculatedFees.standardTotal,
+                annualTotal: state.calculatedFees.annualTotal
+            };
+            initCostOptimizer(optimizerData);
         }
         // Initialize charts after DOM is ready
         setTimeout(() => {

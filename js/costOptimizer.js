@@ -124,6 +124,18 @@ function initCostOptimizer(currentCalculation) {
  * Calculate all possible optimizations
  */
 function calculateOptimizations(current) {
+    // Safety check for undefined current
+    if (!current) {
+        console.error('[OPTIMIZER] ERROR: Invalid current data in calculateOptimizations:', current);
+        return {
+            propertyType: null,
+            stateArbitrage: null,
+            timing: null,
+            structure: null,
+            totalPotentialSavings: 0
+        };
+    }
+
     const optimizations = {
         propertyType: calculatePropertyTypeOptimization(current),
         stateArbitrage: calculateStateArbitrage(current),
@@ -134,10 +146,10 @@ function calculateOptimizations(current) {
 
     // Calculate total potential savings (best case scenario)
     optimizations.totalPotentialSavings =
-        (optimizations.propertyType.savings || 0) +
-        (optimizations.stateArbitrage.maxSavings || 0) +
-        (optimizations.timing.maxSavings || 0) +
-        (optimizations.structure.maxSavings || 0);
+        (optimizations.propertyType?.savings || 0) +
+        (optimizations.stateArbitrage?.maxSavings || 0) +
+        (optimizations.timing?.maxSavings || 0) +
+        (optimizations.structure?.maxSavings || 0);
 
     return optimizations;
 }
@@ -202,9 +214,25 @@ function calculateCostsForType(price, type, state) {
  * Show equivalent properties in different states
  */
 function calculateStateArbitrage(current) {
+    // Safety check for undefined current or inputs
+    if (!current || !current.inputs) {
+        console.error('[OPTIMIZER] ERROR: Invalid current data in calculateStateArbitrage:', current);
+        return null;
+    }
+
     const currentState = current.inputs.state;
     const currentPrice = current.inputs.purchasePrice;
     const propertyType = current.inputs.propertyType;
+
+    // Validate required inputs
+    if (!currentState || !currentPrice || !propertyType) {
+        console.error('[OPTIMIZER] ERROR: Missing required inputs in calculateStateArbitrage:', {
+            state: currentState,
+            price: currentPrice,
+            propertyType: propertyType
+        });
+        return null;
+    }
 
     const comparisons = [];
 
