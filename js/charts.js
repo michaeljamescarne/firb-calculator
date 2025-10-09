@@ -230,6 +230,7 @@ function renderDonutChart(fees) {
             lucide.createIcons();
         }
         return;
+    }
 
     // Prepare data for donut chart
     const data = [
