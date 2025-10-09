@@ -946,6 +946,7 @@ function showEligibilityResult(result) {
  */
 function renderEligibilityResult() {
     console.log('[RENDER DEBUG] renderEligibilityResult function called at:', new Date().toISOString());
+    console.log('[CACHE BUST] Version 2.0 - This should appear if cache is cleared');
     console.log('[RENDER DEBUG] wizardState:', wizardState);
     console.log('[RENDER DEBUG] wizardState.result:', wizardState.result);
     console.log('[RENDER DEBUG] state.eligibilityResult:', state.eligibilityResult);
