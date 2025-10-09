@@ -129,10 +129,10 @@ function checkFIRBEligibility({
     }
 
     // Get constants with fallback - handle case where window.FIRBConstants isn't loaded yet
-    const CITIZENSHIP_STATUS = window.FIRBConstants?.CITIZENSHIP_STATUS || CITIZENSHIP_STATUS_FALLBACK;
-    const PROPERTY_TYPES = window.FIRBConstants?.PROPERTY_TYPES || PROPERTY_TYPES_FALLBACK;
-    const VISA_TYPES = window.FIRBConstants?.VISA_TYPES || VISA_TYPES_FALLBACK;
-    const FIRB_RESULT = window.FIRBConstants?.FIRB_RESULT || FIRB_RESULT_FALLBACK;
+    const CITIZENSHIP_STATUS = (typeof window !== 'undefined' && window.FIRBConstants?.CITIZENSHIP_STATUS) || CITIZENSHIP_STATUS_FALLBACK;
+    const PROPERTY_TYPES = (typeof window !== 'undefined' && window.FIRBConstants?.PROPERTY_TYPES) || PROPERTY_TYPES_FALLBACK;
+    const VISA_TYPES = (typeof window !== 'undefined' && window.FIRBConstants?.VISA_TYPES) || VISA_TYPES_FALLBACK;
+    const FIRB_RESULT = (typeof window !== 'undefined' && window.FIRBConstants?.FIRB_RESULT) || FIRB_RESULT_FALLBACK;
 
     // Validate citizenship status
     const validCitizenshipStatuses = Object.values(CITIZENSHIP_STATUS);
@@ -240,8 +240,8 @@ function checkFIRBEligibility({
 function checkForeignNationalEligibility(propertyType, baseResult) {
     console.log('[FIRB_ELIGIBILITY] Checking foreign national eligibility for:', propertyType);
     
-    const PROPERTY_TYPES = window.FIRBConstants?.PROPERTY_TYPES || PROPERTY_TYPES_FALLBACK;
-    const FIRB_RESULT = window.FIRBConstants?.FIRB_RESULT || FIRB_RESULT_FALLBACK;
+    const PROPERTY_TYPES = (typeof window !== 'undefined' && window.FIRBConstants?.PROPERTY_TYPES) || PROPERTY_TYPES_FALLBACK;
+    const FIRB_RESULT = (typeof window !== 'undefined' && window.FIRBConstants?.FIRB_RESULT) || FIRB_RESULT_FALLBACK;
 
     // New dwellings - ALLOWED
     if (propertyType === PROPERTY_TYPES.NEW_DWELLING || propertyType === PROPERTY_TYPES.OFF_THE_PLAN) {
@@ -330,9 +330,9 @@ function checkForeignNationalEligibility(propertyType, baseResult) {
 function checkTemporaryResidentEligibility(propertyType, visaType, baseResult) {
     console.log('[FIRB_ELIGIBILITY] Checking temporary resident eligibility for:', propertyType, visaType);
     
-    const PROPERTY_TYPES = window.FIRBConstants?.PROPERTY_TYPES || PROPERTY_TYPES_FALLBACK;
-    const VISA_TYPES = window.FIRBConstants?.VISA_TYPES || VISA_TYPES_FALLBACK;
-    const FIRB_RESULT = window.FIRBConstants?.FIRB_RESULT || FIRB_RESULT_FALLBACK;
+    const PROPERTY_TYPES = (typeof window !== 'undefined' && window.FIRBConstants?.PROPERTY_TYPES) || PROPERTY_TYPES_FALLBACK;
+    const VISA_TYPES = (typeof window !== 'undefined' && window.FIRBConstants?.VISA_TYPES) || VISA_TYPES_FALLBACK;
+    const FIRB_RESULT = (typeof window !== 'undefined' && window.FIRBConstants?.FIRB_RESULT) || FIRB_RESULT_FALLBACK;
 
     // Define visa-specific rules
     const visaRules = {
@@ -532,7 +532,8 @@ function checkTemporaryResidentEligibility(propertyType, visaType, baseResult) {
  * getCitizenshipLabel('temporary')   // Returns: "Temporary Resident"
  */
 function getCitizenshipLabel(citizenshipStatus) {
-    const CITIZENSHIP_STATUS = window.FIRBConstants?.CITIZENSHIP_STATUS || CITIZENSHIP_STATUS_FALLBACK;
+    // Handle both browser and Node.js environments
+    const CITIZENSHIP_STATUS = (typeof window !== 'undefined' && window.FIRBConstants?.CITIZENSHIP_STATUS) || CITIZENSHIP_STATUS_FALLBACK;
     
     const labels = {
         [CITIZENSHIP_STATUS.AUSTRALIAN_CITIZEN]: 'Australian Citizen',
@@ -555,7 +556,8 @@ function getCitizenshipLabel(citizenshipStatus) {
  * getPropertyTypeDescription('established')  // Returns: "Established Dwelling"
  */
 function getPropertyTypeDescription(propertyType) {
-    const PROPERTY_TYPES = window.FIRBConstants?.PROPERTY_TYPES || PROPERTY_TYPES_FALLBACK;
+    // Handle both browser and Node.js environments
+    const PROPERTY_TYPES = (typeof window !== 'undefined' && window.FIRBConstants?.PROPERTY_TYPES) || PROPERTY_TYPES_FALLBACK;
     
     const descriptions = {
         [PROPERTY_TYPES.NEW_DWELLING]: 'New Dwelling',
