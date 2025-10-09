@@ -3,8 +3,8 @@
  * Handles caching, offline support, and background sync
  */
 
-const CACHE_NAME = 'firb-calculator-v1.1.0';
-const RUNTIME_CACHE = 'firb-runtime-v1.1.0';
+const CACHE_NAME = 'firb-calculator-v2.0.0';
+const RUNTIME_CACHE = 'firb-runtime-v2.0.0';
 
 // Files to cache immediately on install
 const PRECACHE_URLS = [

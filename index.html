@@ -50,18 +50,18 @@
     <script src="js/browserCompatibility.js"></script>
     <script src="js/errorHandling.js"></script>
     <!-- FIRB Constants - MUST load before any file that uses them -->
-    <script src="src/constants/firbConstants.js?v=1.1"></script>
+    <script src="src/constants/firbConstants.js?v=2.0"></script>
     <!-- FIRB Eligibility Module -->
-    <script src="src/utils/firbEligibility.js?v=1.1"></script>
+    <script src="src/utils/firbEligibility.js?v=2.0"></script>
     <script src="js/dataRates2024_25.js"></script>
     <script src="js/utils.js"></script>
     <script src="js/icons.js"></script>
     <script src="js/translations.js"></script>
     <script src="js/calculations.js"></script>
     <script src="js/state.js"></script>
-    <script src="js/formValidation.js?v=1.1"></script>
+    <script src="js/formValidation.js?v=2.0"></script>
     <script src="js/alerts.js"></script>
-    <script src="js/eligibilityWizard.js?v=1.1"></script>
+    <script src="js/eligibilityWizard.js?v=2.0"></script>
     <script src="js/scenarioComparison.js"></script>
     <script src="js/comparisonUI.js"></script>
     <script src="js/comparisonExport.js"></script>
@@ -80,14 +80,14 @@
     <script src="js/mobileFixes.js"></script>
     <script src="js/charts.js"></script>
     <script src="js/resultsDashboard.js"></script>
-    <script src="js/render.js"></script>
-    <script src="js/main.js"></script>
+    <script src="js/render.js?v=2.0"></script>
+    <script src="js/main.js?v=2.0"></script>
 
     <!-- Register Service Worker for PWA -->
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js')
+                navigator.serviceWorker.register('./sw.js')
                     .then(registration => {
                         console.log('Service Worker registered:', registration);
                     })
