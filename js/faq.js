@@ -649,7 +649,7 @@ function renderPopularFAQs(limit = 6) {
     const topQuestions = allQuestions.slice(0, limit);
 
     return `
-        <div class="popular-faqs">
+        <div class="popular-faqs-enhanced">
             <div class="text-center mb-12">
                 <h2 class="text-3xl font-bold text-gray-900 mb-4">
                     Popular Questions
@@ -659,27 +659,30 @@ function renderPopularFAQs(limit = 6) {
                 </p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+            <div class="faq-grid">
                 ${topQuestions.map(q => `
-                    <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100">
-                        <div class="flex items-start gap-3 mb-3">
-                            ${q.categoryIcon ? renderIcon(q.categoryIcon, 'w-5 h-5 text-blue-600 flex-shrink-0 mt-1') : ''}
-                            <h3 class="font-semibold text-gray-900 leading-tight">
+                    <div class="faq-card-enhanced">
+                        <div class="faq-header">
+                            <div class="faq-icon">
+                                ${q.categoryIcon ? renderIcon(q.categoryIcon, 'w-5 h-5 text-blue-600') : ''}
+                            </div>
+                            <h3 class="faq-title">
                                 ${q.question}
                             </h3>
                         </div>
-                        <p class="text-sm text-gray-600 mb-4 line-clamp-3">
+                        <p class="faq-preview">
                             ${q.answer.substring(0, 150)}...
                         </p>
-                        <button
-                            onclick="navigateToStep('faq'); setTimeout(() => toggleQuestion('${q.id}'), 100);"
-                            class="text-sm text-blue-600 hover:text-blue-800 font-medium inline-flex items-center gap-1"
+                        <a
+                            href="#"
+                            onclick="navigateToStep('faq'); setTimeout(() => toggleQuestion('${q.id}'), 100); return false;"
+                            class="faq-link"
                         >
                             Read more
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                             </svg>
-                        </button>
+                        </a>
                     </div>
                 `).join('')}
             </div>

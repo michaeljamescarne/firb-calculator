@@ -171,8 +171,8 @@ function renderHeader() {
  */
 function renderHome() {
     return `
-        <section class="hero-section">
-            <div class="hero-container">
+        <section class="hero-section-enhanced">
+            <div class="hero-container-enhanced">
                 <div class="hero-content">
                     <h1 class="hero-title">${t('hero')}</h1>
                     <p class="hero-subtitle">${t('subtitle')}</p>
@@ -379,7 +379,7 @@ function renderHome() {
             </div>
         </section>
 
-        <section class="py-20 bg-gray-50">
+        <section class="section-enhanced section-bordered bg-gray-50">
             <div class="max-w-7xl mx-auto px-4">
                 ${typeof renderPopularFAQs === 'function' ? renderPopularFAQs(6) : ''}
             </div>
@@ -1075,8 +1075,8 @@ function renderFooter() {
     const needsUpdate = typeof needsReview === 'function' ? needsReview() : false;
 
     return `
-        <footer class="bg-gray-900 text-white py-12">
-            <div class="max-w-7xl mx-auto px-4">
+        <footer class="footer-enhanced">
+            <div class="footer-container">
                 <!-- Data freshness indicator -->
                 <div class="mb-8 p-4 bg-gray-800 rounded-lg border ${needsUpdate ? 'border-yellow-600' : 'border-green-600'}">
                     <div class="flex items-center justify-between flex-wrap gap-4">
@@ -1101,7 +1101,7 @@ function renderFooter() {
                     </div>
                 </div>
 
-                <div class="grid md:grid-cols-4 gap-8">
+                <div class="footer-grid">
                     <div>
                         <h3 class="text-lg font-bold mb-4">FIRB Calculator</h3>
                         <p class="text-gray-400">Professional fee calculations for foreign property investors</p>
@@ -1130,11 +1130,8 @@ function renderFooter() {
                         </p>
                     </div>
                 </div>
-                <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-                    <p class="text-sm">&copy; 2025 FIRB Calculator. ${t('allRights')}</p>
-                    <p class="text-xs text-gray-500 mt-2">
-                        Rates current as of ${lastUpdated} (FY ${dataVersion})
-                    </p>
+                <div class="footer-bottom">
+                    <p>&copy; 2025 FIRB Calculator. All calculations are estimates based on current legislation. Always verify with official sources and consult qualified professionals.</p>
                 </div>
             </div>
         </footer>
