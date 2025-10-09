@@ -55,12 +55,11 @@ function renderPieChart(fees) {
         return;
     }
 
-    // Check if Recharts is available
-    if (!window.Recharts || !window.React || !window.ReactDOM) {
-        console.warn('[PIE CHART DEBUG] Recharts, React, or ReactDOM not loaded - using CSS fallback');
-        console.log('[PIE CHART DEBUG] window.Recharts:', typeof window.Recharts);
-        console.log('[PIE CHART DEBUG] window.React:', typeof window.React);
-        console.log('[PIE CHART DEBUG] window.ReactDOM:', typeof window.ReactDOM);
+    // Always use fallback for now to ensure charts show
+    console.log('[PIE CHART DEBUG] Using CSS fallback for guaranteed rendering');
+    console.log('[PIE CHART DEBUG] window.Recharts:', typeof window.Recharts);
+    console.log('[PIE CHART DEBUG] window.React:', typeof window.React);
+    console.log('[PIE CHART DEBUG] window.ReactDOM:', typeof window.ReactDOM);
 
         // Prepare data for fallback chart
         const data = [
@@ -191,12 +190,15 @@ function renderPieChart(fees) {
  * @param {Object} fees - Calculated fees object
  */
 function renderDonutChart(fees) {
+    console.log('[DONUT CHART DEBUG] renderDonutChart called with fees:', fees);
     const container = document.getElementById('donut-chart-container');
-    if (!container) return;
+    if (!container) {
+        console.error('[DONUT CHART DEBUG] Container not found');
+        return;
+    }
 
-    // Check if Recharts is available
-    if (!window.Recharts || !window.React || !window.ReactDOM) {
-        console.warn('Recharts, React, or ReactDOM not loaded - using CSS fallback');
+    // Always use fallback for now to ensure charts show
+    console.log('[DONUT CHART DEBUG] Using CSS fallback for guaranteed rendering');
 
         // Prepare data for fallback chart
         const data = [
@@ -277,12 +279,15 @@ function renderDonutChart(fees) {
  * @param {Array} stateCosts - Array of state cost objects
  */
 function renderBarChart(stateCosts) {
+    console.log('[BAR CHART DEBUG] renderBarChart called with stateCosts:', stateCosts);
     const container = document.getElementById('bar-chart-container');
-    if (!container) return;
+    if (!container) {
+        console.error('[BAR CHART DEBUG] Container not found');
+        return;
+    }
 
-    // Check if Recharts is available
-    if (!window.Recharts || !window.React || !window.ReactDOM) {
-        console.warn('Recharts, React, or ReactDOM not loaded - using CSS fallback');
+    // Always use fallback for now to ensure charts show
+    console.log('[BAR CHART DEBUG] Using CSS fallback for guaranteed rendering');
 
         // Sort by total cost
         const sortedData = [...stateCosts].sort((a, b) => a.total - b.total);

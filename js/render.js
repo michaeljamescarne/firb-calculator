@@ -728,17 +728,17 @@ function renderCalculator() {
                                 </div>
                                 <span id="deposit-value" class="text-lg font-bold text-blue-600 w-16 text-right">${state.formData.depositPercent}%</span>
                             </div>
-                            <div class="flex justify-between text-xs text-gray-500 mt-2 px-1">
-                                <span>10%</span>
-                                <span>20%</span>
-                                <span>30%</span>
-                                <span>40%</span>
-                                <span>50%</span>
-                                <span>60%</span>
-                                <span>70%</span>
-                                <span>80%</span>
-                                <span>90%</span>
-                                <span>100%</span>
+                            <div class="flex justify-between text-xs text-gray-600 mt-3 px-2 font-medium">
+                                <span class="bg-gray-100 px-2 py-1 rounded">10%</span>
+                                <span class="bg-gray-100 px-2 py-1 rounded">20%</span>
+                                <span class="bg-gray-100 px-2 py-1 rounded">30%</span>
+                                <span class="bg-gray-100 px-2 py-1 rounded">40%</span>
+                                <span class="bg-gray-100 px-2 py-1 rounded">50%</span>
+                                <span class="bg-gray-100 px-2 py-1 rounded">60%</span>
+                                <span class="bg-gray-100 px-2 py-1 rounded">70%</span>
+                                <span class="bg-gray-100 px-2 py-1 rounded">80%</span>
+                                <span class="bg-gray-100 px-2 py-1 rounded">90%</span>
+                                <span class="bg-gray-100 px-2 py-1 rounded">100%</span>
                             </div>
                             <p class="text-xs text-gray-500 mt-1">${t('depositPercentHelp')}</p>
                         </div>
@@ -1139,6 +1139,8 @@ function addDepositSliderStyles() {
             appearance: none;
             background: transparent;
             cursor: pointer;
+            outline: none;
+            height: 8px;
         }
         
         .deposit-slider::-webkit-slider-track {
@@ -1146,19 +1148,26 @@ function addDepositSliderStyles() {
             height: 8px;
             border-radius: 4px;
             border: none;
+            outline: none;
         }
         
         .deposit-slider::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
-            height: 20px;
-            width: 20px;
+            height: 24px;
+            width: 24px;
             border-radius: 50%;
             background: #3b82f6;
             cursor: pointer;
-            border: 2px solid #ffffff;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            margin-top: -6px;
+            border: 3px solid #ffffff;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            margin-top: -8px;
+            transition: all 0.2s ease;
+        }
+        
+        .deposit-slider::-webkit-slider-thumb:hover {
+            background: #2563eb;
+            transform: scale(1.1);
         }
         
         .deposit-slider::-moz-range-track {
@@ -1166,16 +1175,23 @@ function addDepositSliderStyles() {
             height: 8px;
             border-radius: 4px;
             border: none;
+            outline: none;
         }
         
         .deposit-slider::-moz-range-thumb {
-            height: 20px;
-            width: 20px;
+            height: 24px;
+            width: 24px;
             border-radius: 50%;
             background: #3b82f6;
             cursor: pointer;
-            border: 2px solid #ffffff;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            border: 3px solid #ffffff;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            transition: all 0.2s ease;
+        }
+        
+        .deposit-slider::-moz-range-thumb:hover {
+            background: #2563eb;
+            transform: scale(1.1);
         }
         
         .deposit-slider::-ms-track {
@@ -1183,16 +1199,36 @@ function addDepositSliderStyles() {
             height: 8px;
             border-radius: 4px;
             border: none;
+            outline: none;
         }
         
         .deposit-slider::-ms-thumb {
-            height: 20px;
-            width: 20px;
+            height: 24px;
+            width: 24px;
             border-radius: 50%;
             background: #3b82f6;
             cursor: pointer;
-            border: 2px solid #ffffff;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            border: 3px solid #ffffff;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            transition: all 0.2s ease;
+        }
+        
+        .deposit-slider::-ms-thumb:hover {
+            background: #2563eb;
+            transform: scale(1.1);
+        }
+        
+        /* Ensure the track is always visible */
+        .deposit-slider:focus {
+            outline: none;
+        }
+        
+        .deposit-slider:focus::-webkit-slider-track {
+            background: #d1d5db;
+        }
+        
+        .deposit-slider:focus::-moz-range-track {
+            background: #d1d5db;
         }
     `;
     document.head.appendChild(style);
