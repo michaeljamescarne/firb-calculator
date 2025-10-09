@@ -833,6 +833,12 @@ function calculateEligibilityResult() {
         });
 
         console.log('[WIZARD] FIRB eligibility check result:', firbResult);
+        console.log('[WIZARD] FIRB result details:', {
+            firbRequired: firbResult.firbRequired,
+            result: firbResult.result,
+            reason: firbResult.reason,
+            eligible: firbResult.result !== 'not_allowed'
+        });
 
         const firbFee = estimateFIRBFee();
         const surcharge = getStateSurcharge(stateCode);
@@ -856,6 +862,13 @@ function calculateEligibilityResult() {
         };
 
         console.log('[WIZARD] Eligibility result:', result);
+        console.log('[WIZARD] Final result details:', {
+            eligible: result.eligible,
+            noFIRBRequired: result.noFIRBRequired,
+            firbRequired: result.firbRequired,
+            reason: result.reason,
+            canProceedToCalculator: result.canProceedToCalculator
+        });
         showEligibilityResult(result);
     } catch (error) {
         console.error('[WIZARD] Error in calculateEligibilityResult:', error);
