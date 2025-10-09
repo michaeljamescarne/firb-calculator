@@ -838,15 +838,25 @@ function renderHomeCountryComparison() {
 
 // Initialize charts after render
 function initInvestmentCharts() {
-    if (!investmentState.calculations || typeof Recharts === 'undefined') return;
+    console.log('[INVESTMENT CHARTS DEBUG] initInvestmentCharts called');
+    console.log('[INVESTMENT CHARTS DEBUG] investmentState.calculations:', investmentState.calculations);
+    console.log('[INVESTMENT CHARTS DEBUG] window.Recharts:', typeof window.Recharts);
+    
+    if (!investmentState.calculations) {
+        console.warn('[INVESTMENT CHARTS DEBUG] No calculations available');
+        return;
+    }
 
     const calc = investmentState.calculations;
 
+    // Always use fallback for now to ensure charts show
+    console.log('[INVESTMENT CHARTS DEBUG] Using CSS fallback for guaranteed rendering');
+    
     // Property Value Chart
-    initPropertyValueChart(calc.yearlyProjections);
+    initPropertyValueChartFallback(calc.yearlyProjections);
 
     // Cash Flow Chart
-    initCashFlowChart(calc.yearlyProjections);
+    initCashFlowChartFallback(calc.yearlyProjections);
 }
 
 // Property value projection chart
@@ -934,6 +944,126 @@ function initCashFlowChart(projections) {
     );
 
     ReactDOM.render(element, container);
+}
+
+// Property value projection chart fallback
+function initPropertyValueChartFallback(projections) {
+    console.log('[PROPERTY VALUE CHART DEBUG] initPropertyValueChartFallback called with projections:', projections);
+    const container = document.getElementById('property-value-chart');
+    if (!container) {
+        console.error('[PROPERTY VALUE CHART DEBUG] Container not found');
+        return;
+    }
+
+    const data = projections.map(p => ({
+        year: p.year,
+        value: Math.round(p.propertyValue)
+    }));
+
+    // Add initial value
+    data.unshift({
+        year: 'Now',
+        value: investmentState.inputs.purchasePrice
+    });
+
+    console.log('[PROPERTY VALUE CHART DEBUG] Chart data:', data);
+
+    const maxValue = Math.max(...data.map(d => d.value));
+    const minValue = Math.min(...data.map(d => d.value));
+
+    container.innerHTML = `
+        <div class="p-4">
+            <h5 class="text-lg font-semibold mb-4 text-gray-800">Property Value Projection</h5>
+            <div class="space-y-3">
+                ${data.map((item, index) => {
+                    const percentage = ((item.value - minValue) / (maxValue - minValue)) * 100;
+                    const isCurrent = index === 0;
+                    return `
+                        <div class="flex items-center justify-between p-3 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg border border-blue-200">
+                            <div class="flex items-center">
+                                <div class="w-3 h-3 rounded-full mr-3 ${isCurrent ? 'bg-green-500' : 'bg-blue-500'}"></div>
+                                <span class="font-medium text-gray-700">${item.year}</span>
+                            </div>
+                            <div class="text-right">
+                                <div class="font-bold text-gray-900">${formatCurrency(item.value)}</div>
+                                <div class="w-32 bg-gray-200 rounded-full h-2 mt-1">
+                                    <div class="bg-blue-500 h-2 rounded-full transition-all duration-500" style="width: ${percentage}%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('')}
+            </div>
+            <div class="mt-4 p-3 bg-gray-50 rounded-lg">
+                <div class="text-sm text-gray-600">
+                    <strong>Growth:</strong> ${formatCurrency(maxValue - minValue)} over ${data.length - 1} years
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// Cash flow chart fallback
+function initCashFlowChartFallback(projections) {
+    console.log('[CASH FLOW CHART DEBUG] initCashFlowChartFallback called with projections:', projections);
+    const container = document.getElementById('cash-flow-chart');
+    if (!container) {
+        console.error('[CASH FLOW CHART DEBUG] Container not found');
+        return;
+    }
+
+    const data = projections.map(p => ({
+        year: p.year,
+        cashFlow: Math.round(p.cashFlow),
+        cumulative: Math.round(p.cumulativeCashFlow)
+    }));
+
+    console.log('[CASH FLOW CHART DEBUG] Chart data:', data);
+
+    const maxCashFlow = Math.max(...data.map(d => Math.abs(d.cashFlow)));
+    const maxCumulative = Math.max(...data.map(d => Math.abs(d.cumulative)));
+
+    container.innerHTML = `
+        <div class="p-4">
+            <h5 class="text-lg font-semibold mb-4 text-gray-800">Year-by-Year Cash Flow</h5>
+            <div class="space-y-3">
+                ${data.map(item => {
+                    const cashFlowPercentage = (Math.abs(item.cashFlow) / maxCashFlow) * 100;
+                    const cumulativePercentage = (Math.abs(item.cumulative) / maxCumulative) * 100;
+                    const isPositive = item.cashFlow >= 0;
+                    const isCumulativePositive = item.cumulative >= 0;
+                    
+                    return `
+                        <div class="p-3 bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg border border-gray-200">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="font-medium text-gray-700">Year ${item.year}</span>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm text-gray-600">Annual Cash Flow:</span>
+                                    <div class="flex items-center">
+                                        <span class="font-semibold ${isPositive ? 'text-green-600' : 'text-red-600'}">${formatCurrency(item.cashFlow)}</span>
+                                        <div class="w-24 bg-gray-200 rounded-full h-2 ml-2">
+                                            <div class="h-2 rounded-full transition-all duration-500 ${isPositive ? 'bg-green-500' : 'bg-red-500'}" style="width: ${cashFlowPercentage}%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm text-gray-600">Cumulative:</span>
+                                    <div class="flex items-center">
+                                        <span class="font-semibold ${isCumulativePositive ? 'text-green-600' : 'text-red-600'}">${formatCurrency(item.cumulative)}</span>
+                                        <div class="w-24 bg-gray-200 rounded-full h-2 ml-2">
+                                            <div class="h-2 rounded-full transition-all duration-500 ${isCumulativePositive ? 'bg-blue-500' : 'bg-red-500'}" style="width: ${cumulativePercentage}%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('')}
+            </div>
+        </div>
+    `;
 }
 
 // Update investment display
