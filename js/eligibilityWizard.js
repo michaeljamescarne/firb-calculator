@@ -907,6 +907,11 @@ function calculateEligibilityResult() {
         console.log('[WIZARD] Eligibility result:', result);
         console.log('[WIZARD DEBUG] Final noFIRBRequired:', result.noFIRBRequired);
         console.log('[WIZARD DEBUG] Final eligible:', result.eligible);
+        console.log('[WIZARD DEBUG] firbResult.firbRequired:', firbResult.firbRequired);
+        console.log('[WIZARD DEBUG] !firbResult.firbRequired:', !firbResult.firbRequired);
+        console.log('[WIZARD DEBUG] result.noFIRBRequired:', result.noFIRBRequired);
+        console.log('[WIZARD DEBUG] result.eligible:', result.eligible);
+        console.log('[WIZARD DEBUG] result.canProceedToCalculator:', result.canProceedToCalculator);
         showEligibilityResult(result);
     } catch (error) {
         console.error('[WIZARD] Error in calculateEligibilityResult:', error);
