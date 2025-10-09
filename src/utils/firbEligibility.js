@@ -22,19 +22,11 @@ const CITIZENSHIP_STATUS = {
 
 /**
  * Visa type constants
- * COMMENTED OUT - Now using centralized constants from src/constants/firbConstants.js
+ * IMPORTED from centralized constants in src/constants/firbConstants.js
  */
-// const VISA_TYPES = {
-//     STUDENT: 'student',           // Subclass 500
-//     SKILLED: 'skilled',           // Subclass 482, 485, 189, 190
-//     PARTNER: 'partner',           // Subclass 309, 820
-//     BRIDGING: 'bridging',         // Bridging visas
-//     VISITOR: 'visitor',           // Tourist visas
-//     OTHER_TEMPORARY: 'other'      // Other temporary visas
-// };
-
-// Import from centralized constants
-const VISA_TYPES = window.FIRBConstants?.VISA_TYPES || {
+// Import from centralized constants - use window.FIRBConstants.VISA_TYPES
+// Fallback object for cases where constants aren't loaded yet
+const VISA_TYPES_FALLBACK = {
     STUDENT: 'student',
     SKILLED: 'skilled',
     PARTNER: 'partner',
@@ -322,7 +314,7 @@ function checkTemporaryResidentEligibility(propertyType, visaType, baseResult) {
 
     // Define visa-specific rules
     const visaRules = {
-        [VISA_TYPES.STUDENT]: {
+        [(window.FIRBConstants?.VISA_TYPES || VISA_TYPES_FALLBACK).STUDENT]: {
             canBuyEstablished: true,
             canBuyNew: true,
             canBuyVacant: true,
@@ -330,7 +322,7 @@ function checkTemporaryResidentEligibility(propertyType, visaType, baseResult) {
             mustSellOnDeparture: true,
             condition: 'Must be your principal place of residence'
         },
-        [VISA_TYPES.SKILLED]: {
+        [(window.FIRBConstants?.VISA_TYPES || VISA_TYPES_FALLBACK).SKILLED]: {
             canBuyEstablished: true,
             canBuyNew: true,
             canBuyVacant: true,
@@ -338,7 +330,7 @@ function checkTemporaryResidentEligibility(propertyType, visaType, baseResult) {
             mustSellOnDeparture: true,
             condition: 'Must be your principal place of residence'
         },
-        [VISA_TYPES.PARTNER]: {
+        [(window.FIRBConstants?.VISA_TYPES || VISA_TYPES_FALLBACK).PARTNER]: {
             canBuyEstablished: true,
             canBuyNew: true,
             canBuyVacant: true,
@@ -346,7 +338,7 @@ function checkTemporaryResidentEligibility(propertyType, visaType, baseResult) {
             mustSellOnDeparture: true,
             condition: 'Must be your principal place of residence'
         },
-        [VISA_TYPES.BRIDGING]: {
+        [(window.FIRBConstants?.VISA_TYPES || VISA_TYPES_FALLBACK).BRIDGING]: {
             canBuyEstablished: false,
             canBuyNew: true,
             canBuyVacant: false,
@@ -354,7 +346,7 @@ function checkTemporaryResidentEligibility(propertyType, visaType, baseResult) {
             mustSellOnDeparture: true,
             condition: 'Only new dwellings allowed'
         },
-        [VISA_TYPES.VISITOR]: {
+        [(window.FIRBConstants?.VISA_TYPES || VISA_TYPES_FALLBACK).VISITOR]: {
             canBuyEstablished: false,
             canBuyNew: true,
             canBuyVacant: false,
@@ -362,7 +354,7 @@ function checkTemporaryResidentEligibility(propertyType, visaType, baseResult) {
             mustSellOnDeparture: true,
             condition: 'Only new dwellings allowed (investment only)'
         },
-        [VISA_TYPES.OTHER_TEMPORARY]: {
+        [(window.FIRBConstants?.VISA_TYPES || VISA_TYPES_FALLBACK).OTHER_TEMPORARY]: {
             canBuyEstablished: true,
             canBuyNew: true,
             canBuyVacant: true,
@@ -732,7 +724,6 @@ if (typeof module !== 'undefined' && module.exports) {
 
         // Constants
         CITIZENSHIP_STATUS,
-        VISA_TYPES,
         PROPERTY_TYPES,
         FIRB_RESULT
     };
@@ -746,7 +737,6 @@ if (typeof window !== 'undefined') {
         getPropertyTypeDescription,
         runEligibilityTests,
         CITIZENSHIP_STATUS,
-        VISA_TYPES,
         PROPERTY_TYPES,
         FIRB_RESULT
     };
