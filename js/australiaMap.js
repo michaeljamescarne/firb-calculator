@@ -87,10 +87,10 @@ const stateData = {
  * Simplified coordinates for Australia map
  */
 const statePaths = {
-    WA: 'M30,80 L30,280 L200,280 L200,200 L180,160 L160,140 L140,120 L120,100 L100,90 L80,85 L60,82 Z',
-    NT: 'M200,40 L200,200 L320,200 L320,40 Z',
-    SA: 'M200,200 L200,300 L350,300 L380,270 L380,200 Z',
-    QLD: 'M320,40 L320,220 L480,200 L500,120 L450,40 Z',
+    WA: 'M50,100 L50,250 L220,250 L220,180 L180,120 L120,100 Z',
+    NT: 'M220,50 L220,180 L350,180 L350,50 Z',
+    SA: 'M220,180 L220,280 L350,280 L380,250 L380,180 Z',
+    QLD: 'M350,50 L350,220 L480,200 L500,120 L450,50 Z',
     NSW: 'M350,220 L350,320 L450,340 L480,280 L480,200 Z',
     VIC: 'M350,320 L380,360 L450,360 L450,340 Z',
     TAS: 'M400,380 L420,400 L450,390 L440,370 Z',
@@ -172,20 +172,9 @@ function renderMapView() {
             </div>
 
             <!-- Australia SVG Map -->
-            <svg viewBox="0 0 550 450" class="w-full h-auto drop-shadow-lg" style="max-height: 600px;">
-                <!-- Background with gradient -->
-                <defs>
-                    <linearGradient id="mapBg" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" style="stop-color:#f8fafc;stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:#e2e8f0;stop-opacity:1" />
-                    </linearGradient>
-                    <filter id="stateShadow" x="-20%" y="-20%" width="140%" height="140%">
-                        <feDropShadow dx="2" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.1"/>
-                    </filter>
-                </defs>
-                
+            <svg viewBox="0 0 550 450" class="w-full h-auto" style="max-height: 600px;">
                 <!-- Background -->
-                <rect width="550" height="450" fill="url(#mapBg)" rx="8"/>
+                <rect width="550" height="450" fill="#f0f9ff"/>
 
                 <!-- States -->
                 ${Object.keys(statePaths).map(stateCode => `
@@ -194,19 +183,19 @@ function renderMapView() {
                             d="${statePaths[stateCode]}"
                             fill="${stateData[stateCode].color}"
                             stroke="#ffffff"
-                            stroke-width="3"
-                            class="state-path cursor-pointer transition-all duration-300 hover:opacity-100"
+                            stroke-width="2"
+                            class="state-path cursor-pointer transition-all duration-200"
                             onmouseover="showStateTooltip(event, '${stateCode}')"
                             onmouseout="hideStateTooltip()"
                             onclick="showStateDetail('${stateCode}')"
-                            style="opacity: 0.85; filter: url(#stateShadow);"
+                            style="opacity: 0.8;"
                         />
                         <text
                             x="${getStateLabelPosition(stateCode).x}"
                             y="${getStateLabelPosition(stateCode).y}"
                             text-anchor="middle"
-                            class="font-bold text-sm fill-white pointer-events-none"
-                            style="text-shadow: 2px 2px 4px rgba(0,0,0,0.7);">
+                            class="font-bold text-xs fill-white pointer-events-none"
+                            style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
                             ${stateCode}
                         </text>
                     </g>

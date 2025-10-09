@@ -666,15 +666,7 @@ function checkPropertyEligibility(propertyType) {
         // Check if module is loaded
         if (typeof window.FIRBEligibility === 'undefined' || typeof window.FIRBEligibility.checkFIRBEligibility !== 'function') {
             console.warn('[WIZARD] FIRBEligibility module not loaded - using fallback logic');
-            
-            // Basic fallback logic based on citizenship and property type
-            if (citizenshipStatus === 'australian' || citizenshipStatus === 'permanent') {
-                return { eligible: true, message: 'No FIRB approval required' };
-            } else if (citizenshipStatus === 'foreign' && propertyType === 'established') {
-                return { eligible: false, message: 'Foreign nationals cannot purchase established dwellings' };
-            } else {
-                return { eligible: true, message: 'FIRB approval required' };
-            }
+            return { eligible: true, message: 'Eligibility depends on specific circumstances' };
         }
 
         const { checkFIRBEligibility } = window.FIRBEligibility;
@@ -799,63 +791,26 @@ function calculateEligibilityResult() {
 
     try {
         // Check if module is loaded
-        console.log('[WIZARD DEBUG] Checking FIRBEligibility module...');
-        console.log('[WIZARD DEBUG] window.FIRBEligibility:', typeof window.FIRBEligibility);
-        console.log('[WIZARD DEBUG] checkFIRBEligibility function:', typeof window.FIRBEligibility?.checkFIRBEligibility);
-        
         if (typeof window.FIRBEligibility === 'undefined' || typeof window.FIRBEligibility.checkFIRBEligibility !== 'function') {
             console.error('[WIZARD] FIRBEligibility module not loaded - using fallback');
-            console.log('[WIZARD DEBUG] Using fallback logic for citizenship:', citizenshipStatus);
 
-            // Fallback to basic logic based on citizenship status
+            // Fallback to old logic
+            const eligibility = checkPropertyEligibility(propertyType);
             const firbFee = estimateFIRBFee();
             const surcharge = getStateSurcharge(stateCode);
-            
-            // Determine FIRB requirement based on citizenship status
-            let noFIRBRequired = false;
-            let eligible = true;
-            let reason = '';
-            
-            if (citizenshipStatus === 'australian') {
-                noFIRBRequired = true;
-                eligible = true;
-                reason = 'Australian citizens do not require FIRB approval for residential property purchases';
-            } else if (citizenshipStatus === 'permanent') {
-                noFIRBRequired = true;
-                eligible = true;
-                reason = 'Permanent residents ordinarily resident in Australia do not require FIRB approval';
-            } else if (citizenshipStatus === 'foreign') {
-                noFIRBRequired = false;
-                if (propertyType === 'established') {
-                    eligible = false;
-                    reason = 'Foreign nationals are NOT permitted to purchase established dwellings';
-                } else {
-                    eligible = true;
-                    reason = 'Foreign nationals can purchase new dwellings and vacant land with FIRB approval';
-                }
-            } else if (citizenshipStatus === 'temporary') {
-                noFIRBRequired = false;
-                eligible = true;
-                reason = 'Temporary residents require FIRB approval for property purchases';
-            } else {
-                // Default case
-                noFIRBRequired = false;
-                eligible = true;
-                reason = 'FIRB approval may be required - please consult FIRB guidelines';
-            }
 
             const result = {
-                eligible: eligible,
-                noFIRBRequired: noFIRBRequired,
-                reason: reason,
-                firbFee: noFIRBRequired ? 0 : firbFee,
-                surcharge: noFIRBRequired ? 0 : surcharge,
+                eligible: eligibility.eligible,
+                noFIRBRequired: false,
+                reason: eligibility.message,
+                firbFee,
+                surcharge,
                 state: stateCode,
                 propertyType,
                 citizenshipStatus,
                 visaType,
                 purchasePrice,
-                canProceedToCalculator: eligible
+                canProceedToCalculator: eligibility.eligible
             };
 
             console.log('[WIZARD] Eligibility result (fallback):', result);
@@ -863,16 +818,9 @@ function calculateEligibilityResult() {
             return;
         }
 
-        console.log('[WIZARD DEBUG] FIRBEligibility module loaded successfully');
         const { checkFIRBEligibility } = window.FIRBEligibility;
 
         // Call the centralized eligibility checker
-        console.log('[WIZARD DEBUG] Calling checkFIRBEligibility with:', {
-            citizenshipStatus: citizenshipStatus || 'foreign',
-            visaType: visaType || null,
-            propertyType: mappedPropertyType
-        });
-        
         const firbResult = checkFIRBEligibility({
             citizenshipStatus: citizenshipStatus || 'foreign',
             visaType: visaType || null,
@@ -880,8 +828,6 @@ function calculateEligibilityResult() {
         });
 
         console.log('[WIZARD] FIRB eligibility check result:', firbResult);
-        console.log('[WIZARD DEBUG] firbResult.firbRequired:', firbResult.firbRequired);
-        console.log('[WIZARD DEBUG] firbResult.result:', firbResult.result);
 
         const firbFee = estimateFIRBFee();
         const surcharge = getStateSurcharge(stateCode);
@@ -905,13 +851,6 @@ function calculateEligibilityResult() {
         };
 
         console.log('[WIZARD] Eligibility result:', result);
-        console.log('[WIZARD DEBUG] Final noFIRBRequired:', result.noFIRBRequired);
-        console.log('[WIZARD DEBUG] Final eligible:', result.eligible);
-        console.log('[WIZARD DEBUG] firbResult.firbRequired:', firbResult.firbRequired);
-        console.log('[WIZARD DEBUG] !firbResult.firbRequired:', !firbResult.firbRequired);
-        console.log('[WIZARD DEBUG] result.noFIRBRequired:', result.noFIRBRequired);
-        console.log('[WIZARD DEBUG] result.eligible:', result.eligible);
-        console.log('[WIZARD DEBUG] result.canProceedToCalculator:', result.canProceedToCalculator);
         showEligibilityResult(result);
     } catch (error) {
         console.error('[WIZARD] Error in calculateEligibilityResult:', error);
@@ -923,21 +862,9 @@ function calculateEligibilityResult() {
  * Show eligibility result page
  */
 function showEligibilityResult(result) {
-    console.log('[SHOW DEBUG] showEligibilityResult called with:', result);
-    console.log('[SHOW DEBUG] wizardState before setting result:', wizardState);
     wizardState.result = result;
-    console.log('[SHOW DEBUG] wizardState after setting result:', wizardState);
-    console.log('[SHOW DEBUG] wizardState.result after setting:', wizardState.result);
-    
-    // Also store in global state to ensure it's accessible
-    state.eligibilityResult = result;
-    console.log('[SHOW DEBUG] Also stored in state.eligibilityResult:', state.eligibilityResult);
-    
     state.currentStep = 'eligibilityResult';
-    console.log('[SHOW DEBUG] Set currentStep to:', state.currentStep);
-    console.log('[SHOW DEBUG] About to call render()');
     render();
-    console.log('[SHOW DEBUG] render() completed');
     window.scrollTo(0, 0);
 }
 
@@ -945,23 +872,9 @@ function showEligibilityResult(result) {
  * Render eligibility result page
  */
 function renderEligibilityResult() {
-    console.log('[RENDER DEBUG] renderEligibilityResult function called at:', new Date().toISOString());
-    console.log('[CACHE BUST] Version 2.0 - This should appear if cache is cleared');
-    console.log('[RENDER DEBUG] wizardState:', wizardState);
-    console.log('[RENDER DEBUG] wizardState.result:', wizardState.result);
-    console.log('[RENDER DEBUG] state.eligibilityResult:', state.eligibilityResult);
-    
-    // Try to get result from wizardState first, then fallback to global state
-    let result = wizardState.result;
-    if (!result && state.eligibilityResult) {
-        console.log('[RENDER DEBUG] Using state.eligibilityResult as fallback');
-        result = state.eligibilityResult;
-    }
-    
+    const result = wizardState.result;
     if (!result) {
         console.error('[WIZARD] renderEligibilityResult called with no result');
-        console.error('[WIZARD] wizardState:', wizardState);
-        console.error('[WIZARD] state.eligibilityResult:', state.eligibilityResult);
         return '';
     }
 
@@ -992,13 +905,7 @@ function renderEligibilityResult() {
     }
 
     // For Australian citizens and PR
-    console.log('[RENDER DEBUG] Checking render conditions at:', new Date().toISOString());
-    console.log('[RENDER DEBUG] noFIRBRequired:', noFIRBRequired);
-    console.log('[RENDER DEBUG] eligible:', eligible);
-    console.log('[RENDER DEBUG] canProceedToCalculator:', canProceedToCalculator);
-    
     if (noFIRBRequired) {
-        console.log('[RENDER DEBUG] Taking noFIRBRequired branch (Great News!)');
         return `
             <section class="py-20 bg-gradient-to-br from-green-50 to-white min-h-screen">
                 <div class="max-w-4xl mx-auto px-4">
@@ -1078,7 +985,6 @@ function renderEligibilityResult() {
 
     // For eligible foreign buyers / temporary residents
     if (eligible && canProceedToCalculator) {
-        console.log('[RENDER DEBUG] Taking eligible branch (You ARE Eligible!)');
         const propertyTypeLabel = PROPERTY_TYPES_WIZARD[propertyType]?.label || propertyType;
         const documentsKey = citizenshipStatus === 'temporary' ? 'temporary_resident' : 'foreign_national';
 

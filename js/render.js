@@ -30,14 +30,7 @@ function render() {
             content += renderEligibility();
             break;
         case 'eligibilityResult':
-            console.log('[RENDER.JS DEBUG] eligibilityResult case - renderEligibilityResult type:', typeof renderEligibilityResult);
-            if (typeof renderEligibilityResult === 'function') {
-                console.log('[RENDER.JS DEBUG] Calling renderEligibilityResult()');
-                content += renderEligibilityResult();
-            } else {
-                console.log('[RENDER.JS DEBUG] renderEligibilityResult not a function, calling renderHome()');
-                content += renderHome();
-            }
+            content += typeof renderEligibilityResult === 'function' ? renderEligibilityResult() : renderHome();
             break;
         case 'calculator':
             content += renderCalculator();
@@ -79,9 +72,6 @@ function render() {
         addAlertStyles();
     }
 
-    // Add deposit slider styles
-    addDepositSliderStyles();
-
     // Initialize dashboard charts if on results page
     if (state.currentStep === 'results' && state.calculatedFees) {
         // Add collapsible styles
@@ -105,16 +95,6 @@ function render() {
                 initInvestmentCharts();
             }
         }, 100);
-        
-        // Retry chart initialization if libraries failed to load
-        setTimeout(() => {
-            if (!window.Recharts || !window.React || !window.ReactDOM) {
-                console.warn('[CHARTS] External libraries not loaded, retrying chart initialization...');
-                if (typeof initializeDashboardCharts === 'function') {
-                    initializeDashboardCharts();
-                }
-            }
-        }, 2000);
     }
 }
 
@@ -171,36 +151,21 @@ function renderHeader() {
  */
 function renderHome() {
     return `
-        <section class="hero-section-enhanced">
-            <div class="hero-container-enhanced">
-                <div class="hero-content">
-                    <h1 class="hero-title">${t('hero')}</h1>
-                    <p class="hero-subtitle">${t('subtitle')}</p>
-                    <div class="hero-actions">
-                        <button onclick="startEligibilityWizard()" class="btn-primary btn-large">
-                            <span>${t('cta')}</span>
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-                            </svg>
-                        </button>
-                        <button onclick="runFIRBEligibilityTests()" class="btn-secondary btn-large">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                            </svg>
-                            <span>Run Eligibility Tests</span>
-                        </button>
-                    </div>
-                </div>
-                <div class="hero-visual">
-                    <div class="hero-card">
-                        <div class="card-icon">
-                            <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
-                            </svg>
-                        </div>
-                        <h3 class="card-title">Professional FIRB Calculator</h3>
-                        <p class="card-description">Accurate fee calculations for foreign property investors</p>
-                    </div>
+        <section class="bg-gradient-to-br from-blue-50 to-white py-20">
+            <div class="max-w-7xl mx-auto px-4 text-center">
+                <h1 class="text-5xl font-bold mb-6">${t('hero')}</h1>
+                <p class="text-xl text-gray-600 mb-8">${t('subtitle')}</p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                    <button onclick="startEligibilityWizard()" class="bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-700 inline-flex items-center space-x-2">
+                        <span>${t('cta')}</span>
+                        ${icons.arrowRight()}
+                    </button>
+                    <button onclick="runFIRBEligibilityTests()" class="bg-green-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-green-700 inline-flex items-center space-x-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <span>Run Eligibility Tests</span>
+                    </button>
                 </div>
             </div>
         </section>
@@ -379,7 +344,7 @@ function renderHome() {
             </div>
         </section>
 
-        <section class="section-enhanced section-bordered bg-gray-50">
+        <section class="py-20 bg-gray-50">
             <div class="max-w-7xl mx-auto px-4">
                 ${typeof renderPopularFAQs === 'function' ? renderPopularFAQs(6) : ''}
             </div>
@@ -388,7 +353,7 @@ function renderHome() {
         <section class="py-20 bg-white">
             <div class="max-w-7xl mx-auto px-4">
                 <h2 class="text-3xl font-bold text-gray-900 mb-12 text-center">Understanding the Fees</h2>
-                <div class="grid md:grid-cols-3 gap-10">
+                <div class="grid md:grid-cols-3 gap-8">
                     <div class="bg-white p-8 rounded-lg shadow-sm">
                         <div class="bg-blue-600 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
                             ${icons.fileText('w-6 h-6 text-white')}
@@ -593,30 +558,12 @@ function renderCalculator() {
                                     id="property-address"
                                     value="${escapeHTML(state.formData.address)}"
                                     oninput="handleValidatedAddressInput(this)"
-                                    onfocus="showAddressSuggestions(this)"
-                                    onblur="hideAddressSuggestions()"
                                     placeholder="${t('enterAddress')}"
                                     aria-label="${t('propAddress')}"
                                     aria-required="true"
                                     aria-invalid="false"
-                                    autocomplete="street-address"
                                     maxlength="200"
                                     class="w-full px-4 py-3 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" />
-                                <div class="absolute inset-y-0 right-0 flex items-center pr-3">
-                                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                    </svg>
-                                </div>
-                                <!-- Address suggestions dropdown -->
-                                <div id="address-suggestions" class="hidden absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
-                                    <div class="p-2 text-sm text-gray-500 border-b">Common Australian address formats:</div>
-                                    <div class="p-2 hover:bg-gray-50 cursor-pointer" onclick="selectAddressSuggestion('123 Main Street, Suburb, NSW 2000')">123 Main Street, Suburb, NSW 2000</div>
-                                    <div class="p-2 hover:bg-gray-50 cursor-pointer" onclick="selectAddressSuggestion('456 Collins Street, Melbourne, VIC 3000')">456 Collins Street, Melbourne, VIC 3000</div>
-                                    <div class="p-2 hover:bg-gray-50 cursor-pointer" onclick="selectAddressSuggestion('789 Queen Street, Brisbane, QLD 4000')">789 Queen Street, Brisbane, QLD 4000</div>
-                                    <div class="p-2 hover:bg-gray-50 cursor-pointer" onclick="selectAddressSuggestion('321 King William Street, Adelaide, SA 5000')">321 King William Street, Adelaide, SA 5000</div>
-                                    <div class="p-2 hover:bg-gray-50 cursor-pointer" onclick="selectAddressSuggestion('654 St Georges Terrace, Perth, WA 6000')">654 St Georges Terrace, Perth, WA 6000</div>
-                                </div>
                             </div>
                             <div id="property-address-error" class="hidden text-red-600 text-sm mt-1 flex items-center">
                                 <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
@@ -730,30 +677,16 @@ function renderCalculator() {
                         <div>
                             <label class="block font-semibold mb-2" for="deposit-percent">${t('depositPercent')}</label>
                             <div class="flex items-center space-x-4">
-                                <div class="flex-1 relative">
-                                    <input type="range"
-                                        id="deposit-percent"
-                                        min="10"
-                                        max="100"
-                                        step="5"
-                                        value="${state.formData.depositPercent}"
-                                        oninput="updateForm('depositPercent', this.value); document.getElementById('deposit-value').textContent = this.value + '%';"
-                                        aria-label="${t('depositPercent')}"
-                                        class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer deposit-slider" />
-                                </div>
+                                <input type="range"
+                                    id="deposit-percent"
+                                    min="10"
+                                    max="100"
+                                    step="5"
+                                    value="${state.formData.depositPercent}"
+                                    oninput="updateForm('depositPercent', this.value); document.getElementById('deposit-value').textContent = this.value + '%';"
+                                    aria-label="${t('depositPercent')}"
+                                    class="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" />
                                 <span id="deposit-value" class="text-lg font-bold text-blue-600 w-16 text-right">${state.formData.depositPercent}%</span>
-                            </div>
-                            <div class="flex justify-between text-xs text-gray-600 mt-3 px-2 font-medium">
-                                <span class="bg-gray-100 px-2 py-1 rounded">10%</span>
-                                <span class="bg-gray-100 px-2 py-1 rounded">20%</span>
-                                <span class="bg-gray-100 px-2 py-1 rounded">30%</span>
-                                <span class="bg-gray-100 px-2 py-1 rounded">40%</span>
-                                <span class="bg-gray-100 px-2 py-1 rounded">50%</span>
-                                <span class="bg-gray-100 px-2 py-1 rounded">60%</span>
-                                <span class="bg-gray-100 px-2 py-1 rounded">70%</span>
-                                <span class="bg-gray-100 px-2 py-1 rounded">80%</span>
-                                <span class="bg-gray-100 px-2 py-1 rounded">90%</span>
-                                <span class="bg-gray-100 px-2 py-1 rounded">100%</span>
                             </div>
                             <p class="text-xs text-gray-500 mt-1">${t('depositPercentHelp')}</p>
                         </div>
@@ -1075,8 +1008,8 @@ function renderFooter() {
     const needsUpdate = typeof needsReview === 'function' ? needsReview() : false;
 
     return `
-        <footer class="footer-enhanced">
-            <div class="footer-container">
+        <footer class="bg-gray-900 text-white py-12">
+            <div class="max-w-7xl mx-auto px-4">
                 <!-- Data freshness indicator -->
                 <div class="mb-8 p-4 bg-gray-800 rounded-lg border ${needsUpdate ? 'border-yellow-600' : 'border-green-600'}">
                     <div class="flex items-center justify-between flex-wrap gap-4">
@@ -1101,19 +1034,17 @@ function renderFooter() {
                     </div>
                 </div>
 
-                <div class="footer-grid">
+                <div class="grid md:grid-cols-4 gap-8">
                     <div>
                         <h3 class="text-lg font-bold mb-4">FIRB Calculator</h3>
                         <p class="text-gray-400">Professional fee calculations for foreign property investors</p>
                     </div>
                     <div>
                         <h3 class="text-lg font-bold mb-4">${t('quickLinks')}</h3>
-                        <div class="space-y-3">
-                            <button onclick="goToStep('home')" class="block w-full text-left text-gray-400 hover:text-white transition-colors py-1">${t('navHome')}</button>
-                            <button onclick="goToStep('eligibility')" class="block w-full text-left text-gray-400 hover:text-white transition-colors py-1">${t('navCalculator')}</button>
-                            <button onclick="goToStep('timeline')" class="block w-full text-left text-gray-400 hover:text-white transition-colors py-1">Timeline</button>
-                            <button onclick="goToStep('faq')" class="block w-full text-left text-gray-400 hover:text-white transition-colors py-1">FAQs</button>
-                        </div>
+                        <button onclick="goToStep('home')" class="block text-gray-400 hover:text-white mb-2">${t('navHome')}</button>
+                        <button onclick="goToStep('eligibility')" class="block text-gray-400 hover:text-white mb-2">${t('navCalculator')}</button>
+                        <button onclick="goToStep('timeline')" class="block text-gray-400 hover:text-white mb-2">Timeline</button>
+                        <button onclick="goToStep('faq')" class="block text-gray-400 hover:text-white">FAQs</button>
                     </div>
                     <div>
                         <h3 class="text-lg font-bold mb-4">Official Sources</h3>
@@ -1130,157 +1061,13 @@ function renderFooter() {
                         </p>
                     </div>
                 </div>
-                <div class="footer-bottom">
-                    <p>&copy; 2025 FIRB Calculator. All calculations are estimates based on current legislation. Always verify with official sources and consult qualified professionals.</p>
+                <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                    <p class="text-sm">&copy; 2025 FIRB Calculator. ${t('allRights')}</p>
+                    <p class="text-xs text-gray-500 mt-2">
+                        Rates current as of ${lastUpdated} (FY ${dataVersion})
+                    </p>
                 </div>
             </div>
         </footer>
     `;
-}
-
-/**
- * Add deposit slider styles for better visibility
- */
-function addDepositSliderStyles() {
-    // Check if styles already added
-    if (document.getElementById('deposit-slider-styles')) return;
-    
-    const style = document.createElement('style');
-    style.id = 'deposit-slider-styles';
-    style.textContent = `
-        .deposit-slider {
-            -webkit-appearance: none;
-            appearance: none;
-            background: transparent;
-            cursor: pointer;
-            outline: none;
-            height: 8px;
-        }
-        
-        .deposit-slider::-webkit-slider-track {
-            background: #e5e7eb;
-            height: 8px;
-            border-radius: 4px;
-            border: none;
-            outline: none;
-        }
-        
-        .deposit-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            height: 24px;
-            width: 24px;
-            border-radius: 50%;
-            background: #3b82f6;
-            cursor: pointer;
-            border: 3px solid #ffffff;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-            margin-top: -8px;
-            transition: all 0.2s ease;
-        }
-        
-        .deposit-slider::-webkit-slider-thumb:hover {
-            background: #2563eb;
-            transform: scale(1.1);
-        }
-        
-        .deposit-slider::-moz-range-track {
-            background: #e5e7eb;
-            height: 8px;
-            border-radius: 4px;
-            border: none;
-            outline: none;
-        }
-        
-        .deposit-slider::-moz-range-thumb {
-            height: 24px;
-            width: 24px;
-            border-radius: 50%;
-            background: #3b82f6;
-            cursor: pointer;
-            border: 3px solid #ffffff;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-            transition: all 0.2s ease;
-        }
-        
-        .deposit-slider::-moz-range-thumb:hover {
-            background: #2563eb;
-            transform: scale(1.1);
-        }
-        
-        .deposit-slider::-ms-track {
-            background: #e5e7eb;
-            height: 8px;
-            border-radius: 4px;
-            border: none;
-            outline: none;
-        }
-        
-        .deposit-slider::-ms-thumb {
-            height: 24px;
-            width: 24px;
-            border-radius: 50%;
-            background: #3b82f6;
-            cursor: pointer;
-            border: 3px solid #ffffff;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-            transition: all 0.2s ease;
-        }
-        
-        .deposit-slider::-ms-thumb:hover {
-            background: #2563eb;
-            transform: scale(1.1);
-        }
-        
-        /* Ensure the track is always visible */
-        .deposit-slider:focus {
-            outline: none;
-        }
-        
-        .deposit-slider:focus::-webkit-slider-track {
-            background: #d1d5db;
-        }
-        
-        .deposit-slider:focus::-moz-range-track {
-            background: #d1d5db;
-        }
-    `;
-    document.head.appendChild(style);
-}
-
-/**
- * Show address suggestions dropdown
- * @param {HTMLInputElement} input - Address input element
- */
-function showAddressSuggestions(input) {
-    const suggestions = document.getElementById('address-suggestions');
-    if (suggestions) {
-        suggestions.classList.remove('hidden');
-    }
-}
-
-/**
- * Hide address suggestions dropdown
- */
-function hideAddressSuggestions() {
-    // Delay hiding to allow for click events
-    setTimeout(() => {
-        const suggestions = document.getElementById('address-suggestions');
-        if (suggestions) {
-            suggestions.classList.add('hidden');
-        }
-    }, 200);
-}
-
-/**
- * Select an address suggestion
- * @param {string} address - Selected address
- */
-function selectAddressSuggestion(address) {
-    const input = document.getElementById('property-address');
-    if (input) {
-        input.value = address;
-        handleValidatedAddressInput(input);
-    }
-    hideAddressSuggestions();
 }

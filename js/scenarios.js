@@ -73,16 +73,12 @@ function loadAutoSavedData() {
                 state.formData = autoSaveData.formData;
             }
             if (autoSaveData.isEligible) {
-                // TEMPORARY FIX: Don't restore old eligibility data to prevent overriding new calculations
-                console.log('[SCENARIOS] Skipping restoration of old eligibility data:', autoSaveData.isEligible);
-                // state.isEligible = autoSaveData.isEligible;
+                state.isEligible = autoSaveData.isEligible;
             }
 
             lastAutoSave = autoSaveData.timestamp;
 
-            // TEMPORARY FIX: Disable session restoration notification
-            console.log('[SCENARIOS] Session restoration disabled - not showing notification');
-            // showNotification('Your previous session was restored', 'info', 3000);
+            showNotification('Your previous session was restored', 'info', 3000);
         }
     }
 }

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { margin: 0; padding: 0; background: #f8fafc; }
+        .screenshot {
+            width: 540px;
+            height: 720px;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            font-family: Arial, sans-serif;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .content {
+            padding: 20px;
+            flex: 1;
+        }
+        .results-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .cost-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .cost-item:last-child {
+            border-bottom: none;
+            font-weight: bold;
+            font-size: 18px;
+            background: #f3f4f6;
+            padding: 16px;
+            margin: 10px -20px;
+            border-radius: 8px;
+        }
+        .cost-label {
+            color: #6b7280;
+        }
+        .cost-value {
+            color: #1f2937;
+            font-weight: bold;
+        }
+        .chart-placeholder {
+            background: #f3f4f6;
+            height: 200px;
+            margin: 20px 0;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6b7280;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="screenshot">
+        <div class="header">
+            <h1>Cost Breakdown Results</h1>
+            <p>Property Value: $800,000</p>
+        </div>
+        <div class="content">
+            <div class="results-title">Your FIRB Costs</div>
+            
+            <div class="cost-item">
+                <span class="cost-label">FIRB Application Fee</span>
+                <span class="cost-value">$13,200</span>
+            </div>
+            <div class="cost-item">
+                <span class="cost-label">Stamp Duty Surcharge</span>
+                <span class="cost-value">$64,000</span>
+            </div>
+            <div class="cost-item">
+                <span class="cost-label">Land Tax Surcharge</span>
+                <span class="cost-value">$8,000</span>
+            </div>
+            <div class="cost-item">
+                <span class="cost-label">Legal & Conveyancing</span>
+                <span class="cost-value">$3,500</span>
+            </div>
+            <div class="cost-item">
+                <span class="cost-label">Total Additional Costs</span>
+                <span class="cost-value">$88,700</span>
+            </div>
+            
+            <div class="chart-placeholder">
+                📊 Cost Breakdown Chart
+            </div>
+            
+            <div class="cost-item">
+                <span class="cost-label">Total Property Cost</span>
+                <span class="cost-value">$888,700</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

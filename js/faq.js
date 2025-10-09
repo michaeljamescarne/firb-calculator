@@ -649,7 +649,7 @@ function renderPopularFAQs(limit = 6) {
     const topQuestions = allQuestions.slice(0, limit);
 
     return `
-        <div class="popular-faqs-enhanced">
+        <div class="popular-faqs">
             <div class="text-center mb-12">
                 <h2 class="text-3xl font-bold text-gray-900 mb-4">
                     Popular Questions
@@ -659,30 +659,27 @@ function renderPopularFAQs(limit = 6) {
                 </p>
             </div>
 
-            <div class="faq-grid">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                 ${topQuestions.map(q => `
-                    <div class="faq-card-enhanced">
-                        <div class="faq-header">
-                            <div class="faq-icon">
-                                ${q.categoryIcon ? renderIcon(q.categoryIcon, 'w-5 h-5 text-blue-600') : ''}
-                            </div>
-                            <h3 class="faq-title">
+                    <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                        <div class="flex items-start gap-3 mb-3">
+                            ${renderIcon(q.categoryIcon, 'w-5 h-5 text-blue-600 flex-shrink-0 mt-1')}
+                            <h3 class="font-semibold text-gray-900 leading-tight">
                                 ${q.question}
                             </h3>
                         </div>
-                        <p class="faq-preview">
+                        <p class="text-sm text-gray-600 mb-4 line-clamp-3">
                             ${q.answer.substring(0, 150)}...
                         </p>
-                        <a
-                            href="#"
-                            onclick="navigateToStep('faq'); setTimeout(() => toggleQuestion('${q.id}'), 100); return false;"
-                            class="faq-link"
+                        <button
+                            onclick="navigateToStep('faq'); setTimeout(() => toggleQuestion('${q.id}'), 100);"
+                            class="text-sm text-blue-600 hover:text-blue-800 font-medium inline-flex items-center gap-1"
                         >
                             Read more
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                             </svg>
-                        </a>
+                        </button>
                     </div>
                 `).join('')}
             </div>

@@ -6,6 +6,39 @@
 const { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } = window.Recharts || {};
 
 /**
+ * Check if external libraries are loaded and ready
+ * @returns {boolean} True if all libraries are available
+ */
+function checkExternalLibraries() {
+    return !!(window.Recharts && window.React && window.ReactDOM);
+}
+
+/**
+ * Wait for external libraries to load with timeout
+ * @param {number} timeout - Timeout in milliseconds
+ * @returns {Promise<boolean>} True if libraries loaded, false if timeout
+ */
+function waitForExternalLibraries(timeout = 3000) {
+    return new Promise((resolve) => {
+        if (checkExternalLibraries()) {
+            resolve(true);
+            return;
+        }
+        
+        const startTime = Date.now();
+        const checkInterval = setInterval(() => {
+            if (checkExternalLibraries()) {
+                clearInterval(checkInterval);
+                resolve(true);
+            } else if (Date.now() - startTime > timeout) {
+                clearInterval(checkInterval);
+                resolve(false);
+            }
+        }, 100);
+    });
+}
+
+/**
  * CSS-based fallback chart when Recharts is unavailable
  * @param {Array} data - Chart data with name, value, and color
  * @param {string} title - Chart title
@@ -52,7 +85,7 @@ function renderPieChart(fees) {
     if (!container) return;
 
     // Check if Recharts is available
-    if (!window.Recharts || !window.React || !window.ReactDOM) {
+    if (!checkExternalLibraries()) {
         console.warn('Recharts, React, or ReactDOM not loaded - using CSS fallback');
 
         // Prepare data for fallback chart
@@ -156,7 +189,7 @@ function renderDonutChart(fees) {
     if (!container) return;
 
     // Check if Recharts is available
-    if (!window.Recharts || !window.React || !window.ReactDOM) {
+    if (!checkExternalLibraries()) {
         console.warn('Recharts, React, or ReactDOM not loaded - using CSS fallback');
 
         // Prepare data for fallback chart
@@ -188,7 +221,7 @@ function renderBarChart(stateCosts) {
     if (!container) return;
 
     // Check if Recharts is available
-    if (!window.Recharts || !window.React || !window.ReactDOM) {
+    if (!checkExternalLibraries()) {
         console.warn('Recharts, React, or ReactDOM not loaded - using CSS fallback');
 
         // Sort by total cost

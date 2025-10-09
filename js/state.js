@@ -153,7 +153,12 @@ function updateEligibility(field, value) {
  * @param {string} value - New value
  */
 function updateForm(field, value) {
-    state.formData[field] = value;
+    return withStateLock(() => {
+        ensureFormDataInitialized();
+        state.formData[field] = value;
+        console.log(`[STATE] Updated formData.${field}:`, value);
+        return true;
+    }, `updateForm-${field}`);
 }
 
 /**
