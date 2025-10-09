@@ -128,22 +128,28 @@ function checkFIRBEligibility({
         throw new Error('propertyType is required');
     }
 
+    // Get constants with fallback - handle case where window.FIRBConstants isn't loaded yet
+    const CITIZENSHIP_STATUS = window.FIRBConstants?.CITIZENSHIP_STATUS || CITIZENSHIP_STATUS_FALLBACK;
+    const PROPERTY_TYPES = window.FIRBConstants?.PROPERTY_TYPES || PROPERTY_TYPES_FALLBACK;
+    const VISA_TYPES = window.FIRBConstants?.VISA_TYPES || VISA_TYPES_FALLBACK;
+    const FIRB_RESULT = window.FIRBConstants?.FIRB_RESULT || FIRB_RESULT_FALLBACK;
+
     // Validate citizenship status
-    const validCitizenshipStatuses = Object.values(window.FIRBConstants?.CITIZENSHIP_STATUS || CITIZENSHIP_STATUS_FALLBACK);
+    const validCitizenshipStatuses = Object.values(CITIZENSHIP_STATUS);
     if (!validCitizenshipStatuses.includes(citizenshipStatus)) {
         console.error('[FIRB_ELIGIBILITY] ERROR: Invalid citizenshipStatus:', citizenshipStatus);
         throw new Error(`Invalid citizenshipStatus: ${citizenshipStatus}. Must be one of: ${validCitizenshipStatuses.join(', ')}`);
     }
 
     // Validate property type
-    const validPropertyTypes = Object.values(window.FIRBConstants?.PROPERTY_TYPES || PROPERTY_TYPES_FALLBACK);
+    const validPropertyTypes = Object.values(PROPERTY_TYPES);
     if (!validPropertyTypes.includes(propertyType)) {
         console.error('[FIRB_ELIGIBILITY] ERROR: Invalid propertyType:', propertyType);
         throw new Error(`Invalid propertyType: ${propertyType}. Must be one of: ${validPropertyTypes.join(', ')}`);
     }
 
     // Temporary residents must provide visa type
-    if (citizenshipStatus === (window.FIRBConstants?.CITIZENSHIP_STATUS || CITIZENSHIP_STATUS_FALLBACK).TEMPORARY_RESIDENT && !visaType) {
+    if (citizenshipStatus === CITIZENSHIP_STATUS.TEMPORARY_RESIDENT && !visaType) {
         console.error('[FIRB_ELIGIBILITY] ERROR: visaType is required for temporary residents');
         throw new Error('visaType is required for temporary residents');
     }
@@ -159,11 +165,11 @@ function checkFIRBEligibility({
     };
 
     // RULE 1: Australian Citizens
-    if (citizenshipStatus === (window.FIRBConstants?.CITIZENSHIP_STATUS || CITIZENSHIP_STATUS_FALLBACK).AUSTRALIAN_CITIZEN) {
+    if (citizenshipStatus === CITIZENSHIP_STATUS.AUSTRALIAN_CITIZEN) {
         console.log('[FIRB_ELIGIBILITY] Australian citizen - FIRB not required');
         return {
             ...baseResult,
-            result: (window.FIRBConstants?.FIRB_RESULT || FIRB_RESULT_FALLBACK).NOT_REQUIRED,
+            result: FIRB_RESULT.NOT_REQUIRED,
             firbRequired: false,
             reason: 'Australian citizens do not require FIRB approval for residential property purchases',
             metadata: {
@@ -176,12 +182,12 @@ function checkFIRBEligibility({
     }
 
     // RULE 2: Permanent Residents
-    if (citizenshipStatus === (window.FIRBConstants?.CITIZENSHIP_STATUS || CITIZENSHIP_STATUS_FALLBACK).PERMANENT_RESIDENT) {
+    if (citizenshipStatus === CITIZENSHIP_STATUS.PERMANENT_RESIDENT) {
         if (isOrdinarilyResident) {
             console.log('[FIRB_ELIGIBILITY] Permanent resident (ordinarily resident) - FIRB not required');
             return {
                 ...baseResult,
-                result: (window.FIRBConstants?.FIRB_RESULT || FIRB_RESULT_FALLBACK).NOT_REQUIRED,
+                result: FIRB_RESULT.NOT_REQUIRED,
                 firbRequired: false,
                 reason: 'Permanent residents ordinarily resident in Australia do not require FIRB approval',
                 conditions: 'You must be ordinarily resident in Australia (spending majority of time in Australia)',
@@ -197,7 +203,7 @@ function checkFIRBEligibility({
             console.log('[FIRB_ELIGIBILITY] Permanent resident (NOT ordinarily resident) - FIRB required');
             return {
                 ...baseResult,
-                result: (window.FIRBConstants?.FIRB_RESULT || FIRB_RESULT_FALLBACK).REQUIRED,
+                result: FIRB_RESULT.REQUIRED,
                 firbRequired: true,
                 reason: 'Permanent residents who are NOT ordinarily resident in Australia require FIRB approval',
                 conditions: 'You are treated as a foreign person if you spend most of your time overseas',
@@ -213,12 +219,12 @@ function checkFIRBEligibility({
     }
 
     // RULE 3: Foreign Nationals
-    if (citizenshipStatus === (window.FIRBConstants?.CITIZENSHIP_STATUS || CITIZENSHIP_STATUS_FALLBACK).FOREIGN_NATIONAL) {
+    if (citizenshipStatus === CITIZENSHIP_STATUS.FOREIGN_NATIONAL) {
         return checkForeignNationalEligibility(propertyType, baseResult);
     }
 
     // RULE 4: Temporary Residents
-    if (citizenshipStatus === (window.FIRBConstants?.CITIZENSHIP_STATUS || CITIZENSHIP_STATUS_FALLBACK).TEMPORARY_RESIDENT) {
+    if (citizenshipStatus === CITIZENSHIP_STATUS.TEMPORARY_RESIDENT) {
         return checkTemporaryResidentEligibility(propertyType, visaType, baseResult);
     }
 
@@ -233,12 +239,15 @@ function checkFIRBEligibility({
  */
 function checkForeignNationalEligibility(propertyType, baseResult) {
     console.log('[FIRB_ELIGIBILITY] Checking foreign national eligibility for:', propertyType);
+    
+    const PROPERTY_TYPES = window.FIRBConstants?.PROPERTY_TYPES || PROPERTY_TYPES_FALLBACK;
+    const FIRB_RESULT = window.FIRBConstants?.FIRB_RESULT || FIRB_RESULT_FALLBACK;
 
     // New dwellings - ALLOWED
-    if (propertyType === (window.FIRBConstants?.PROPERTY_TYPES || PROPERTY_TYPES_FALLBACK).NEW_DWELLING || propertyType === (window.FIRBConstants?.PROPERTY_TYPES || PROPERTY_TYPES_FALLBACK).OFF_THE_PLAN) {
+    if (propertyType === PROPERTY_TYPES.NEW_DWELLING || propertyType === PROPERTY_TYPES.OFF_THE_PLAN) {
         return {
             ...baseResult,
-            result: (window.FIRBConstants?.FIRB_RESULT || FIRB_RESULT_FALLBACK).REQUIRED,
+            result: FIRB_RESULT.REQUIRED,
             firbRequired: true,
             reason: 'Foreign nationals can purchase new dwellings and off-the-plan properties with FIRB approval',
             conditions: 'Property must be brand new and never previously occupied',
@@ -253,10 +262,10 @@ function checkForeignNationalEligibility(propertyType, baseResult) {
     }
 
     // Established dwellings - NOT ALLOWED
-    if (propertyType === (window.FIRBConstants?.PROPERTY_TYPES || PROPERTY_TYPES_FALLBACK).ESTABLISHED) {
+    if (propertyType === PROPERTY_TYPES.ESTABLISHED) {
         return {
             ...baseResult,
-            result: (window.FIRBConstants?.FIRB_RESULT || FIRB_RESULT_FALLBACK).NOT_ALLOWED,
+            result: FIRB_RESULT.NOT_ALLOWED,
             firbRequired: false,
             reason: 'Foreign nationals are NOT permitted to purchase established dwellings',
             conditions: 'Established properties are reserved for Australian citizens, permanent residents, and temporary residents',
@@ -273,10 +282,10 @@ function checkForeignNationalEligibility(propertyType, baseResult) {
     }
 
     // Vacant land - CONDITIONAL
-    if (propertyType === (window.FIRBConstants?.PROPERTY_TYPES || PROPERTY_TYPES_FALLBACK).VACANT_LAND) {
+    if (propertyType === PROPERTY_TYPES.VACANT_LAND) {
         return {
             ...baseResult,
-            result: (window.FIRBConstants?.FIRB_RESULT || FIRB_RESULT_FALLBACK).CONDITIONAL,
+            result: FIRB_RESULT.CONDITIONAL,
             firbRequired: true,
             reason: 'Foreign nationals can purchase vacant land with FIRB approval and development conditions',
             conditions: 'You must: (1) Obtain FIRB approval, (2) Commence continuous construction within 4 years, (3) Complete construction within 4 years of commencement',
@@ -293,10 +302,10 @@ function checkForeignNationalEligibility(propertyType, baseResult) {
     }
 
     // Commercial property - ALLOWED (different rules)
-    if (propertyType === (window.FIRBConstants?.PROPERTY_TYPES || PROPERTY_TYPES_FALLBACK).COMMERCIAL) {
+    if (propertyType === PROPERTY_TYPES.COMMERCIAL) {
         return {
             ...baseResult,
-            result: (window.FIRBConstants?.FIRB_RESULT || FIRB_RESULT_FALLBACK).REQUIRED,
+            result: FIRB_RESULT.REQUIRED,
             firbRequired: true,
             reason: 'Foreign nationals can purchase commercial property with FIRB approval under different rules',
             conditions: 'Commercial property acquisitions have different thresholds and requirements. Consult FIRB for commercial property guidelines.',
@@ -320,10 +329,14 @@ function checkForeignNationalEligibility(propertyType, baseResult) {
  */
 function checkTemporaryResidentEligibility(propertyType, visaType, baseResult) {
     console.log('[FIRB_ELIGIBILITY] Checking temporary resident eligibility for:', propertyType, visaType);
+    
+    const PROPERTY_TYPES = window.FIRBConstants?.PROPERTY_TYPES || PROPERTY_TYPES_FALLBACK;
+    const VISA_TYPES = window.FIRBConstants?.VISA_TYPES || VISA_TYPES_FALLBACK;
+    const FIRB_RESULT = window.FIRBConstants?.FIRB_RESULT || FIRB_RESULT_FALLBACK;
 
     // Define visa-specific rules
     const visaRules = {
-        [(window.FIRBConstants?.VISA_TYPES || VISA_TYPES_FALLBACK).STUDENT]: {
+        [VISA_TYPES.STUDENT]: {
             canBuyEstablished: true,
             canBuyNew: true,
             canBuyVacant: true,
@@ -331,7 +344,7 @@ function checkTemporaryResidentEligibility(propertyType, visaType, baseResult) {
             mustSellOnDeparture: true,
             condition: 'Must be your principal place of residence'
         },
-        [(window.FIRBConstants?.VISA_TYPES || VISA_TYPES_FALLBACK).SKILLED]: {
+        [VISA_TYPES.SKILLED]: {
             canBuyEstablished: true,
             canBuyNew: true,
             canBuyVacant: true,
@@ -339,7 +352,7 @@ function checkTemporaryResidentEligibility(propertyType, visaType, baseResult) {
             mustSellOnDeparture: true,
             condition: 'Must be your principal place of residence'
         },
-        [(window.FIRBConstants?.VISA_TYPES || VISA_TYPES_FALLBACK).PARTNER]: {
+        [VISA_TYPES.PARTNER]: {
             canBuyEstablished: true,
             canBuyNew: true,
             canBuyVacant: true,
@@ -347,7 +360,7 @@ function checkTemporaryResidentEligibility(propertyType, visaType, baseResult) {
             mustSellOnDeparture: true,
             condition: 'Must be your principal place of residence'
         },
-        [(window.FIRBConstants?.VISA_TYPES || VISA_TYPES_FALLBACK).BRIDGING]: {
+        [VISA_TYPES.BRIDGING]: {
             canBuyEstablished: false,
             canBuyNew: true,
             canBuyVacant: false,
@@ -355,7 +368,7 @@ function checkTemporaryResidentEligibility(propertyType, visaType, baseResult) {
             mustSellOnDeparture: true,
             condition: 'Only new dwellings allowed'
         },
-        [(window.FIRBConstants?.VISA_TYPES || VISA_TYPES_FALLBACK).VISITOR]: {
+        [VISA_TYPES.VISITOR]: {
             canBuyEstablished: false,
             canBuyNew: true,
             canBuyVacant: false,
@@ -363,7 +376,7 @@ function checkTemporaryResidentEligibility(propertyType, visaType, baseResult) {
             mustSellOnDeparture: true,
             condition: 'Only new dwellings allowed (investment only)'
         },
-        [(window.FIRBConstants?.VISA_TYPES || VISA_TYPES_FALLBACK).OTHER_TEMPORARY]: {
+        [VISA_TYPES.OTHER_TEMPORARY]: {
             canBuyEstablished: true,
             canBuyNew: true,
             canBuyVacant: true,
@@ -380,11 +393,11 @@ function checkTemporaryResidentEligibility(propertyType, visaType, baseResult) {
     }
 
     // Check new dwellings
-    if (propertyType === (window.FIRBConstants?.PROPERTY_TYPES || PROPERTY_TYPES_FALLBACK).NEW_DWELLING || propertyType === (window.FIRBConstants?.PROPERTY_TYPES || PROPERTY_TYPES_FALLBACK).OFF_THE_PLAN) {
+    if (propertyType === PROPERTY_TYPES.NEW_DWELLING || propertyType === PROPERTY_TYPES.OFF_THE_PLAN) {
         if (rules.canBuyNew) {
             return {
                 ...baseResult,
-                result: (window.FIRBConstants?.FIRB_RESULT || FIRB_RESULT_FALLBACK).REQUIRED,
+                result: FIRB_RESULT.REQUIRED,
                 firbRequired: true,
                 reason: 'Temporary residents can purchase new dwellings with FIRB approval',
                 conditions: `${rules.condition}. You must sell the property within 3 months of your visa expiring or leaving Australia permanently.`,
@@ -403,11 +416,11 @@ function checkTemporaryResidentEligibility(propertyType, visaType, baseResult) {
     }
 
     // Check established dwellings
-    if (propertyType === (window.FIRBConstants?.PROPERTY_TYPES || PROPERTY_TYPES_FALLBACK).ESTABLISHED) {
+    if (propertyType === PROPERTY_TYPES.ESTABLISHED) {
         if (rules.canBuyEstablished) {
             return {
                 ...baseResult,
-                result: (window.FIRBConstants?.FIRB_RESULT || FIRB_RESULT_FALLBACK).CONDITIONAL,
+                result: FIRB_RESULT.CONDITIONAL,
                 firbRequired: true,
                 reason: 'Temporary residents can purchase established dwellings with FIRB approval under specific conditions',
                 conditions: `STRICT CONDITIONS APPLY: (1) ${rules.condition}, (2) Maximum ONE established dwelling at a time, (3) Must sell within 3 months of visa expiry or departure, (4) Cannot rent out the property, (5) Must live in the property as your main residence`,
@@ -427,7 +440,7 @@ function checkTemporaryResidentEligibility(propertyType, visaType, baseResult) {
         } else {
             return {
                 ...baseResult,
-                result: (window.FIRBConstants?.FIRB_RESULT || FIRB_RESULT_FALLBACK).NOT_ALLOWED,
+                result: FIRB_RESULT.NOT_ALLOWED,
                 firbRequired: false,
                 reason: `Your visa type (${visaType}) does not permit purchasing established dwellings`,
                 conditions: rules.condition,
@@ -445,11 +458,11 @@ function checkTemporaryResidentEligibility(propertyType, visaType, baseResult) {
     }
 
     // Check vacant land
-    if (propertyType === (window.FIRBConstants?.PROPERTY_TYPES || PROPERTY_TYPES_FALLBACK).VACANT_LAND) {
+    if (propertyType === PROPERTY_TYPES.VACANT_LAND) {
         if (rules.canBuyVacant) {
             return {
                 ...baseResult,
-                result: (window.FIRBConstants?.FIRB_RESULT || FIRB_RESULT_FALLBACK).CONDITIONAL,
+                result: FIRB_RESULT.CONDITIONAL,
                 firbRequired: true,
                 reason: 'Temporary residents can purchase vacant land with FIRB approval and development conditions',
                 conditions: `${rules.condition}. You must: (1) Commence continuous construction within 4 years, (2) Complete within 4 years of commencement, (3) Property must be your residence, (4) Sell within 3 months of visa expiry`,
@@ -469,7 +482,7 @@ function checkTemporaryResidentEligibility(propertyType, visaType, baseResult) {
         } else {
             return {
                 ...baseResult,
-                result: (window.FIRBConstants?.FIRB_RESULT || FIRB_RESULT_FALLBACK).NOT_ALLOWED,
+                result: FIRB_RESULT.NOT_ALLOWED,
                 firbRequired: false,
                 reason: `Your visa type (${visaType}) does not permit purchasing vacant land`,
                 conditions: rules.condition,
@@ -487,10 +500,10 @@ function checkTemporaryResidentEligibility(propertyType, visaType, baseResult) {
     }
 
     // Check commercial property
-    if (propertyType === (window.FIRBConstants?.PROPERTY_TYPES || PROPERTY_TYPES_FALLBACK).COMMERCIAL) {
+    if (propertyType === PROPERTY_TYPES.COMMERCIAL) {
         return {
             ...baseResult,
-            result: (window.FIRBConstants?.FIRB_RESULT || FIRB_RESULT_FALLBACK).REQUIRED,
+            result: FIRB_RESULT.REQUIRED,
             firbRequired: true,
             reason: 'Temporary residents can purchase commercial property with FIRB approval',
             conditions: 'Commercial property acquisitions have different rules. Consult FIRB for specific requirements.',
@@ -519,11 +532,13 @@ function checkTemporaryResidentEligibility(propertyType, visaType, baseResult) {
  * getCitizenshipLabel('temporary')   // Returns: "Temporary Resident"
  */
 function getCitizenshipLabel(citizenshipStatus) {
+    const CITIZENSHIP_STATUS = window.FIRBConstants?.CITIZENSHIP_STATUS || CITIZENSHIP_STATUS_FALLBACK;
+    
     const labels = {
-        [(window.FIRBConstants?.CITIZENSHIP_STATUS || CITIZENSHIP_STATUS_FALLBACK).AUSTRALIAN_CITIZEN]: 'Australian Citizen',
-        [(window.FIRBConstants?.CITIZENSHIP_STATUS || CITIZENSHIP_STATUS_FALLBACK).PERMANENT_RESIDENT]: 'Permanent Resident',
-        [(window.FIRBConstants?.CITIZENSHIP_STATUS || CITIZENSHIP_STATUS_FALLBACK).TEMPORARY_RESIDENT]: 'Temporary Resident',
-        [(window.FIRBConstants?.CITIZENSHIP_STATUS || CITIZENSHIP_STATUS_FALLBACK).FOREIGN_NATIONAL]: 'Foreign National'
+        [CITIZENSHIP_STATUS.AUSTRALIAN_CITIZEN]: 'Australian Citizen',
+        [CITIZENSHIP_STATUS.PERMANENT_RESIDENT]: 'Permanent Resident',
+        [CITIZENSHIP_STATUS.TEMPORARY_RESIDENT]: 'Temporary Resident',
+        [CITIZENSHIP_STATUS.FOREIGN_NATIONAL]: 'Foreign National'
     };
 
     return labels[citizenshipStatus] || 'Unknown Status';
@@ -540,12 +555,14 @@ function getCitizenshipLabel(citizenshipStatus) {
  * getPropertyTypeDescription('established')  // Returns: "Established Dwelling"
  */
 function getPropertyTypeDescription(propertyType) {
+    const PROPERTY_TYPES = window.FIRBConstants?.PROPERTY_TYPES || PROPERTY_TYPES_FALLBACK;
+    
     const descriptions = {
-        [(window.FIRBConstants?.PROPERTY_TYPES || PROPERTY_TYPES_FALLBACK).NEW_DWELLING]: 'New Dwelling',
-        [(window.FIRBConstants?.PROPERTY_TYPES || PROPERTY_TYPES_FALLBACK).ESTABLISHED]: 'Established Dwelling',
-        [(window.FIRBConstants?.PROPERTY_TYPES || PROPERTY_TYPES_FALLBACK).OFF_THE_PLAN]: 'Off-the-Plan',
-        [(window.FIRBConstants?.PROPERTY_TYPES || PROPERTY_TYPES_FALLBACK).VACANT_LAND]: 'Vacant Land',
-        [(window.FIRBConstants?.PROPERTY_TYPES || PROPERTY_TYPES_FALLBACK).COMMERCIAL]: 'Commercial Property'
+        [PROPERTY_TYPES.NEW_DWELLING]: 'New Dwelling',
+        [PROPERTY_TYPES.ESTABLISHED]: 'Established Dwelling',
+        [PROPERTY_TYPES.OFF_THE_PLAN]: 'Off-the-Plan',
+        [PROPERTY_TYPES.VACANT_LAND]: 'Vacant Land',
+        [PROPERTY_TYPES.COMMERCIAL]: 'Commercial Property'
     };
 
     return descriptions[propertyType] || 'Unknown Property Type';
