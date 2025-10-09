@@ -373,7 +373,7 @@ function renderHome() {
         <section class="py-20 bg-white">
             <div class="max-w-7xl mx-auto px-4">
                 <h2 class="text-3xl font-bold text-gray-900 mb-12 text-center">Understanding the Fees</h2>
-                <div class="grid md:grid-cols-3 gap-8">
+                <div class="grid md:grid-cols-3 gap-10">
                     <div class="bg-white p-8 rounded-lg shadow-sm">
                         <div class="bg-blue-600 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
                             ${icons.fileText('w-6 h-6 text-white')}
@@ -1093,10 +1093,12 @@ function renderFooter() {
                     </div>
                     <div>
                         <h3 class="text-lg font-bold mb-4">${t('quickLinks')}</h3>
-                        <button onclick="goToStep('home')" class="block text-gray-400 hover:text-white mb-2">${t('navHome')}</button>
-                        <button onclick="goToStep('eligibility')" class="block text-gray-400 hover:text-white mb-2">${t('navCalculator')}</button>
-                        <button onclick="goToStep('timeline')" class="block text-gray-400 hover:text-white mb-2">Timeline</button>
-                        <button onclick="goToStep('faq')" class="block text-gray-400 hover:text-white">FAQs</button>
+                        <div class="space-y-3">
+                            <button onclick="goToStep('home')" class="block w-full text-left text-gray-400 hover:text-white transition-colors py-1">${t('navHome')}</button>
+                            <button onclick="goToStep('eligibility')" class="block w-full text-left text-gray-400 hover:text-white transition-colors py-1">${t('navCalculator')}</button>
+                            <button onclick="goToStep('timeline')" class="block w-full text-left text-gray-400 hover:text-white transition-colors py-1">Timeline</button>
+                            <button onclick="goToStep('faq')" class="block w-full text-left text-gray-400 hover:text-white transition-colors py-1">FAQs</button>
+                        </div>
                     </div>
                     <div>
                         <h3 class="text-lg font-bold mb-4">Official Sources</h3>

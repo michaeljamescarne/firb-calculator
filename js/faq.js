@@ -659,9 +659,9 @@ function renderPopularFAQs(limit = 6) {
                 </p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
                 ${topQuestions.map(q => `
-                    <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                    <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100">
                         <div class="flex items-start gap-3 mb-3">
                             ${renderIcon(q.categoryIcon, 'w-5 h-5 text-blue-600 flex-shrink-0 mt-1')}
                             <h3 class="font-semibold text-gray-900 leading-tight">
