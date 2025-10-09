@@ -923,9 +923,13 @@ function calculateEligibilityResult() {
  * Show eligibility result page
  */
 function showEligibilityResult(result) {
+    console.log('[SHOW DEBUG] showEligibilityResult called with:', result);
     wizardState.result = result;
     state.currentStep = 'eligibilityResult';
+    console.log('[SHOW DEBUG] Set currentStep to:', state.currentStep);
+    console.log('[SHOW DEBUG] About to call render()');
     render();
+    console.log('[SHOW DEBUG] render() completed');
     window.scrollTo(0, 0);
 }
 
@@ -966,7 +970,7 @@ function renderEligibilityResult() {
     }
 
     // For Australian citizens and PR
-    console.log('[RENDER DEBUG] Checking render conditions:');
+    console.log('[RENDER DEBUG] Checking render conditions at:', new Date().toISOString());
     console.log('[RENDER DEBUG] noFIRBRequired:', noFIRBRequired);
     console.log('[RENDER DEBUG] eligible:', eligible);
     console.log('[RENDER DEBUG] canProceedToCalculator:', canProceedToCalculator);

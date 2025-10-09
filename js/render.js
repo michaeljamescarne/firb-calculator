@@ -30,7 +30,14 @@ function render() {
             content += renderEligibility();
             break;
         case 'eligibilityResult':
-            content += typeof renderEligibilityResult === 'function' ? renderEligibilityResult() : renderHome();
+            console.log('[RENDER.JS DEBUG] eligibilityResult case - renderEligibilityResult type:', typeof renderEligibilityResult);
+            if (typeof renderEligibilityResult === 'function') {
+                console.log('[RENDER.JS DEBUG] Calling renderEligibilityResult()');
+                content += renderEligibilityResult();
+            } else {
+                console.log('[RENDER.JS DEBUG] renderEligibilityResult not a function, calling renderHome()');
+                content += renderHome();
+            }
             break;
         case 'calculator':
             content += renderCalculator();
